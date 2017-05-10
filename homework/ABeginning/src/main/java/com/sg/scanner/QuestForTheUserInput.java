@@ -1,4 +1,4 @@
-package scanner;
+package com.sg.scanner;
 
 import java.util.Scanner;
 
