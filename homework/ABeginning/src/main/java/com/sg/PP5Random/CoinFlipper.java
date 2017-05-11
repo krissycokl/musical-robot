@@ -1,4 +1,4 @@
-package com.sg.Random;
+package com.sg.PP5Random;
 import java.util.Random;
 public class CoinFlipper {
     public static void main(String[] args) {
