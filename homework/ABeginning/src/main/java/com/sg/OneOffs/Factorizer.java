@@ -1,4 +1,4 @@
-package com.sg.Factorizer;
+package com.sg.OneOffs;
 import java.util.Scanner;
 
 public class Factorizer {

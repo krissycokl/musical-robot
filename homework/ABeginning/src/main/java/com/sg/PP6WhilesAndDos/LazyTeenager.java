@@ -12,7 +12,7 @@ public class LazyTeenager {
         do {
             timesTold++;
             System.out.println("Clean your room! (x"+timesTold+")");
-            chance += .01;
+            chance += .05;
             if (ran.nextDouble()<chance){
                 System.out.println("Sorry, mother.  Of course I'll clean.");
                 System.out.println("That's a necessary part of belonging to a family.");
