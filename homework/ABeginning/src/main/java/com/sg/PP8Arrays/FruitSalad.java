@@ -28,7 +28,6 @@ public class FruitSalad {
         // are no more than 12 fruits in the salad:
         String[] fruitSalad = new String[12];
         
-        // Loop through a second time to add them to our salad.
         for(String item : fruit){
             if(item.toLowerCase().contains("berry")){
                 fruitSalad[index] = item;
