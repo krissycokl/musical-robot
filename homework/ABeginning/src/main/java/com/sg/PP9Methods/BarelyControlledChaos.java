@@ -51,7 +51,7 @@ public class BarelyControlledChaos {
     
     public static int randomInt(int min, int max){
         Random ran = new Random();
-        int random = ran.nextInt(max+1)+min;
+        int random = ran.nextInt(max-min+1)+min;
         return random;
     }
 }
