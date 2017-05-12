@@ -35,15 +35,16 @@ public class RockPaperScissors {
                 ansUser = Integer.parseInt(sc.nextLine());
                 System.out.println("You picked " + printHand(ansUser) + ".");
                 ansComp = ran.nextInt(3) + 1;
-                System.out.println("Computer picked " + printHand(ansComp) + ".");
 
                 if (ansUser == ansComp) {
+                    System.out.println("Computer also picked " + printHand(ansComp) + ".");
                     numTies++;
                     System.out.println("\nIt's a tie!");
                     System.out.println("You've won " + numWins + " time" + pluralHandler(numWins) + ", "
                             + "lost " + numLosses + " time" + pluralHandler(numLosses) + ", and "
                             + "tied " + numTies + " time" + pluralHandler(numTies) + ".");
                 } else {
+                    System.out.println("Computer picked " + printHand(ansComp) + ".");
                     if (ansUser == 1 && ansComp == 2) {
                         // User: rock, Comp: paper
                         numLosses = lossHandler(numWins, numLosses, numTies);
