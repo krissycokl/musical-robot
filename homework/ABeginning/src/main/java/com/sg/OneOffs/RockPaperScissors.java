@@ -76,6 +76,8 @@ public class RockPaperScissors {
                     again = sc.nextLine().toLowerCase();
 
                     if (again.equals("y")) {
+                        // Must set curRound to -1 because it increments
+                        // when the loop finishes.
                         curRound = -1;
                         numWins = 0;
                         numTies = 0;
