@@ -13,7 +13,6 @@ public class SimpleSort {
         
         int index1 = 0;
         int index2 = 0;
-        int lastMin = 0;
         
         while (index1+index2 < 24){
             if (index1==12){
