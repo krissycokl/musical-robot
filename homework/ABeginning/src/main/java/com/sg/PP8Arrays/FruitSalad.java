@@ -19,25 +19,14 @@ public class FruitSalad {
         int apples=0;
         int oranges=0;
         
-        // Need to loop through once just to determine how many
-        // fruits will end up in our salad
-        for(String item : fruit){
-            if(item.toLowerCase().contains("berry")){
-                index++;
-            } else if(item.toLowerCase().contains("apple") && apples<3){
-                index++;
-                apples++;
-            } else if (item.toLowerCase().contains("orange") && oranges<2) {
-                index++;
-                oranges++;
-            }
-        }
+        // Originally I thought needed to loop twice:
+        // once just to determine how many
+        // fruits will end up in our salad,
+        // and a second time to add them.
         
-        String[] fruitSalad = new String[index];
-        
-        index = 0;
-        apples=0;
-        oranges=0;
+        // However, since the question states there
+        // are no more than 12 fruits in the salad:
+        String[] fruitSalad = new String[12];
         
         // Loop through a second time to add them to our salad.
         for(String item : fruit){
@@ -57,7 +46,7 @@ public class FruitSalad {
         
         // Print salad.
         System.out.println("My salad contains "+ fruitSalad.length +" items:");
-        for(int i=0; i<fruitSalad.length; i++){
+        for(int i=0; i<index; i++){
             if ((i+1)%3==0){System.out.print("\n");}
             if (i==fruitSalad.length-1){
                 System.out.println("and "+ fruitSalad[i]);
