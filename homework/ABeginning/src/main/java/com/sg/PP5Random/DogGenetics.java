@@ -9,21 +9,42 @@ public class DogGenetics {
         System.out.println("What's your dog's name?");
         String dogName = sc.nextLine();
         
-        System.out.println("I've received confidential information");
-        System.out.println(" about the genetic makeup of your superdog:\n");
+        System.out.println("\nI've received confidential information");
+        System.out.println("about the genetic makeup of your superdog:\n");
         
-        int a, b, c, d, e;
+        double a, b, c, d, e, sum;
+
+        // My original randomization was highly biased toward the first
+        // breeds, since it became successively unlikely for each
+        // breed to approach 100%.
         
-        a = ran.nextInt(100)+1;
-        b = ran.nextInt(100-a)+1;
-        c = ran.nextInt(100-a-b)+1;
-        d = ran.nextInt(100-a-b-c)+1;
-        e = 100-a-b-c-d;
+        // To weight each breed equally, generate 5 random numbers
+        // independently of one another
+        a = ran.nextDouble();
+        b = ran.nextDouble();
+        c = ran.nextDouble();
+        d = ran.nextDouble();
+        e = ran.nextDouble();
         
-        System.out.println(a+"% Kryptonian");
-        System.out.println(b+"% Martian");
-        System.out.println(c+"% Botswanan");
-        System.out.println(d+"% Saturnalian");
-        System.out.println(e+"% Golden Retriever");
+        // Then scale them down so the sum is 100:
+        sum = a+b+c+d+e;
+        a = a/sum*100;
+        b = b/sum*100;
+        c = c/sum*100;
+        d = d/sum*100;
+        e = e/sum*100;
+        
+        System.out.println(Math.round(a)+"% Kryptonian");
+        System.out.println(Math.round(b)+"% Martian");
+        System.out.println(Math.round(c)+"% Botswanan");
+        System.out.println(Math.round(d)+"% Saturnalian");
+        System.out.println(Math.round(e)+"% Golden Retriever\n");
+        
+        if(a+b+c+d < 50){
+            System.out.println("Oh.  Turns out "+dogName + " is kind of a mutt.");
+        } else{
+            System.out.println("You can really tell "+dogName+" has "
+                    + "extra-terrestrial origins!");
+        }
     }
 }
