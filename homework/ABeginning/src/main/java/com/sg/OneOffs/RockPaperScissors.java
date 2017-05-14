@@ -37,7 +37,7 @@ public class RockPaperScissors {
                 ansComp = ran.nextInt(3) + 1;
 
                 if (ansUser == ansComp) {
-                    System.out.println("Computer also picked " + printHand(ansComp) + ".");
+                    System.out.println("Computer also picked " + printHand(ansComp) + ".\n");
                     showHands(ansUser,ansComp);
                     numTies++;
                     System.out.println("\nIt's a tie!");
@@ -45,7 +45,7 @@ public class RockPaperScissors {
                             + "lost " + numLosses + " time" + pluralHandler(numLosses) + ", and "
                             + "tied " + numTies + " time" + pluralHandler(numTies) + ".");
                 } else {
-                    System.out.println("Computer picked " + printHand(ansComp) + ".");
+                    System.out.println("Computer picked " + printHand(ansComp) + ".\n");
                     showHands(ansUser,ansComp);
                     if (ansUser == 1 && ansComp == 2) {
                         // User: rock, Comp: paper
@@ -72,8 +72,10 @@ public class RockPaperScissors {
                 }
 
                 if (curRound == rounds - 1) {
-                    System.out.println("\nG A M E   O V E R");
-                    System.out.println("Play again? (y/n)");
+                    if (numWins > numLosses) { overall(1); }
+                    else if (numWins < numLosses){ overall(2); }
+                    else { overall(3); }
+                    System.out.println("\nPlay again? (y/n)");
 
                     again = sc.nextLine().toLowerCase();
 
@@ -95,9 +97,6 @@ public class RockPaperScissors {
 
                     } else {
                         System.out.println("\nThanks for playing!");
-                        if (numWins < numLosses) {
-                            System.out.println("Sucker...");
-                        }
                     }
                 }
             }
@@ -109,7 +108,7 @@ public class RockPaperScissors {
     }
 
     public static int winHandler(int numWins, int numLosses, int numTies) {
-        System.out.println("\nYou win!");
+        System.out.println("\nYou win this match!");
         numWins++;
         System.out.println("You've won " + numWins + " time" + pluralHandler(numWins) + ", "
                 + "lost " + numLosses + " time" + pluralHandler(numLosses) + ", and "
@@ -118,7 +117,7 @@ public class RockPaperScissors {
     }
 
     public static int lossHandler(int numWins, int numLosses, int numTies) {
-        System.out.println("\nYou lose!");
+        System.out.println("\nYou lose this match!");
         numLosses++;
         System.out.println("You've won " + numWins + " time" + pluralHandler(numWins) + ", "
                 + "lost " + numLosses + " time" + pluralHandler(numLosses) + ", and "
@@ -309,6 +308,32 @@ public class RockPaperScissors {
 "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\n" +
 "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\n" +
 "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+        }
+    }
+    
+    public static void overall(int res){
+        System.out.println("\n                               G A M E   O V E R");
+        System.out.println("                                O V E R A L L :");
+        switch (res){
+            case 1: System.out.println("                                                  _\n" +
+                    "                     _   _  ___  _   _  __      _(_)_ __  \n" +
+                    "                    | | | |/ _ \\| | | | \\ \\ /\\ / / | '_ \\ \n" +
+                    "                    | |_| | (_) | |_| |  \\ V  V /| | | | |\n" +
+                    "                     \\__, |\\___/ \\__,_|   \\_/\\_/ |_|_| |_|\n" +
+                    "                      |___/");
+                    break;
+            case 2: System.out.println("                                         _\n" +
+                    "                     _   _  ___  _   _  | | ___  ___  ___ \n" +
+                    "                    | | | |/ _ \\| | | | | |/ _ \\/ __|/ _ \\\n" +
+                    "                    | |_| | (_) | |_| | | | (_) \\__ \\  __/\n" +
+                    "                     \\__, |\\___/ \\__,_| |_|\\___/|___/\\___|\n" +
+                    "                      |___/                                ");
+                    break;
+            case 3: System.out.println("                        _ _   _              _   _\n" +
+                    "                       (_) |_( )__    __ _  | |_(_) ___ \n" +
+                    "                       | | __|/ __|  / _` | | __| |/ _ \\\n" +
+                    "                       | | |_ \\__ \\ | (_| | | |_| |  __/\n" +
+                    "                       |_|\\__||___/  \\__,_|  \\__|_|\\___|");
         }
     }
 }
