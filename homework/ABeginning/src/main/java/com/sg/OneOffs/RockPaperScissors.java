@@ -93,6 +93,7 @@ public class RockPaperScissors {
                         if (rounds < 1 || rounds > 10) {
                             System.out.println("Error: number of rounds should "
                                     + "be between 1 and 10.");
+                            break;
                         }
 
                     } else {
