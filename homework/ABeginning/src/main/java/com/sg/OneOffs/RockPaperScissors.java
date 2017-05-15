@@ -66,7 +66,6 @@ public class RockPaperScissors {
                         // User: scissors, Comp: paper
                         numWins = winHandler(numWins, numLosses, numTies);
                     } else {
-                        // Unexpected
                         System.out.println("Error!");
                     }
                 }
