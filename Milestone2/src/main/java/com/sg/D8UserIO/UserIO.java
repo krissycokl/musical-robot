@@ -8,4 +8,5 @@ public interface UserIO {
     public float getFloat(String prompt, float min, float max);
     public double getDouble(String prompt);
     public double getDouble(String prompt, double min, double max);
+    public void printString(String prompt);
 }

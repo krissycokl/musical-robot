@@ -63,4 +63,10 @@ public class ImplementsUserIO implements UserIO{
             }
         }
     }
+    
+    @Override
+    public void printString(String prompt){
+        System.out.println(prompt);
+    }
+        
 }
