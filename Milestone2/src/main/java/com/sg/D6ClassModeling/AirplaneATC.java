@@ -14,10 +14,12 @@ public class AirplaneATC {
     
     public static double calcDistane(AirplaneATC plane1, AirplaneATC plane2){
         // calculate distance between two planes
+        return 0;
     }
     
     public double calcETA(double coords){
         // calculate time remaining to destination
+        return 0;
     }
 
     public double[] getPosition() {

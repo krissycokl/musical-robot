@@ -36,9 +36,10 @@ public class HouseGPS {
         this.address = address;
     }
     
-    public HouseGPS[] findNeighbors(int miles){
+    //public HouseGPS[] findNeighbors(int miles){
         // Will return any other houses in the database (??) within miles miles
-    }
+    //}
+    
     public String getTimeZone(){
         // Will determine the time zone mathematically from lat & lon
         // if that's possible...

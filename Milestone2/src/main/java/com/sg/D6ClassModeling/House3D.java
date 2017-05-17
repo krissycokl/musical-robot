@@ -1,19 +1,19 @@
 package com.sg.D6ClassModeling;
 
 public class House3D {
-    private Room[] rooms;
+    //private Room[] rooms;
     private double lotWidth;
     private double lotLength;
     private double driveWidth;
     private double driveLength;
 
-    public Room[] getRooms() {
-        return rooms;
-    }
+    //public Room[] getRooms() {
+    //    return rooms;
+    //}
 
-    public void setRooms(Room[] rooms) {
-        this.rooms = rooms;
-    }
+    //public void setRooms(Room[] rooms) {
+    //    this.rooms = rooms;
+    //}
 
     public double getLotWidth() {
         return lotWidth;
@@ -66,15 +66,17 @@ public class House3D {
     private String roofMaterial;
     private String exteriorWallMaterial;
     
-    public House3D(int numRooms){
-        this.rooms = new Room[numRooms];
-    }
+    //public House3D(int numRooms){
+    //   this.rooms = new Room[numRooms];
+    //}
     
     public int numBathrooms(){
         // Counts number of bathrooms in rooms array
+        return 0;
     }
     
     public int numBedrooms(){
         // Counts number of bedrooms in rooms array
+        return 0;
     }
 }
