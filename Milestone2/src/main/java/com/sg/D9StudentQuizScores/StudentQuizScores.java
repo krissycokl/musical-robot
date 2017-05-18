@@ -10,6 +10,8 @@ public class StudentQuizScores {
     
     public static ImplementsUserIO UIO = new ImplementsUserIO();
     
+    public static int IDat = 7;
+    
     public static void main(String[] args) {
         HashMap<Integer, Student> students = new HashMap<>();
         createDummyStudents(students);
@@ -21,6 +23,11 @@ public class StudentQuizScores {
     }
     
     public static int getID(HashMap<Integer,Student> students){
+        if(students.isEmpty()){
+            System.out.println("There are no students.");
+            return -1;
+        }
+        
         ArrayList<Integer> names = new ArrayList<>();
         String name;
         int gottenID;
@@ -65,9 +72,9 @@ public class StudentQuizScores {
         String name = UIO.getString("Enter student's name or type cancel");
         if (name.equalsIgnoreCase("cancel")){return 0;}
         else {
-            int numStudents=students.size();
-            students.put(numStudents,new Student(name.toUpperCase()));
-            System.out.println(name+" added with id "+numStudents);
+            IDat++;
+            students.put(IDat,new Student(name.toUpperCase()));
+            System.out.println(name+" added with id "+IDat);
             return 1;
         }
     }
