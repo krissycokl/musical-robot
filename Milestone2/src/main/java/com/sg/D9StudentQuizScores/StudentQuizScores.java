@@ -18,26 +18,30 @@ public class StudentQuizScores {
         
         while(!cancel){
             input = UIO.getString("What do you want to do?\n"
-                    + "\tList Students\n"
-                    + "\tAdd Student\n"
-                    + "\tRemove Student\n"
-                    + "\tView Scores\n"
-                    + "\tAdd Score\n"
-                    + "\tView Average\n"
+                    + "\t1.) List Students\n"
+                    + "\t2.) Add Student\n"
+                    + "\t3.) Remove Student\n"
+                    + "\t4.) View Scores\n"
+                    + "\t5.) Add Score\n"
+                    + "\t6.) View Average (one student)\n"
+                    + "\t7.) View Average (all students)\n"
                     + "Type cancel at any time to quit.");
+            System.out.println();
             
-            if(input.equalsIgnoreCase("list students")){
+            if(input.equalsIgnoreCase("1") || input.equalsIgnoreCase("list students")){
                 getListOfStudents(students);
-            } else if(input.equalsIgnoreCase("add student")){
+            } else if(input.equalsIgnoreCase("2") || input.equalsIgnoreCase("add student")){
                 numStudents+=addStudent(students,numStudents);
-            } else if(input.equalsIgnoreCase("remove student")){
+            } else if(input.equalsIgnoreCase("3") || input.equalsIgnoreCase("remove student")){
                 numStudents-=removeStudent(students);
-            } else if(input.equalsIgnoreCase("view scores")){
+            } else if(input.equalsIgnoreCase("4") || input.equalsIgnoreCase("view scores")){
                 getScores(students);
-            } else if(input.equalsIgnoreCase("add score")){
+            } else if(input.equalsIgnoreCase("5") || input.equalsIgnoreCase("add score")){
                 addScore(students);
-            } else if(input.equalsIgnoreCase("view average")){
+            } else if(input.equalsIgnoreCase("6") || input.equalsIgnoreCase("view average (one student)")){
                 getAverage(students);
+            } else if(input.equalsIgnoreCase("7") || input.equalsIgnoreCase("view average (all students)")){
+                getOverallAverage(students);
             } else if(input.equalsIgnoreCase("cancel")){
                 cancel=true;
             }
@@ -61,6 +65,7 @@ public class StudentQuizScores {
             }
         } else if (way.equalsIgnoreCase("name")){
             name = UIO.getString("Please enter the student's name.");
+            System.out.println();
             for ( Integer id : students.keySet()){
                 if (students.get(id).getName().equalsIgnoreCase(name) ){
                     names.add(id);
@@ -143,6 +148,22 @@ public class StudentQuizScores {
             return;
         }
         System.out.println(students.get(id).getName() + "'s average is "+ 1.0*sumScores/numScores);
+    }
+    
+    public static void getOverallAverage(HashMap<Integer,Student> students){
+        int sumScores = 0;
+        int numScores = 0;
+        for (Integer id : students.keySet()){
+            for (Integer score : students.get(id).getScores()){
+                numScores++;
+                sumScores+=score;
+            }
+        }
+        if(numScores==0){
+            System.out.println("No scores on file.");
+            return;
+        }
+        System.out.println("Class overall average is "+ 1.0*sumScores/numScores);
     }
     
     public static void createDummyStudents(HashMap<Integer,Student> students){
