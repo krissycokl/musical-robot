@@ -2,6 +2,8 @@ package com.sg.D9StudentQuizScores;
 import com.sg.D8UserIO.ImplementsUserIO;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+// Random only used to initialize dummy student scores
 import java.util.Random;
 
 public class StudentQuizScores {
@@ -9,50 +11,12 @@ public class StudentQuizScores {
     public static ImplementsUserIO UIO = new ImplementsUserIO();
     
     public static void main(String[] args) {
-        String input;
-        boolean cancel=false;
-        
         HashMap<Integer, Student> students = new HashMap<>();
         createDummyStudents(students);
-        int numStudents=students.size();
         
+        boolean cancel=false;
         while(!cancel){
-            input = UIO.getString("What do you want to do?\n"
-                    + "\t1.) List Students\n"
-                    + "\t2.) Add Student\n"
-                    + "\t3.) Remove Student\n"
-                    + "\t4.) View Scores\n"
-                    + "\t5.) Add Score\n"
-                    + "\t6.) View Average (one student)\n"
-                    + "\t7.) View Average (all students)\n"
-                    + "\t8.) Best Average\n"
-                    + "\t9.) Worst Average\n"
-                    + "Type cancel at any time to quit.");
-            System.out.println();
-            
-            if(input.equalsIgnoreCase("1") || input.equalsIgnoreCase("list students")){
-                getListOfStudents(students);
-            } else if(input.equalsIgnoreCase("2") || input.equalsIgnoreCase("add student")){
-                numStudents+=addStudent(students,numStudents);
-            } else if(input.equalsIgnoreCase("3") || input.equalsIgnoreCase("remove student")){
-                numStudents-=removeStudent(students);
-            } else if(input.equalsIgnoreCase("4") || input.equalsIgnoreCase("view scores")){
-                getScores(students);
-            } else if(input.equalsIgnoreCase("5") || input.equalsIgnoreCase("add score")){
-                addScore(students);
-            } else if(input.equalsIgnoreCase("6") || input.equalsIgnoreCase("view average (one student)")){
-                getAverage(students);
-            } else if(input.equalsIgnoreCase("7") || input.equalsIgnoreCase("view average (all students)")){
-                getOverallAverage(students);
-            } else if(input.equalsIgnoreCase("8") || input.equalsIgnoreCase("best average")){
-                getStudentByScore(students,true);
-            } else if(input.equalsIgnoreCase("9") || input.equalsIgnoreCase("worst average")){
-                getStudentByScore(students,false);
-            } else if(input.equalsIgnoreCase("cancel")){
-                cancel=true;
-            }
-            System.out.println();
-            
+            cancel = direct(students);
         }
     }
     
@@ -97,12 +61,13 @@ public class StudentQuizScores {
         }
     }
     
-    public static int addStudent(HashMap<Integer,Student> students, int id){
+    public static int addStudent(HashMap<Integer,Student> students){
         String name = UIO.getString("Enter student's name or type cancel");
         if (name.equalsIgnoreCase("cancel")){return 0;}
         else {
-            students.put(id,new Student(name.toUpperCase()));
-            System.out.println(name+" added with id "+id);
+            int numStudents=students.size();
+            students.put(numStudents,new Student(name.toUpperCase()));
+            System.out.println(name+" added with id "+numStudents);
             return 1;
         }
     }
@@ -111,6 +76,7 @@ public class StudentQuizScores {
         int id = getID(students);
         if(id==-1){return 0;}
         
+        System.out.println("Student ID: "+id+", Name: "+students.get(id).getName()+" removed.");
         students.remove(id);
         return 1;
     }
@@ -176,7 +142,7 @@ public class StudentQuizScores {
     }
     
     public static void getStudentByScore(HashMap<Integer,Student> students, boolean best){
-        if(students.size()==0){
+        if(students.isEmpty()){
             System.out.println("There are no students.");
             return;
         }
@@ -201,13 +167,13 @@ public class StudentQuizScores {
         
         if(best){
             if (maxID==-1){System.out.println("Score validation error. Scores should be between 0 and 100.");}
-            System.out.println("The student with the highest score is "+students.get(maxID).getName()+""
-                    + " with an average score of "+maxAvg);
+            System.out.println("The student with the highest grade is "+students.get(maxID).getName()+""
+                    + " with an average of "+maxAvg);
         }
         else {
             if (minID==-1){System.out.println("Score validation error. Scores should be between 0 and 100.");}
-            System.out.println("The student with the lowest score is "+students.get(minID).getName()+""
-                    + " with an average score of "+minAvg);
+            System.out.println("The student with the lowest grade is "+students.get(minID).getName()+""
+                    + " with an average of "+minAvg);
         }
     }
 
@@ -228,5 +194,45 @@ public class StudentQuizScores {
                 students.get(id).addScore(ran.nextInt(30)+71);
             }
         }
+    }
+    
+    public static boolean direct(HashMap<Integer,Student> students){
+        String input;
+        input = UIO.getString("What do you want to do?\n"
+                + "\t1.) List Students\n"
+                + "\t2.) Add Student\n"
+                + "\t3.) Remove Student\n"
+                + "\t4.) View Scores\n"
+                + "\t5.) Add Score\n"
+                + "\t6.) View Average (one student)\n"
+                + "\t7.) View Average (all students)\n"
+                + "\t8.) Best Average\n"
+                + "\t9.) Worst Average\n"
+                + "Type cancel at any time to quit.");
+        System.out.println();
+
+        if(input.equalsIgnoreCase("1") || input.equalsIgnoreCase("list students")){
+            getListOfStudents(students);
+        } else if(input.equalsIgnoreCase("2") || input.equalsIgnoreCase("add student")){
+            addStudent(students);
+        } else if(input.equalsIgnoreCase("3") || input.equalsIgnoreCase("remove student")){
+            removeStudent(students);
+        } else if(input.equalsIgnoreCase("4") || input.equalsIgnoreCase("view scores")){
+            getScores(students);
+        } else if(input.equalsIgnoreCase("5") || input.equalsIgnoreCase("add score")){
+            addScore(students);
+        } else if(input.equalsIgnoreCase("6") || input.equalsIgnoreCase("view average (one student)")){
+            getAverage(students);
+        } else if(input.equalsIgnoreCase("7") || input.equalsIgnoreCase("view average (all students)")){
+            getOverallAverage(students);
+        } else if(input.equalsIgnoreCase("8") || input.equalsIgnoreCase("best average")){
+            getStudentByScore(students,true);
+        } else if(input.equalsIgnoreCase("9") || input.equalsIgnoreCase("worst average")){
+            getStudentByScore(students,false);
+        } else if(input.equalsIgnoreCase("cancel")){
+            return true;
+        }
+        System.out.println();
+        return false;
     }
 }
