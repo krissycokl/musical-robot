@@ -25,6 +25,8 @@ public class StudentQuizScores {
                     + "\t5.) Add Score\n"
                     + "\t6.) View Average (one student)\n"
                     + "\t7.) View Average (all students)\n"
+                    + "\t8.) Best Average\n"
+                    + "\t9.) Worst Average\n"
                     + "Type cancel at any time to quit.");
             System.out.println();
             
@@ -42,6 +44,10 @@ public class StudentQuizScores {
                 getAverage(students);
             } else if(input.equalsIgnoreCase("7") || input.equalsIgnoreCase("view average (all students)")){
                 getOverallAverage(students);
+            } else if(input.equalsIgnoreCase("8") || input.equalsIgnoreCase("best average")){
+                getStudentByScore(students,true);
+            } else if(input.equalsIgnoreCase("9") || input.equalsIgnoreCase("worst average")){
+                getStudentByScore(students,false);
             } else if(input.equalsIgnoreCase("cancel")){
                 cancel=true;
             }
@@ -136,18 +142,21 @@ public class StudentQuizScores {
         int id = getID(students);
         if(id==-1){return;}
         
-        int numScores;
-        int sumScores=0;
-        
-        numScores = students.get(id).getScores().size();
-        for (Integer score : students.get(id).getScores()){
-            sumScores += score;
-        }
-        if(numScores==0){
+        if(students.get(id).getScores().isEmpty()){
             System.out.println("No scores on file for "+students.get(id).getName()+".");
             return;
         }
-        System.out.println(students.get(id).getName() + "'s average is "+ 1.0*sumScores/numScores);
+        System.out.println(students.get(id).getName() + "'s average is "+ getAverage(students, id));
+    }
+    
+    public static double getAverage(HashMap<Integer,Student> students, int id){
+        int numScores=0;
+        int sumScores=0;
+        for (Integer score : students.get(id).getScores()){
+            sumScores += score;
+            numScores++;
+        }
+        return 1.0*sumScores/numScores;
     }
     
     public static void getOverallAverage(HashMap<Integer,Student> students){
@@ -166,6 +175,42 @@ public class StudentQuizScores {
         System.out.println("Class overall average is "+ 1.0*sumScores/numScores);
     }
     
+    public static void getStudentByScore(HashMap<Integer,Student> students, boolean best){
+        if(students.size()==0){
+            System.out.println("There are no students.");
+            return;
+        }
+        
+        double minAvg=101;
+        int minID = -1;
+        double maxAvg=-1;
+        int maxID = -1;
+        double tempAvg;
+        
+        for (Integer id : students.keySet()){
+            tempAvg = getAverage(students,id);
+            if(tempAvg<minAvg){
+                minAvg=tempAvg;
+                minID = id;
+            }
+            if(tempAvg>maxAvg){
+                maxAvg=tempAvg;
+                maxID = id;
+            }
+        }
+        
+        if(best){
+            if (maxID==-1){System.out.println("Score validation error. Scores should be between 0 and 100.");}
+            System.out.println("The student with the highest score is "+students.get(maxID).getName()+""
+                    + " with an average score of "+maxAvg);
+        }
+        else {
+            if (minID==-1){System.out.println("Score validation error. Scores should be between 0 and 100.");}
+            System.out.println("The student with the lowest score is "+students.get(minID).getName()+""
+                    + " with an average score of "+minAvg);
+        }
+    }
+
     public static void createDummyStudents(HashMap<Integer,Student> students){
         Random ran = new Random();
         
