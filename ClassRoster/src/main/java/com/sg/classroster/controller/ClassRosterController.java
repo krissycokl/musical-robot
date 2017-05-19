@@ -5,8 +5,14 @@ import com.sg.classroster.dto.*;
 import java.util.List;
 
 public class ClassRosterController {
-    ClassRosterView view = new ClassRosterView();
-    private ClassRosterDao dao = new ClassRosterDaoFileImpl();
+    
+    public ClassRosterController(ClassRosterDao dao, ClassRosterView view){
+        this.dao = dao;
+        this.view = view;
+    }
+    
+    ClassRosterView view;
+    ClassRosterDao dao;
     
     public void run(){
         boolean run = true;
