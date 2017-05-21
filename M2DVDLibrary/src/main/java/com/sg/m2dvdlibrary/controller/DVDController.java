@@ -74,7 +74,15 @@ public class DVDController {
                 dvd.setNote(view.getNote());
                 break;
             case 7:
-                dao.removeDVD(key);
+                int conf = view.confirmDelete();
+                if (conf==1){
+                    dao.removeDVD(key);
+                }
+                break;
+            case 8:
+                break;
+            default:
+                invalidInput();
         }
     }
     
@@ -94,13 +102,10 @@ public class DVDController {
         return view.confirmExit();
     }
     
-    private void chooseFromMultiple(String response){
-        int key;
-        try{key = Integer.parseInt(response);}
-        catch (NumberFormatException e) {key = -1;}
+    private void chooseFromMultiple(int key){
         if (dao.getDVD(key) != null){
             getSelectionDVD(key);
-        }
+        } 
     }
     
     private void getDVDByName(){

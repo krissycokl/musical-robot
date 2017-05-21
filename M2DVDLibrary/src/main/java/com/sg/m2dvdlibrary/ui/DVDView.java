@@ -11,13 +11,23 @@ public class DVDView {
         this.io = io;
     }
     
+    public int makeSureItsInt(String input){
+        int inputInt;
+        try{
+            inputInt = Integer.parseInt(input);
+        } catch (NumberFormatException e){
+            inputInt = -1;
+        }
+        return inputInt;
+    }
+    
     public int getMenuImport(){
         io.print("\n~~~~~ Welcome to Your DVD Library ~~~~~");
         io.print("Do you want to import a library, or start a new one?");
         io.print("1.) Import");
         io.print("2.) New");
         io.print("3.) Exit");
-        return io.getInt("",1,3);
+        return makeSureItsInt(io.getString(""));
     }
     
     public int getMenuMain(){
@@ -27,11 +37,11 @@ public class DVDView {
         io.print("3.) Browse all DVDs");
         io.print("4.) Exit and save changes");
         io.print("5.) Exit without saving");
-        return io.getInt("What would you like to do?",1,5);
+        return makeSureItsInt(io.getString("What would you like to do?"));
     }
     
     public int getMenuDVD(DVD dvd){
-        io.print("   Title: "+dvd.getTitle());
+        io.print("\n   Title: "+dvd.getTitle());
         io.print("    Year: "+dvd.getYear());
         io.print("Director: "+dvd.getDirector());
         io.print("  Studio: "+dvd.getStudio());
@@ -46,12 +56,12 @@ public class DVDView {
         io.print("6.) Edit comment");
         io.print("7.) Delete "+dvd.getTitle());
         io.print("8.) Go back");
-        return io.getInt("",1,8);
+        return makeSureItsInt(io.getString(""));
     }
     
     public void showDVDs(HashMap<Integer,DVD> library){
         if (library.isEmpty()){
-            io.print("No DVDs found.");
+            io.print("\nNo DVDs found.");
             return;
         }
         for (Integer key : library.keySet()){
@@ -62,12 +72,12 @@ public class DVDView {
     }
     
     public void bannerAllDVDS(){
-        io.print("~~~~~ All DVDs ~~~~~");
+        io.print("\n~~~~~ All DVDs ~~~~~");
     }
     
-    public String getMenuMultiple(){
-        io.print("Type a number to see more details,");
-        return io.getString("or hit enter to go back.");
+    public int getMenuMultiple(){
+        io.print("\nType a number to see more details,");
+        return makeSureItsInt(io.getString("or hit enter to go back."));
     }
     
     public void bannerBadInput(){
@@ -92,15 +102,16 @@ public class DVDView {
     }
     
     public int confirmSave(){
-        io.print("Do you really want to save your changes?");
+        io.print("\nDo you really want to save your changes?");
+        io.print("This will overwrite your existing library.");
         io.print("1.) Yes       2.) No");
-        return io.getInt("",1,2);
+        return makeSureItsInt(io.getString(""));
     }
     
     public int confirmExit(){
-        io.print("Do you really want to exit without saving?");
+        io.print("\nDo you really want to exit without saving?");
         io.print("1.) Yes       2.) No");
-        return io.getInt("",1,2);
+        return makeSureItsInt(io.getString(""));
     }
     
     public void goodBye(){
@@ -108,7 +119,9 @@ public class DVDView {
     }
     
     public String getDVDTitle(){
-        return io.getString("Please input the title of the DVD.");
+        String title = io.getString("\nPlease input the title of the DVD.");
+        if(!title.isEmpty()){return title;}
+        return "~no title provided~";
     }
     
     public void importSuccess(int num){
@@ -120,21 +133,37 @@ public class DVDView {
     }
     
     public String getTitle(){
-        return io.getString("Title:");
+        String holder = io.getString("Title:");
+        if(holder!=null){return holder;}
+        return "none";
     }
     public int getYear(){
         return io.getInt("Year:",1900,2050);
     }
     public String getDirector(){
-        return io.getString("Director:");
+        String holder = io.getString("Director:");
+        if(!holder.isEmpty()){return holder;}
+        return "none";
     }
     public String getStudio(){
-        return io.getString("Studio:");
+        String holder = io.getString("Studio:");
+        if(!holder.isEmpty()){return holder;}
+        return "none";
     }
     public String getRating(){
-        return io.getString("Rating:");
+        String holder = io.getString("Rating:");
+        if(!holder.isEmpty()){return holder;}
+        return "none";
     }
     public String getNote(){
-        return io.getString("Comment:");
+        String holder = io.getString("Comment:");
+        if(!holder.isEmpty()){return holder;}
+        return "none";
+    }
+    
+    public int confirmDelete(){
+        io.print("Do you really want to delete this DVD?");
+        io.print("1.) Yes       2.) No");
+        return makeSureItsInt(io.getString(""));
     }
 }
