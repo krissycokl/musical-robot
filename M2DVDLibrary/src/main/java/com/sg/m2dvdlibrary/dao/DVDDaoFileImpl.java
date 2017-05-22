@@ -67,7 +67,7 @@ public class DVDDaoFileImpl implements DVDDao {
             curDVD.setDirector(values[3]);
             curDVD.setStudio(values[4]);
             curDVD.setRating(values[5]);
-            if(values.length > 6){curDVD.setNote(values[6]);}
+            curDVD.setNote(values[6]);
             library.put(Integer.parseInt(values[0]), curDVD);
         }
         int newKey =-1;

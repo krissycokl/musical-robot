@@ -9,26 +9,6 @@ public class App {
         DVDView view = new DVDView(io);
         DVDDao dao = new DVDDaoFileImpl();
         DVDController controller = new DVDController(view, dao);
-        boolean run = true;
-        
-        try{
-            int choice = view.getMenuImport();
-            switch(choice){
-                case 1:
-                    dao.populate();
-                    view.importSuccess(dao.listDVDs().size());
-                    break;
-                case 2:
-                    break;
-                case 3:
-                    run = false;
-            }
-            while(run){
-                run = controller.run();
-            }
-            view.goodBye();
-        } catch (DVDDaoException | NumberFormatException er) {
-            view.bannerError(er.getMessage());
-        }
+        controller.begin();
     }
 }

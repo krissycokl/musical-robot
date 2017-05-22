@@ -10,15 +10,37 @@ public class DVDController {
 
     DVDView view;
     DVDDao dao;
-    int choice;
     
     public DVDController(DVDView view, DVDDao dao){
         this.view = view;
         this.dao  = dao;
     }
     
+    public void begin(){
+        boolean run = true;
+        try{
+            int choice = view.getMenuImport();
+            switch(choice){
+                case 1:
+                    dao.populate();
+                    view.importSuccess(dao.listDVDs().size());
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    run = false;
+            }
+            while(run){
+                run = run();
+            }
+            view.goodBye();
+        } catch (DVDDaoException | NumberFormatException er) {
+            view.bannerError(er.getMessage());
+        }
+    }
+    
     public boolean run() throws DVDDaoException, NumberFormatException{
-        choice = getSelectionMain();
+        int choice = getSelectionMain();
         switch(choice){
             case 1:
                 addDVD();
@@ -30,8 +52,10 @@ public class DVDController {
                 listAllDVDs();
                 break;
             case 4:
-                exitAndSave();
-                return false;
+                if(exitAndSave()==1){
+                    return false;
+                };
+                break;
             case 5:
                 if(exitWithoutSave()==1){
                     return false;
@@ -90,12 +114,13 @@ public class DVDController {
         view.bannerBadInput();
     }
     
-    private void exitAndSave() throws DVDDaoException{
+    private int exitAndSave() throws DVDDaoException{
         int save = view.confirmSave();
         if(save==1){
             dao.save();
             view.saveSuccess(dao.listDVDs().size());
         }
+        return save;
     }
     
     private int exitWithoutSave() {

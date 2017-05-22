@@ -5,4 +5,4 @@
 4::Alien::1979::Ridley Scott::20th Century Fox::R::null
 5::Aliens::1986::James Cameron::20th Century Fox::R::null
 6::Alien 3::1992::David Fincher::20th Century Fox::R::null
-7::Alien: Resurrection::1997::Jean-Pierre Jeunet::20th Century Fox::R::null
+7::Alien: Resurrection::1997::Jean-Pierre Jeunet::20th Century Fox::R::none

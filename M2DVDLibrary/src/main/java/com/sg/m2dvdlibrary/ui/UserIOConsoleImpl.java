@@ -7,19 +7,31 @@ public class UserIOConsoleImpl implements UserIO {
     
     @Override
     public int getInt(String prompt){
-        System.out.println(prompt);
-        return Integer.parseInt(sc.nextLine());
+        String response;
+        int responseInt;
+        while (true){
+            System.out.println(prompt);
+            response = sc.nextLine();
+            try{
+                responseInt = Integer.parseInt(response);
+                return responseInt;
+            } catch (NumberFormatException e) {}
+        }
     }
     
     @Override
     public int getInt(String prompt, int min, int max){
-        int response;
+        String response;
+        int responseInt;
         while (true){
             System.out.println(prompt);
-            response = Integer.parseInt(sc.nextLine());
-            if(response <= max && response >= min){
-                return response;
-            }
+            response = sc.nextLine();
+            try{
+                responseInt = Integer.parseInt(response);
+                if(responseInt <= max && responseInt >= min){
+                    return responseInt;
+                }
+            } catch (NumberFormatException e) {}
         }
     }
     
@@ -31,37 +43,61 @@ public class UserIOConsoleImpl implements UserIO {
     
     @Override
     public float getFloat(String prompt){
-        System.out.println(prompt);
-        return Float.parseFloat(sc.nextLine());
+        String response;
+        float responseFloat;
+        while (true){
+            System.out.println(prompt);
+            response = sc.nextLine();
+            try{
+                responseFloat = Float.parseFloat(response);
+                return responseFloat;
+            } catch (NumberFormatException e) {}
+        }
     }
     
     @Override
     public float getFloat(String prompt, float min, float max){
-        float response;
+        String response;
+        float responseFloat;
         while (true){
             System.out.println(prompt);
-            response = Float.parseFloat(sc.nextLine());
-            if(response <= max && response >= min){
-                return response;
-            }
+            response = sc.nextLine();
+            try{
+                responseFloat = Float.parseFloat(response);
+                if(responseFloat <= max && responseFloat >= min){
+                    return responseFloat;
+                }
+            } catch (NumberFormatException e) {}
         }
     }
     
     @Override
     public double getDouble(String prompt){
-        System.out.println(prompt);
-        return Double.parseDouble(sc.nextLine());
+        String response;
+        double responseDbl;
+        while (true){
+            System.out.println(prompt);
+            response = sc.nextLine();
+            try{
+                responseDbl = Double.parseDouble(response);
+                return responseDbl;
+            } catch (NumberFormatException e) {}
+        }
     }
     
     @Override
     public double getDouble(String prompt, double min, double max){
-        double response;
+        String response;
+        double responseDouble;
         while (true){
             System.out.println(prompt);
-            response = Double.parseDouble(sc.nextLine());
-            if(response <= max && response >= min){
-                return response;
-            }
+            response = sc.nextLine();
+            try{
+                responseDouble = Double.parseDouble(response);
+                if(responseDouble <= max && responseDouble >= min){
+                    return responseDouble;
+                }
+            } catch (NumberFormatException e) {}
         }
     }
     

@@ -11,23 +11,13 @@ public class DVDView {
         this.io = io;
     }
     
-    public int makeSureItsInt(String input){
-        int inputInt;
-        try{
-            inputInt = Integer.parseInt(input);
-        } catch (NumberFormatException e){
-            inputInt = -1;
-        }
-        return inputInt;
-    }
-    
     public int getMenuImport(){
         io.print("\n~~~~~ Welcome to Your DVD Library ~~~~~");
         io.print("Do you want to import a library, or start a new one?");
         io.print("1.) Import");
         io.print("2.) New");
         io.print("3.) Exit");
-        return makeSureItsInt(io.getString(""));
+        return io.getInt("",1,3);
     }
     
     public int getMenuMain(){
@@ -37,7 +27,7 @@ public class DVDView {
         io.print("3.) Browse all DVDs");
         io.print("4.) Exit and save changes");
         io.print("5.) Exit without saving");
-        return makeSureItsInt(io.getString("What would you like to do?"));
+        return io.getInt("What would you like to do?",1,5);
     }
     
     public int getMenuDVD(DVD dvd){
@@ -56,7 +46,7 @@ public class DVDView {
         io.print("6.) Edit comment");
         io.print("7.) Delete "+dvd.getTitle());
         io.print("8.) Go back");
-        return makeSureItsInt(io.getString(""));
+        return io.getInt("",1,8);
     }
     
     public void showDVDs(HashMap<Integer,DVD> library){
@@ -77,7 +67,7 @@ public class DVDView {
     
     public int getMenuMultiple(){
         io.print("\nType a number to see more details,");
-        return makeSureItsInt(io.getString("or hit enter to go back."));
+        return io.getInt("or type -1 to go back.");
     }
     
     public void bannerBadInput(){
@@ -105,13 +95,13 @@ public class DVDView {
         io.print("\nDo you really want to save your changes?");
         io.print("This will overwrite your existing library.");
         io.print("1.) Yes       2.) No");
-        return makeSureItsInt(io.getString(""));
+        return io.getInt("",1,2);
     }
     
     public int confirmExit(){
         io.print("\nDo you really want to exit without saving?");
         io.print("1.) Yes       2.) No");
-        return makeSureItsInt(io.getString(""));
+        return io.getInt("",1,2);
     }
     
     public void goodBye(){
@@ -134,7 +124,7 @@ public class DVDView {
     
     public String getTitle(){
         String holder = io.getString("Title:");
-        if(holder!=null){return holder;}
+        if(!holder.isEmpty()){return holder;}
         return "none";
     }
     public int getYear(){
@@ -164,6 +154,6 @@ public class DVDView {
     public int confirmDelete(){
         io.print("Do you really want to delete this DVD?");
         io.print("1.) Yes       2.) No");
-        return makeSureItsInt(io.getString(""));
+        return io.getInt("",1,2);
     }
 }
