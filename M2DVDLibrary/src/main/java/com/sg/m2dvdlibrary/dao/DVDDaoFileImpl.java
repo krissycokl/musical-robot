@@ -44,7 +44,7 @@ public class DVDDaoFileImpl implements DVDDao {
     public HashMap<Integer, DVD> listDVDs(String title) {
         HashMap<Integer, DVD> matches = new HashMap<>();
         for (Integer key : library.keySet()){
-            if (library.get(key).getTitle().contains(title)){
+            if (library.get(key).getTitle().toLowerCase().contains(title.toLowerCase())){
                 matches.put(key, library.get(key));
             }
         }
