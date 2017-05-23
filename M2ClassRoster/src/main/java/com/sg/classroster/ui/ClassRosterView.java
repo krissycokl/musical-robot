@@ -9,6 +9,10 @@ public class ClassRosterView {
         this.io = io;
     }
     
+    public void displayErrorMessage(String error){
+        io.print(error);
+    }
+    
     public int printMenuAndGetSelection(){
         io.print("Main Menu");
         io.print("1. List Student IDs");

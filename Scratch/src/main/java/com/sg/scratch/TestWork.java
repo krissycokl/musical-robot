@@ -2,38 +2,29 @@ package com.sg.scratch;
 
 public class TestWork {
     public static void main(String[] args) {
-        /*byte myByte = 127;
-        System.out.println(myByte);
-        myByte++;
-        System.out.println(myByte);*/
+        String justASpace = " ";
+        String justANewLine = "\n";
+        String spaceAndNewLine = " \n";
+        String nothing = "";
         
-        /*int anA = giveMeAnA();
-        System.out.println(anA);*/
+        System.out.println("Just a space: \n"+
+                "Is empty?: "+justASpace.isEmpty()+
+                "Is null? : "+(justASpace==null)+
+                "Length?  : "+justASpace.length());
         
+        System.out.println("Just a new line: \n"+
+                "Is empty?: "+justANewLine.isEmpty()+
+                "Is null? : "+(justANewLine==null)+
+                "Length?  : "+justANewLine.length());
         
-        // boolean:  1 bit
-        // byte:     8 bit signed
-        // short:   16 bit signed
-        // char:    16 bit unsigned
-        // int:     32 bit signed
-        // long:    64 bit signed
-        // float:   64 bit "single precision"
-        // double:  64 bit "double precision"
+        System.out.println("Space and new line: \n"+
+                "Is empty?: "+spaceAndNewLine.isEmpty()+
+                "Is null? : "+(spaceAndNewLine==null)+
+                "Length?  : "+spaceAndNewLine.length());
         
-        // char[] allChars = new char[65536];
-        byte[] allBytes = new byte[256];
-        
-        for (byte i=-128;i<127;i++){
-            allBytes[i+128] = i;
-        }
-        
-        for (byte chara : allBytes){
-            System.out.print(chara+" ");
-            if((chara-1)%8==0){System.out.println();}
-        }
+        System.out.println("Nothing: \n"+
+                "Is empty?: "+nothing.isEmpty()+
+                "Is null? : "+(nothing==null)+
+                "Length?  : "+nothing.length());
     }
-    /*
-    public static char giveMeAnA(){
-        return 'a';
-    }*/
 }
