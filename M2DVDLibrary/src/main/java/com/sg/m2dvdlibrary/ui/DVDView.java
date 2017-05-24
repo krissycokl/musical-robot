@@ -35,7 +35,7 @@ public class DVDView {
     
     public int getMenuDVD(DVD dvd){
         io.print("\n   Title: "+dvd.getTitle());
-        io.print("    Year: "+dvd.getYear());
+        io.print("    Year: "+dvd.getYear().format(DateTimeFormatter.ofPattern("MM/dd/uuuu")));
         io.print("Director: "+dvd.getDirector());
         io.print("  Studio: "+dvd.getStudio());
         io.print("  Rating: "+dvd.getRating());
@@ -136,7 +136,7 @@ public class DVDView {
         try{
             ld = LocalDate.parse(holder,DateTimeFormatter.ofPattern("MM/dd/uuuu"));
         } catch (DateTimeParseException e){
-            ld = LocalDate.parse("01/01/2000",DateTimeFormatter.ofPattern("MM/DD/YYYY"));
+            ld = LocalDate.parse("01/01/2000",DateTimeFormatter.ofPattern("MM/dd/uuuu"));
         }
         return ld;
     }
