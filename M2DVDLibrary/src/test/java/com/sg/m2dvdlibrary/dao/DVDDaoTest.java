@@ -7,6 +7,8 @@
 package com.sg.m2dvdlibrary.dao;
 
 import com.sg.m2dvdlibrary.dto.DVD;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -46,7 +48,7 @@ public class DVDDaoTest {
         dvd.setRating("R");
         dvd.setTitle("3:10 to Yuma");
         dvd.setStudio("");
-        dvd.setYear(1990);
+        dvd.setYear(LocalDate.parse("01/06/1990",DateTimeFormatter.ofPattern("mm/DD/uuuu")));
         
         dao.addDVD(dvd);
         DVD fromDao = dao.getDVD(0);
@@ -62,7 +64,7 @@ public class DVDDaoTest {
         dvd.setRating("R");
         dvd.setTitle("3:10 to Yuma");
         dvd.setStudio("");
-        dvd.setYear(1990);
+        dvd.setYear(LocalDate.parse("01/06/1990",DateTimeFormatter.ofPattern("mm/DD/uuuu")));
         
         dao.addDVD(dvd);
         DVD fromDao = dao.removeDVD(0);
@@ -77,7 +79,7 @@ public class DVDDaoTest {
         dvd.setRating("R");
         dvd.setTitle("3:10 to Yuma");
         dvd.setStudio("");
-        dvd.setYear(1990);
+        dvd.setYear(LocalDate.parse("01/06/1990",DateTimeFormatter.ofPattern("mm/DD/uuuu")));
         
         DVD dvd2 = new DVD();
         dvd2.setDirector("Ian Grimes");
@@ -85,7 +87,7 @@ public class DVDDaoTest {
         dvd2.setRating("R");
         dvd2.setTitle("Palo Alto");
         dvd2.setStudio("Hmm");
-        dvd2.setYear(2001);
+        dvd.setYear(LocalDate.parse("01/06/1990",DateTimeFormatter.ofPattern("mm/DD/uuuu")));
         
         dao.addDVD(dvd);
         dao.addDVD(dvd2);
@@ -102,7 +104,7 @@ public class DVDDaoTest {
         dvd.setRating("R");
         dvd.setTitle("3:10 to Yuma");
         dvd.setStudio("");
-        dvd.setYear(1990);
+        dvd.setYear(LocalDate.parse("01/06/1990",DateTimeFormatter.ofPattern("mm/DD/uuuu")));
         
         DVD dvd2 = new DVD();
         dvd2.setDirector("Ian Grimes");
@@ -110,7 +112,7 @@ public class DVDDaoTest {
         dvd2.setRating("R");
         dvd2.setTitle("Palo Alto");
         dvd2.setStudio("Hmm");
-        dvd2.setYear(2001);
+        dvd.setYear(LocalDate.parse("01/06/1990",DateTimeFormatter.ofPattern("mm/DD/uuuu")));
         
         dao.addDVD(dvd);
         dao.addDVD(dvd2);

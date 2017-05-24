@@ -1,14 +1,16 @@
 package com.sg.D7RefactorIntoObjects;
 
+import java.math.BigDecimal;
+
 public class InterestCalcAccount {
-    private final double BALBEGINNING;
-    private final double I;
+    private final BigDecimal BALBEGINNING;
+    private final BigDecimal I;
     private final int COMPOUNDINGS;
     
-    private double balCurrent;
+    private BigDecimal balCurrent;
     private InterestCalcYear[] years;
-    
-    public InterestCalcAccount(double balBegin, double i, int compoundings, int numYears){
+
+    InterestCalcAccount(BigDecimal balBegin, BigDecimal i, int compoundings, int numYears) {
         this.BALBEGINNING = balBegin;
         this.balCurrent = balBegin;
         this.I = i;
@@ -16,11 +18,11 @@ public class InterestCalcAccount {
         this.years = new InterestCalcYear[numYears];
     }
     
-    public double getBalance(){
+    public BigDecimal getBalance(){
         return balCurrent;
     }
     
-    public void setBalance(double balNew){
+    public void setBalance(BigDecimal balNew){
         this.balCurrent = balNew;
     }
     

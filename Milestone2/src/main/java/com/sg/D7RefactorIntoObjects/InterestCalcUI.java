@@ -1,19 +1,24 @@
 package com.sg.D7RefactorIntoObjects;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Scanner;
 
 public class InterestCalcUI {
     static Scanner sc = new Scanner(System.in);
     
-    public static double getBeginningBalance(){
+    public static String getBeginningBalance(){
         System.out.println("Beginning balance?");
-        return Double.parseDouble(sc.nextLine());
+        return sc.nextLine();
     }
     
-    public static double getInterestRate(){
+    public static String getInterestRate(){
         System.out.println("Interest rate?");
-        double i = Double.parseDouble(sc.nextLine());
-        if (i>1){return i/100;}
-        return i;
+        BigDecimal i = new BigDecimal(sc.nextLine());
+        if (i.compareTo(BigDecimal.ONE) == 1)
+            {
+                return i.divide(new BigDecimal(100), 2, RoundingMode.HALF_UP).toString();
+            }
+        return i.toString();
     }
     
     public static int getCompoundings(){

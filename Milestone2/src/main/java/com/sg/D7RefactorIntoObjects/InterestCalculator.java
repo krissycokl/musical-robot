@@ -1,15 +1,17 @@
 package com.sg.D7RefactorIntoObjects;
 
+import java.math.BigDecimal;
+
 public class InterestCalculator {
     public static void main(String[] args) {
         
-        double balBegin;
-        double i;
+        BigDecimal balBegin;
+        BigDecimal i;
         int compoundings;
         int numYears;    
         
-        balBegin = InterestCalcUI.getBeginningBalance();
-        i = InterestCalcUI.getInterestRate();
+        balBegin = new BigDecimal(InterestCalcUI.getBeginningBalance());
+        i = new BigDecimal(InterestCalcUI.getInterestRate());
         compoundings = InterestCalcUI.getCompoundings();
         if (compoundings == 0){
             System.out.println("Invalid input.");
