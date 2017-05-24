@@ -1,6 +1,9 @@
 package com.sg.m2dvdlibrary.ui;
 
 import com.sg.m2dvdlibrary.dto.DVD;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 
 public class DVDView {
@@ -57,7 +60,7 @@ public class DVDView {
         for (Integer key : library.keySet()){
             io.print(key+".)"
                     +"\t"+library.get(key).getTitle()+" ("
-                    +library.get(key).getYear()+")\n");
+                    +library.get(key).getYear().getYear()+")");
         }
     }
     
@@ -127,8 +130,15 @@ public class DVDView {
         if(!holder.isEmpty()){return holder;}
         return "none";
     }
-    public int getYear(){
-        return io.getInt("Year:",1900,2050);
+    public LocalDate getYear(){
+        String holder = io.getString("Release Date: MM/DD/YYYY");
+        LocalDate ld;
+        try{
+            ld = LocalDate.parse(holder,DateTimeFormatter.ofPattern("MM/dd/uuuu"));
+        } catch (DateTimeParseException e){
+            ld = LocalDate.parse("01/01/2000",DateTimeFormatter.ofPattern("MM/DD/YYYY"));
+        }
+        return ld;
     }
     public String getDirector(){
         String holder = io.getString("Director:");

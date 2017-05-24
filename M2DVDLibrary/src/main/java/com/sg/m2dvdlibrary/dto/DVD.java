@@ -1,18 +1,19 @@
 package com.sg.m2dvdlibrary.dto;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 public class DVD {
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 47 * hash + Objects.hashCode(this.title);
-        hash = 47 * hash + this.year;
-        hash = 47 * hash + Objects.hashCode(this.rating);
-        hash = 47 * hash + Objects.hashCode(this.director);
-        hash = 47 * hash + Objects.hashCode(this.studio);
-        hash = 47 * hash + Objects.hashCode(this.note);
+        int hash = 5;
+        hash = 17 * hash + Objects.hashCode(this.title);
+        hash = 17 * hash + Objects.hashCode(this.year);
+        hash = 17 * hash + Objects.hashCode(this.rating);
+        hash = 17 * hash + Objects.hashCode(this.director);
+        hash = 17 * hash + Objects.hashCode(this.studio);
+        hash = 17 * hash + Objects.hashCode(this.note);
         return hash;
     }
 
@@ -28,9 +29,6 @@ public class DVD {
             return false;
         }
         final DVD other = (DVD) obj;
-        if (this.year != other.year) {
-            return false;
-        }
         if (!Objects.equals(this.title, other.title)) {
             return false;
         }
@@ -46,11 +44,16 @@ public class DVD {
         if (!Objects.equals(this.note, other.note)) {
             return false;
         }
+        if (!Objects.equals(this.year, other.year)) {
+            return false;
+        }
         return true;
     }
+
+    
     
     private String title;
-    private int year;
+    private LocalDate year;
     private String rating;
     private String director;
     private String studio;
@@ -64,11 +67,11 @@ public class DVD {
         this.title = title;
     }
 
-    public int getYear() {
+    public LocalDate getYear() {
         return year;
     }
 
-    public void setYear(int year) {
+    public void setYear(LocalDate year) {
         this.year = year;
     }
 

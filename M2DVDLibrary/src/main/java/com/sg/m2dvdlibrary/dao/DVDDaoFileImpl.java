@@ -7,6 +7,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -63,7 +65,7 @@ public class DVDDaoFileImpl implements DVDDao {
             DVD curDVD = new DVD();
             String[] values = sc.nextLine().split("::");
             curDVD.setTitle(values[1]);
-            curDVD.setYear(Integer.parseInt(values[2]));
+            curDVD.setYear(LocalDate.parse(values[2],DateTimeFormatter.ofPattern("uuuu-MM-dd")));
             curDVD.setDirector(values[3]);
             curDVD.setStudio(values[4]);
             curDVD.setRating(values[5]);
@@ -92,7 +94,7 @@ public class DVDDaoFileImpl implements DVDDao {
             out.println(
                 key+DELIMITER
                +library.get(key).getTitle()+DELIMITER
-               +library.get(key).getYear()+DELIMITER
+               +library.get(key).getYear().toString()+DELIMITER
                +library.get(key).getDirector()+DELIMITER
                +library.get(key).getStudio()+DELIMITER
                +library.get(key).getRating()+DELIMITER
