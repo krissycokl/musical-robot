@@ -1,29 +1,31 @@
 package com.sg.m2dvdlibrary.controller;
 
-import com.sg.m2dvdlibrary.dao.DVDDao;
 import com.sg.m2dvdlibrary.dao.DVDDaoException;
+import com.sg.m2dvdlibrary.dao.DVDFields;
 import com.sg.m2dvdlibrary.dto.DVD;
+import com.sg.m2dvdlibrary.service.DVDDataValidationException;
+import com.sg.m2dvdlibrary.service.DVDService;
 import com.sg.m2dvdlibrary.ui.DVDView;
 import java.util.HashMap;
 
 public class DVDController {
 
     DVDView view;
-    DVDDao dao;
+    DVDService service;
     
-    public DVDController(DVDView view, DVDDao dao){
+    public DVDController(DVDView view, DVDService service){
         this.view = view;
-        this.dao  = dao;
+        this.service  = service;
     }
     
-    public void begin(){
+    public void begin() {
         boolean run = true;
         try{
             int choice = view.getMenuImport();
             switch(choice){
                 case 1:
-                    dao.populate();
-                    view.importSuccess(dao.listDVDs().size());
+                    service.populate();
+                    view.importSuccess(service.listDVDs().size());
                     break;
                 case 2:
                     break;
@@ -34,12 +36,12 @@ public class DVDController {
                 run = run();
             }
             view.goodBye();
-        } catch (DVDDaoException | NumberFormatException er) {
+        } catch (DVDDaoException | NumberFormatException | DVDDataValidationException er) {
             view.bannerError(er.getMessage());
         }
     }
     
-    public boolean run() throws DVDDaoException, NumberFormatException{
+    public boolean run() throws DVDDaoException, NumberFormatException, DVDDataValidationException{
         int choice = getSelectionMain();
         switch(choice){
             case 1:
@@ -67,40 +69,40 @@ public class DVDController {
         return true;
     }
     
-    private void addDVD(){
-        dao.addDVD(view.getNewDVDInfo());
+    private void addDVD() throws DVDDataValidationException, DVDDaoException{
+        service.addDVD(view.getNewDVDInfo());
     }
         
     private int getSelectionMain(){
         return view.getMenuMain();
     }
     
-    private void getSelectionDVD(int key){
-        DVD dvd = dao.getDVD(key);
+    private void getSelectionDVD(int key) throws DVDDataValidationException, DVDDaoException {
+        DVD dvd = service.getDVD(key);
         int action = view.getMenuDVD(dvd);
         switch(action){
             case 1:
-                dvd.setTitle(view.getTitle());
+                service.editDVD(dvd, DVDFields.fields.TITLE, view.getTitle());
                 break;
             case 2:
-                dvd.setYear(view.getYear());
+                service.editDVD(dvd, DVDFields.fields.YEAR, view.getYear());
                 break;
             case 3:
-                dvd.setDirector(view.getDirector());
+                service.editDVD(dvd, DVDFields.fields.DIRECTOR, view.getDirector());
                 break;
             case 4:
-                dvd.setStudio(view.getStudio());
+                service.editDVD(dvd, DVDFields.fields.STUDIO, view.getStudio());
                 break;
             case 5:
-                dvd.setRating(view.getRating());
+                service.editDVD(dvd, DVDFields.fields.RATING, view.getRating());
                 break;
             case 6:
-                dvd.setNote(view.getNote());
+                service.editDVD(dvd, DVDFields.fields.COMMENT, view.getNote());
                 break;
             case 7:
                 int conf = view.confirmDelete();
                 if (conf==1){
-                    dao.removeDVD(key);
+                    service.removeDVD(key);
                 }
                 break;
             case 8:
@@ -117,8 +119,8 @@ public class DVDController {
     private int exitAndSave() throws DVDDaoException{
         int save = view.confirmSave();
         if(save==1){
-            dao.save();
-            view.saveSuccess(dao.listDVDs().size());
+            service.save();
+            view.saveSuccess(service.listDVDs().size());
         }
         return save;
     }
@@ -127,21 +129,21 @@ public class DVDController {
         return view.confirmExit();
     }
     
-    private void chooseFromMultiple(int key){
-        if (dao.getDVD(key) != null){
+    private void chooseFromMultiple(int key) throws DVDDaoException, DVDDataValidationException{
+        if (service.getDVD(key) != null){
             getSelectionDVD(key);
         } 
     }
     
-    private void getDVDByName(){
-        HashMap<Integer, DVD> dvds = dao.listDVDs(view.getDVDTitle());
+    private void getDVDByName() throws DVDDaoException, DVDDataValidationException{
+        HashMap<Integer, DVD> dvds = service.listDVDs(view.getDVDTitle());
         view.showDVDs(dvds);
         chooseFromMultiple(view.getMenuMultiple());
     }
     
-    private void listAllDVDs(){
+    private void listAllDVDs() throws DVDDaoException, DVDDataValidationException{
         view.bannerAllDVDS();
-        view.showDVDs(dao.listDVDs());        
+        view.showDVDs(service.listDVDs());        
         chooseFromMultiple(view.getMenuMultiple());
     }
 }

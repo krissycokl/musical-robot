@@ -1,5 +1,6 @@
 package com.sg.m2dvdlibrary.ui;
 
+import com.sg.m2dvdlibrary.dao.DVDFields;
 import com.sg.m2dvdlibrary.dto.DVD;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -77,11 +78,20 @@ public class DVDView {
         io.getString("Invalid input. Please hit return.");
     }
     
-    public DVD getNewDVDInfo() throws NumberFormatException {
+    public DVD getNewDVDInfo() {
         DVD dvd = new DVD();
         io.print("\n~~~~~ Add DVD ~~~~~");
         dvd.setTitle   (getTitle());
-        dvd.setYear    (getYear());
+        
+        String year = getYear();
+        LocalDate ld;
+                try{
+                    ld = LocalDate.parse(year,DateTimeFormatter.ofPattern("MM/dd/uuuu"));
+                } catch (DateTimeParseException e){
+                    ld = LocalDate.parse("01/01/2000",DateTimeFormatter.ofPattern("MM/dd/uuuu"));
+                }
+        
+        dvd.setYear    (ld);
         dvd.setDirector(getDirector());
         dvd.setStudio  (getStudio());
         dvd.setRating  (getRating());
@@ -126,19 +136,18 @@ public class DVDView {
     }
     
     public String getTitle(){
-        String holder = io.getString("Title:");
-        if(!holder.isEmpty()){return holder;}
-        return "none";
-    }
-    public LocalDate getYear(){
-        String holder = io.getString("Release Date: MM/DD/YYYY");
-        LocalDate ld;
-        try{
-            ld = LocalDate.parse(holder,DateTimeFormatter.ofPattern("MM/dd/uuuu"));
-        } catch (DateTimeParseException e){
-            ld = LocalDate.parse("01/01/2000",DateTimeFormatter.ofPattern("MM/dd/uuuu"));
+        String holder = "";
+        boolean validTitle = false;
+        while (!validTitle){
+            holder = io.getString("Title:");
+            if(!holder.isEmpty()){validTitle = true;}
         }
-        return ld;
+        return holder;
+    }
+    
+    public String getYear(){
+        String holder = io.getString("Release Date: MM/DD/YYYY");
+        return holder;
     }
     public String getDirector(){
         String holder = io.getString("Director:");

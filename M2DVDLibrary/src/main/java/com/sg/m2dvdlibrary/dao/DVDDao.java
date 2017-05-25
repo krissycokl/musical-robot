@@ -7,6 +7,7 @@ public interface DVDDao {
 
     public DVD getDVD(Integer key);
     public DVD addDVD(DVD dvd);
+    public DVD editDVD(DVD dvd, DVDFields.fields field, String value);
     public DVD removeDVD(Integer key);
     public HashMap<Integer,DVD> listDVDs();
     public HashMap<Integer,DVD> listDVDs(String title);

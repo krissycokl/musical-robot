@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -20,6 +21,37 @@ public class DVDDaoFileImpl implements DVDDao {
     
     HashMap<Integer, DVD> library = new HashMap<>();
 
+    @Override
+    public DVD editDVD(DVD dvd, DVDFields.fields field, String value){
+        switch(field){
+            case TITLE:
+                dvd.setTitle(value);
+                break;
+            case YEAR:
+                LocalDate ld;
+                try{
+                    ld = LocalDate.parse(value,DateTimeFormatter.ofPattern("MM/dd/uuuu"));
+                } catch (DateTimeParseException e){
+                    ld = LocalDate.parse("01/01/2000",DateTimeFormatter.ofPattern("MM/dd/uuuu"));
+                }
+                dvd.setYear(ld);
+                break;
+            case DIRECTOR:
+                dvd.setDirector(value);
+                break;
+            case STUDIO:
+                dvd.setStudio(value);
+                break;
+            case RATING:
+                dvd.setRating(value);
+                break;
+            case COMMENT:
+                dvd.setNote(value);
+                break;
+        }
+        return dvd;
+    }
+    
     @Override
     public DVD getDVD(Integer key) {
         return library.get(key);
