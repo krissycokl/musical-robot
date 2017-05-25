@@ -1,20 +1,21 @@
 package com.sg.m2addressbook.controller;
-import com.sg.m2addressbook.dao.AddressDao;
 import com.sg.m2addressbook.dto.Address;
+import com.sg.m2addressbook.service.AddressService;
+import com.sg.m2addressbook.service.AddressValidationException;
 import com.sg.m2addressbook.ui.AddressView;
 public class AddressController {
     
-    AddressDao dao;
     AddressView view;
+    AddressService service;
     boolean run = true;
     int choice;
     
-    public AddressController(AddressDao dao, AddressView view){
-        this.dao = dao;
+    public AddressController(AddressService service, AddressView view){
+        this.service = service;
         this.view = view;
     }
     
-    public void run(){
+    public void run() throws AddressValidationException{
         while(run){
             choice = getChoice();
             switch(choice){
@@ -48,33 +49,33 @@ public class AddressController {
     }
     
     private void getAddyByLn(){
-        view.chooseAddress(dao.getAddresses(view.getLastName()));
+        view.chooseAddress(service.getAddresses(view.getLastName()));
     }
     
-    private void addAddress(){
+    private void addAddress() throws AddressValidationException{
         Address addy = view.getAddressInfo();
-        dao.addAddress(addy);
+        service.addAddress(addy);
         view.showSuccessAdd();
     }
     
     private void rmAddress(){
         String ln = view.getLastName();
-        Address addy = view.chooseAddress(dao.getAddresses(ln));
-        addy = dao.removeAddress(addy);
+        Address addy = view.chooseAddress(service.getAddresses(ln));
+        addy = service.removeAddress(addy);
         if(addy != null){
             view.showSuccessRemove();
         }
     }
     
     private void countAddressAndSayIfNone(){
-        view.showCountOrNone(dao.countAddresses());
+        view.showCountOrNone(service.countAddresses());
     }
     
     private void printAll(){
-        if (dao.countAddresses()==0){
+        if (service.countAddresses()==0){
             countAddressAndSayIfNone();
         } else {
-            for (Address addy : dao.getAddresses()){
+            for (Address addy : service.getAddresses()){
                 view.printAddress(addy);
             }
             view.showSuccessList();
