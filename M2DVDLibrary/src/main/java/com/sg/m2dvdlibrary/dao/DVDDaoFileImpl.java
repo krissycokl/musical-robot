@@ -10,8 +10,12 @@ import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class DVDDaoFileImpl implements DVDDao {
     
@@ -75,8 +79,8 @@ public class DVDDaoFileImpl implements DVDDao {
     }
     
     @Override
-    public HashMap<Integer, DVD> listDVDs(String title) {
-        HashMap<Integer, DVD> matches = new HashMap<>();
+    public Map<Integer, DVD> listDVDs(String title) {
+        Map<Integer, DVD> matches = new HashMap<>();
         for (Integer key : library.keySet()){
             if (library.get(key).getTitle().toLowerCase().contains(title.toLowerCase())){
                 matches.put(key, library.get(key));
@@ -86,7 +90,7 @@ public class DVDDaoFileImpl implements DVDDao {
     }
 
     @Override
-    public HashMap<Integer, DVD> populate() throws DVDDaoException {
+    public Map<Integer, DVD> populate() throws DVDDaoException {
         Scanner sc;
         try {
             sc = new Scanner(new BufferedReader(new FileReader(FILENAME)));
@@ -136,5 +140,69 @@ public class DVDDaoFileImpl implements DVDDao {
         }
         
         out.close();
+    }
+
+    @Override
+    public Map<Integer,DVD> getDVDsAfterYear(int year) {
+        return library.entrySet()
+                .stream()
+                .filter(entry -> entry.getValue().getYear().isAfter(LocalDate.ofYearDay(year, 364)))
+                .collect(Collectors.toMap(e-> e.getKey(), e->e.getValue()));
+    }
+
+    @Override
+    public Map<Integer,DVD> getDVDsByRating(String rating) {
+        return library.entrySet()
+                .stream()
+                .filter(e -> e.getValue().getRating().equals(rating))
+                .collect(Collectors.toMap(e-> e.getKey(), e-> e.getValue()));
+    }
+
+    @Override
+    public Map<String, List<DVD>> getDVDsByDirector(String director) {
+        return library.values()
+                .stream()
+                .filter(dvd -> dvd.getDirector().equals(director))
+                .collect(Collectors.groupingBy(dvd -> dvd.getRating()));
+    }
+
+    @Override
+    public Map<Integer,DVD> getDVDsByStudio(String studio) {
+        return library.entrySet()
+                .stream()
+                .filter(e -> e.getValue().getStudio().equals(studio))
+                .collect(Collectors.toMap(e->e.getKey(), e->e.getValue()));
+    }
+
+    @Override
+    public double getAverageAge() {
+        return library.values()
+                .stream()
+                .collect(Collectors.averagingDouble(
+                        dvd -> dvd.getYear().until(LocalDate.now(), ChronoUnit.YEARS)));
+    }
+
+    @Override
+    public int getByAge(boolean newest) {
+        if(newest){
+            return library.entrySet()
+                .stream()
+                .max((e1, e2) -> e1.getValue().getYear().compareTo(e2.getValue().getYear()) > 0 ? 1 : -1)
+                .get().getKey();
+        } else {
+            return library.entrySet()
+                .stream()
+                .min((e1, e2) -> e1.getValue().getYear().compareTo(e2.getValue().getYear()) > 0 ? 1 : -1)
+                .get().getKey();
+        }
+        
+    }
+
+    @Override
+    public long getNotes() {
+        return library.values()
+                .stream()
+                .filter(dvd -> !dvd.getNote().equals("none") && !dvd.getNote().isEmpty())
+                .count();
     }
 }

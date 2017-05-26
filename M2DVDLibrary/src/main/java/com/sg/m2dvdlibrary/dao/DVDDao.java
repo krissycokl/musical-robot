@@ -2,6 +2,8 @@ package com.sg.m2dvdlibrary.dao;
 
 import com.sg.m2dvdlibrary.dto.DVD;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public interface DVDDao {
 
@@ -9,9 +11,16 @@ public interface DVDDao {
     public DVD addDVD(DVD dvd);
     public DVD editDVD(DVD dvd, DVDFields.fields field, String value);
     public DVD removeDVD(Integer key);
-    public HashMap<Integer,DVD> listDVDs();
-    public HashMap<Integer,DVD> listDVDs(String title);
-    public HashMap<Integer,DVD> populate() throws DVDDaoException;
+    public Map<Integer,DVD> listDVDs();
+    public Map<Integer,DVD> listDVDs(String title);
+    public Map<Integer,DVD> populate() throws DVDDaoException;
     public void save() throws DVDDaoException;
+    public Map<Integer,DVD> getDVDsAfterYear(int year);
+    public Map<Integer,DVD> getDVDsByRating(String rating);
+    public Map<String, List<DVD>> getDVDsByDirector(String director);
+    public Map<Integer,DVD> getDVDsByStudio(String studio);
+    public double getAverageAge();
+    public int getByAge(boolean newest);
+    public long getNotes();
     
 }

@@ -11,5 +11,7 @@ public interface AddressDao {
     public int countAddresses();
     public List<Address> getAddresses();
     public ArrayList<Address> getAddresses(String ln);
+    public void write();
+    public void read();
     
 }

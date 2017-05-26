@@ -6,7 +6,8 @@ import com.sg.m2dvdlibrary.dto.DVD;
 import com.sg.m2dvdlibrary.service.DVDDataValidationException;
 import com.sg.m2dvdlibrary.service.DVDService;
 import com.sg.m2dvdlibrary.ui.DVDView;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class DVDController {
 
@@ -36,12 +37,12 @@ public class DVDController {
                 run = run();
             }
             view.goodBye();
-        } catch (DVDDaoException | NumberFormatException | DVDDataValidationException er) {
+        } catch (DVDDaoException | DVDDataValidationException er) {
             view.bannerError(er.getMessage());
         }
     }
     
-    public boolean run() throws DVDDaoException, NumberFormatException, DVDDataValidationException{
+    public boolean run() throws DVDDaoException, DVDDataValidationException{
         int choice = getSelectionMain();
         switch(choice){
             case 1:
@@ -54,11 +55,14 @@ public class DVDController {
                 listAllDVDs();
                 break;
             case 4:
+                getSelectionASearch();
+                break;
+            case 5:
                 if(exitAndSave()==1){
                     return false;
                 };
                 break;
-            case 5:
+            case 6:
                 if(exitWithoutSave()==1){
                     return false;
                 }
@@ -77,6 +81,54 @@ public class DVDController {
         return view.getMenuMain();
     }
     
+    private void getSelectionASearch() {
+        int key;
+        int search = view.getMenuSearch();
+        switch(search){
+            case 1:
+                int year = view.getYear();
+                view.bannerMoviesAfter(year);
+                view.showDVDs(service.getDVDsAfterYear(year));
+                break;
+            case 2:
+                view.showDVDs(service.getDVDsByRating(view.getRating()));
+                break;
+            case 3:
+                String director = view.getDirector();
+                view.bannerMoviesBy("Director", director);
+                Map<String, List<DVD>> dvds = service.getDVDsByDirector(director);
+                if (dvds.values().isEmpty()){
+                    view.bannerNoResults();
+                } else {
+                    view.groupMoviesByRating(dvds);
+                }
+                break;
+            case 4:
+                String studio = view.getStudio();
+                view.bannerMoviesBy("Studio", studio);
+                view.showDVDs(service.getDVDsByStudio(studio));
+                break;
+            case 5:
+                view.bannerAverageAge(service.getAverageAge());
+                break;
+            case 6:
+                key = service.getByAge(true);
+                view.bannerMovieByAge(true);
+                view.getMenuDVD(service.getDVD(key));
+                break;
+            case 7:
+                key = service.getByAge(false);
+                view.bannerMovieByAge(false);
+                view.getMenuDVD(service.getDVD(key));
+                break;
+            case 8:
+                view.bannerNumberOfNotes(service.getNotes());
+                break;
+            default:
+                invalidInput();
+        }
+    }
+    
     private void getSelectionDVD(int key) throws DVDDataValidationException, DVDDaoException {
         DVD dvd = service.getDVD(key);
         int action = view.getMenuDVD(dvd);
@@ -85,7 +137,7 @@ public class DVDController {
                 service.editDVD(dvd, DVDFields.fields.TITLE, view.getTitle());
                 break;
             case 2:
-                service.editDVD(dvd, DVDFields.fields.YEAR, view.getYear());
+                service.editDVD(dvd, DVDFields.fields.YEAR, view.getDate());
                 break;
             case 3:
                 service.editDVD(dvd, DVDFields.fields.DIRECTOR, view.getDirector());
@@ -136,7 +188,7 @@ public class DVDController {
     }
     
     private void getDVDByName() throws DVDDaoException, DVDDataValidationException{
-        HashMap<Integer, DVD> dvds = service.listDVDs(view.getDVDTitle());
+        Map<Integer, DVD> dvds = service.listDVDs(view.getDVDTitle());
         view.showDVDs(dvds);
         chooseFromMultiple(view.getMenuMultiple());
     }

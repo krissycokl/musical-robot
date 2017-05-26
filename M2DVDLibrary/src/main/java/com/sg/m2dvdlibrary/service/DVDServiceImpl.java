@@ -3,6 +3,8 @@ package com.sg.m2dvdlibrary.service;
 import com.sg.m2dvdlibrary.dao.*;
 import com.sg.m2dvdlibrary.dto.DVD;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class DVDServiceImpl implements DVDService {
     
@@ -42,17 +44,17 @@ public class DVDServiceImpl implements DVDService {
     }
 
     @Override
-    public HashMap<Integer, DVD> listDVDs() {
+    public Map<Integer, DVD> listDVDs() {
         return dao.listDVDs();
     }
 
     @Override
-    public HashMap<Integer, DVD> listDVDs(String title) {
+    public Map<Integer, DVD> listDVDs(String title) {
         return dao.listDVDs(title);
     }
 
     @Override
-    public HashMap<Integer, DVD> populate() throws DVDDaoException {
+    public Map<Integer, DVD> populate() throws DVDDaoException {
         return dao.populate();
     }
 
@@ -67,6 +69,41 @@ public class DVDServiceImpl implements DVDService {
             dvd.getTitle().equals("none")){
             throw new DVDDataValidationException("Title is a required field.");
         }
+    }
+
+    @Override
+    public Map<Integer,DVD> getDVDsAfterYear(int year) {
+        return dao.getDVDsAfterYear(year);
+    }
+
+    @Override
+    public Map<Integer,DVD> getDVDsByRating(String rating) {
+        return dao.getDVDsByRating(rating);
+    }
+
+    @Override
+    public Map<String, List<DVD>> getDVDsByDirector(String director) {
+        return dao.getDVDsByDirector(director);
+    }
+
+    @Override
+    public Map<Integer,DVD> getDVDsByStudio(String studio) {
+        return dao.getDVDsByStudio(studio);
+    }
+
+    @Override
+    public double getAverageAge() {
+        return dao.getAverageAge();
+    }
+
+    @Override
+    public int getByAge(boolean newest) {
+        return dao.getByAge(newest);
+    }
+
+    @Override
+    public long getNotes() {
+        return dao.getNotes();
     }
 
 }

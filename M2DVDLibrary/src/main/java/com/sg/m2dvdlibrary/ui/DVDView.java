@@ -1,11 +1,11 @@
 package com.sg.m2dvdlibrary.ui;
 
-import com.sg.m2dvdlibrary.dao.DVDFields;
 import com.sg.m2dvdlibrary.dto.DVD;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class DVDView {
 
@@ -29,9 +29,10 @@ public class DVDView {
         io.print("1.) Add DVD");
         io.print("2.) Get DVD by name");
         io.print("3.) Browse all DVDs");
-        io.print("4.) Exit and save changes");
-        io.print("5.) Exit without saving");
-        return io.getInt("What would you like to do?",1,5);
+        io.print("4.) Advanced search");
+        io.print("5.) Exit and save changes");
+        io.print("6.) Exit without saving");
+        return io.getInt("What would you like to do?",1,6);
     }
     
     public int getMenuDVD(DVD dvd){
@@ -53,7 +54,7 @@ public class DVDView {
         return io.getInt("",1,8);
     }
     
-    public void showDVDs(HashMap<Integer,DVD> library){
+    public void showDVDs(Map<Integer,DVD> library){
         if (library.isEmpty()){
             io.print("\nNo DVDs found.");
             return;
@@ -62,6 +63,20 @@ public class DVDView {
             io.print(key+".)"
                     +"\t"+library.get(key).getTitle()+" ("
                     +library.get(key).getYear().getYear()+")");
+        }
+    }
+    
+    public void showDVDs(List<DVD> listDVD){
+        int ctr = 1;
+        if (listDVD.isEmpty()){
+            bannerNoResults();
+            return;
+        }
+        for (DVD dvd : listDVD){
+            io.print(ctr+".)"
+                    +"\t"+dvd.getTitle()+" ("
+                    +dvd.getYear().getYear()+")");
+            ctr++;
         }
     }
     
@@ -83,7 +98,7 @@ public class DVDView {
         io.print("\n~~~~~ Add DVD ~~~~~");
         dvd.setTitle   (getTitle());
         
-        String year = getYear();
+        String year = getDate();
         LocalDate ld;
                 try{
                     ld = LocalDate.parse(year,DateTimeFormatter.ofPattern("MM/dd/uuuu"));
@@ -121,6 +136,44 @@ public class DVDView {
         io.print("\n~~~~~ GOOD BYE ~~~~~");
     }
     
+    public void groupMoviesByRating(Map<String, List<DVD>> DVDs){
+        for (String rating : DVDs.keySet()){
+            io.print("\n\tRated "+rating+":");
+            showDVDs(DVDs.get(rating));
+        }
+    }
+    
+    public void bannerNoResults(){
+        io.print("\nNo DVDs found.");
+    }
+    
+    public void bannerAverageAge(double age){
+        io.print("\nThe average age of the movies in your collection is "+age+" years.");
+    }
+    
+    public void bannerMoviesBy(String field, String criteria){
+        io.print("\n~~~ Movies by "+field+": "+criteria+" ~~~");
+    }
+    
+    public void bannerMoviesAfter(int year){
+        io.print("\n~~~ Movies Released After "+year+" ~~~");
+    }
+    
+    public void bannerMoviesRated(String rating){
+        io.print("\n~~~ Movies Rated "+rating+" ~~~");
+    }
+    
+    public void bannerMovieByAge(boolean newest){
+        String which;
+        if (newest) {which = "Newest";}
+        else {which = "Oldest";}
+        io.print("\nThe " + which + " Movie in Your Collection:");
+    }
+    
+    public void bannerNumberOfNotes(long notes){
+        io.print("\n"+notes+" DVDs in your collection have user notes.");
+    }
+    
     public String getDVDTitle(){
         String title = io.getString("\nPlease input the title of the DVD.");
         if(!title.isEmpty()){return title;}
@@ -145,9 +198,12 @@ public class DVDView {
         return holder;
     }
     
-    public String getYear(){
+    public String getDate(){
         String holder = io.getString("Release Date: MM/DD/YYYY");
         return holder;
+    }
+    public int getYear(){
+        return io.getInt("Year:");
     }
     public String getDirector(){
         String holder = io.getString("Director:");
@@ -174,5 +230,18 @@ public class DVDView {
         io.print("Do you really want to delete this DVD?");
         io.print("1.) Yes       2.) No");
         return io.getInt("",1,2);
+    }
+    
+    public int getMenuSearch(){
+        io.print("\n~~~~~ Advanced Search ~~~~~");
+        io.print("1.) List DVDs released after a given year");
+        io.print("2.) List DVDs by MPAA rating");
+        io.print("3.) List DVDs by director");
+        io.print("4.) List DVDs by studio");
+        io.print("5.) Get average age of all DVDs in library");
+        io.print("6.) Get the newest DVD in library");
+        io.print("7.) Get the oldest DVD in library");
+        io.print("8.) See how many DVDs have user notes");
+        return io.getInt("What would you like to see?",1,8);
     }
 }
