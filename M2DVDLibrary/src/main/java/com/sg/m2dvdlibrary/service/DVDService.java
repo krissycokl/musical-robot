@@ -3,6 +3,7 @@ package com.sg.m2dvdlibrary.service;
 import com.sg.m2dvdlibrary.dao.DVDDaoException;
 import com.sg.m2dvdlibrary.dao.DVDFields;
 import com.sg.m2dvdlibrary.dto.DVD;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -10,7 +11,8 @@ public interface DVDService {
 
     public DVD getDVD(Integer key);
     public DVD editDVD(DVD dvd, DVDFields.fields field, String value) throws
-            DVDDataValidationException,
+            DVDDaoException;
+    public DVD editDVDDate(DVD dvd, LocalDate value) throws
             DVDDaoException;
     public DVD addDVD(DVD dvd) throws
             DVDDataValidationException,
@@ -26,6 +28,7 @@ public interface DVDService {
     public Map<Integer,DVD> getDVDsByStudio(String studio);
     public double getAverageAge();
     public int getByAge(boolean newest);
-    public long getNotes();
+    public long getNotesNumber();
+    public double getNotesAvgLen();
     
 }

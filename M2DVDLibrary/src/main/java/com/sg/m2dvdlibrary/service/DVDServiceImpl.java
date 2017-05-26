@@ -2,6 +2,7 @@ package com.sg.m2dvdlibrary.service;
 
 import com.sg.m2dvdlibrary.dao.*;
 import com.sg.m2dvdlibrary.dto.DVD;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -16,13 +17,17 @@ public class DVDServiceImpl implements DVDService {
     }
     
     @Override
-    public DVD editDVD(DVD dvd, DVDFields.fields field, String value) throws
-            DVDDataValidationException,
-            DVDDaoException
-        {
-        validateDVDInfo(dvd);
+    public DVD editDVD(DVD dvd, DVDFields.fields field, String value) throws DVDDaoException {
         String oldValue = dao.editDVD(dvd, field, value);
         String entry = dvd.getTitle()+": "+field.toString()+" changed from "+oldValue+"->"+value;
+        auditDao.writeAuditEntry(entry);
+        return dvd;
+    }
+    
+    @Override
+    public DVD editDVDDate(DVD dvd, LocalDate value) throws DVDDaoException {
+        LocalDate oldValue = dao.editDVDDate(dvd, value);
+        String entry = dvd.getTitle()+": Release date changed from "+oldValue+"->"+value;
         auditDao.writeAuditEntry(entry);
         return dvd;
     }
@@ -33,8 +38,7 @@ public class DVDServiceImpl implements DVDService {
     }
 
     @Override
-    public DVD addDVD(DVD dvd) throws
-            DVDDataValidationException,
+    public DVD addDVD(DVD dvd) throws DVDDataValidationException,
             DVDDaoException {
         validateDVDInfo(dvd);
         auditDao.writeAuditEntry(dvd.getTitle()+" ("+dvd.getYear().getYear()+") added.");
@@ -106,8 +110,13 @@ public class DVDServiceImpl implements DVDService {
     }
 
     @Override
-    public long getNotes() {
-        return dao.getNotes();
+    public long getNotesNumber() {
+        return dao.getNotesNumber();
+    }
+    
+    @Override
+    public double getNotesAvgLen() {
+        return dao.getNotesAvgLen();
     }
 
 }

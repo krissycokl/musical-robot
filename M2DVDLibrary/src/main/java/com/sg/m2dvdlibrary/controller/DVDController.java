@@ -26,7 +26,7 @@ public class DVDController {
             switch(choice){
                 case 1:
                     service.populate();
-                    view.importSuccess(service.listDVDs().size());
+                    view.bannerImportSuccess(service.listDVDs().size());
                     break;
                 case 2:
                     break;
@@ -36,7 +36,7 @@ public class DVDController {
             while(run){
                 run = run();
             }
-            view.goodBye();
+            view.bannerGoodBye();
         } catch (DVDDaoException | DVDDataValidationException er) {
             view.bannerError(er.getMessage());
         }
@@ -164,7 +164,8 @@ public class DVDController {
                 getSelectionDVD(key);
                 break;
             case 8:
-                view.bannerNumberOfNotes(service.getNotes());
+                view.bannerNumberOfNotes(service.getNotesNumber());
+                view.bannerAvgLenOfNotes(service.getNotesAvgLen());
                 break;
             case 9:
                 break;
@@ -179,7 +180,7 @@ public class DVDController {
         int save = view.confirmSave();
         if(save==1){
             service.save();
-            view.saveSuccess(service.listDVDs().size());
+            view.bannerSaveSuccess(service.listDVDs().size());
         }
         return save;
     }

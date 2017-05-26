@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
@@ -33,16 +32,6 @@ public class DVDDaoFileImpl implements DVDDao {
                 oldValue = dvd.getTitle();
                 dvd.setTitle(value);
                 break;
-            case YEAR:
-                oldValue = dvd.getYear().format(DateTimeFormatter.ofPattern("MM/dd/uuuu"));
-                LocalDate ld;
-                try{
-                    ld = LocalDate.parse(value,DateTimeFormatter.ofPattern("MM/dd/uuuu"));
-                } catch (DateTimeParseException e){
-                    ld = LocalDate.parse("01/01/2000",DateTimeFormatter.ofPattern("MM/dd/uuuu"));
-                }
-                dvd.setYear(ld);
-                break;
             case DIRECTOR:
                 oldValue = dvd.getDirector();
                 dvd.setDirector(value);
@@ -60,6 +49,13 @@ public class DVDDaoFileImpl implements DVDDao {
                 dvd.setNote(value);
                 break;
         }
+        return oldValue;
+    }
+    
+    @Override
+    public LocalDate editDVDDate(DVD dvd, LocalDate value){
+        LocalDate oldValue = dvd.getYear();
+        dvd.setYear(value);
         return oldValue;
     }
     
@@ -87,13 +83,10 @@ public class DVDDaoFileImpl implements DVDDao {
     
     @Override
     public Map<Integer, DVD> listDVDs(String title) {
-        Map<Integer, DVD> matches = new HashMap<>();
-        for (Integer key : library.keySet()){
-            if (library.get(key).getTitle().toLowerCase().contains(title.toLowerCase())){
-                matches.put(key, library.get(key));
-            }
-        }
-        return matches;
+        return library.entrySet()
+                .stream()
+                .filter(e -> e.getValue().getTitle().toLowerCase().contains(title.toLowerCase()))
+                .collect(Collectors.toMap(e->e.getKey(), e->e.getValue()));
     }
 
     @Override
@@ -206,10 +199,20 @@ public class DVDDaoFileImpl implements DVDDao {
     }
 
     @Override
-    public long getNotes() {
+    public long getNotesNumber(){
         return library.values()
                 .stream()
                 .filter(dvd -> !dvd.getNote().equals("none") && !dvd.getNote().isEmpty())
                 .count();
+    }
+    
+    @Override
+    public double getNotesAvgLen(){
+         return library.values()
+                .stream()
+                .filter(dvd-> !dvd.getNote().equals("none") && !dvd.getNote().isEmpty())
+                .mapToInt(dvd-> dvd.getNote().length())
+                .average()
+                .getAsDouble();
     }
 }

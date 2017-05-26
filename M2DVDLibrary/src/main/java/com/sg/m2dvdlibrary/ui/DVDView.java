@@ -3,18 +3,16 @@ package com.sg.m2dvdlibrary.ui;
 import com.sg.m2dvdlibrary.dto.DVD;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Map;
 
 public class DVDView {
 
-    private UserIO io;
+    private final UserIO io;
     
     public DVDView(UserIO io){
         this.io = io;
     }
-    
     public int getMenuImport(){
         io.print("\n~~~~~ Welcome to Your DVD Library ~~~~~");
         io.print("Do you want to import a library, or start a new one?");
@@ -23,7 +21,6 @@ public class DVDView {
         io.print("3.) Exit");
         return io.getInt("",1,3);
     }
-    
     public int getMenuMain(){
         io.print("\n~~~~~ Main Menu ~~~~~");
         io.print("1.) Add DVD");
@@ -34,7 +31,6 @@ public class DVDView {
         io.print("6.) Exit without saving");
         return io.getInt("What would you like to do?",1,6);
     }
-    
     public int getMenuDVD(DVD dvd){
         io.print("\n   Title: "+dvd.getTitle());
         io.print("    Year: "+dvd.getYear().format(DateTimeFormatter.ofPattern("MM/dd/uuuu")));
@@ -53,7 +49,50 @@ public class DVDView {
         io.print("8.) Go back");
         return io.getInt("",1,8);
     }
-    
+    public int getMenuMultiple(){
+        io.print("\nType a number to see more details,");
+        return io.getInt("or type -1 to go back.");
+    }
+    public int getMenuSearch(){
+        io.print("\n~~~~~ Advanced Search ~~~~~");
+        io.print("1.) List DVDs released after a given year");
+        io.print("2.) List DVDs by MPAA rating");
+        io.print("3.) List DVDs by director");
+        io.print("4.) List DVDs by studio");
+        io.print("5.) Get average age of all DVDs in library");
+        io.print("6.) Get the newest DVD in library");
+        io.print("7.) Get the oldest DVD in library");
+        io.print("8.) See how many DVDs have user notes");
+        io.print("9.) Go back");
+        return io.getInt("What would you like to see?",1,9);
+    }
+    public DVD getNewDVDInfo() {
+        DVD dvd = new DVD();
+        io.print("\n~~~~~ Add DVD ~~~~~");
+        dvd.setTitle   (getTitle());
+        dvd.setYear    (getDate());
+        dvd.setDirector(getDirector());
+        dvd.setStudio  (getStudio());
+        dvd.setRating  (getRating());
+        dvd.setNote    (getNote());
+        return dvd;
+    }
+    public int confirmSave(){
+        io.print("\nDo you really want to save your changes?");
+        io.print("This will overwrite your existing library.");
+        io.print("1.) Yes       2.) No");
+        return io.getInt("",1,2);
+    }
+    public int confirmExit(){
+        io.print("\nDo you really want to exit without saving?");
+        io.print("1.) Yes       2.) No");
+        return io.getInt("",1,2);
+    }
+    public int confirmDelete(){
+        io.print("Do you really want to delete this DVD?");
+        io.print("1.) Yes       2.) No");
+        return io.getInt("",1,2);
+    }
     public void showDVDs(Map<Integer,DVD> library){
         if (library.isEmpty()){
             io.print("\nNo DVDs found.");
@@ -65,7 +104,6 @@ public class DVDView {
                     +library.get(key).getYear().getYear()+")");
         }
     }
-    
     public void showDVDs(List<DVD> listDVD){
         int ctr = 1;
         if (listDVD.isEmpty()){
@@ -79,54 +117,6 @@ public class DVDView {
             ctr++;
         }
     }
-    
-    public void bannerAllDVDS(){
-        io.print("\n~~~~~ All DVDs ~~~~~");
-    }
-    
-    public int getMenuMultiple(){
-        io.print("\nType a number to see more details,");
-        return io.getInt("or type -1 to go back.");
-    }
-    
-    public void bannerBadInput(){
-        io.getString("Invalid input. Please hit return.");
-    }
-    
-    public DVD getNewDVDInfo() {
-        DVD dvd = new DVD();
-        io.print("\n~~~~~ Add DVD ~~~~~");
-        dvd.setTitle   (getTitle());
-        dvd.setYear    (getDate());
-        dvd.setDirector(getDirector());
-        dvd.setStudio  (getStudio());
-        dvd.setRating  (getRating());
-        dvd.setNote    (getNote());
-        return dvd;
-    }
-    
-    public void bannerError(String errMsg){
-        io.print("\n~~~~~ ERROR ~~~~~");
-        io.print(errMsg);
-    }
-    
-    public int confirmSave(){
-        io.print("\nDo you really want to save your changes?");
-        io.print("This will overwrite your existing library.");
-        io.print("1.) Yes       2.) No");
-        return io.getInt("",1,2);
-    }
-    
-    public int confirmExit(){
-        io.print("\nDo you really want to exit without saving?");
-        io.print("1.) Yes       2.) No");
-        return io.getInt("",1,2);
-    }
-    
-    public void goodBye(){
-        io.print("\n~~~~~ GOOD BYE ~~~~~");
-    }
-    
     public void groupMoviesByRating(Map<String, List<DVD>> DVDs){
         for (String rating : DVDs.keySet()){
             if (rating.equals("none")){io.print("\n\tUnrated:");
@@ -135,56 +125,60 @@ public class DVDView {
             showDVDs(DVDs.get(rating));
         }
     }
-    
     public void bannerNoResults(){
         io.print("\nNo DVDs found.");
     }
-    
     public void bannerDeleted(String title){
         io.print("\n"+title+" deleted");
-    }
-    
+    }    
     public void bannerAverageAge(double age){
         io.print("\nThe average age of the movies in your collection is "+age+" years.");
-    }
-    
+    }    
     public void bannerMoviesBy(String field, String criteria){
         io.print("\n~~~ Movies by "+field+": "+criteria+" ~~~");
-    }
-    
+    }    
     public void bannerMoviesAfter(int year){
         io.print("\n~~~ Movies Released After "+year+" ~~~");
-    }
-    
+    }    
     public void bannerMoviesRated(String rating){
         io.print("\n~~~ Movies Rated "+rating+" ~~~");
-    }
-    
+    }    
     public void bannerMovieByAge(boolean newest){
         String which;
         if (newest) {which = "Newest";}
         else {which = "Oldest";}
         io.print("\nThe " + which + " Movie in Your Collection:");
-    }
-    
+    }    
     public void bannerNumberOfNotes(long notes){
         io.print("\n"+notes+" DVDs in your collection have user notes.");
+    }    
+    public void bannerAvgLenOfNotes(double avgLen){
+        io.print("The average note length is "+String.format("%.2f", avgLen)+" characters.");
     }
-    
+    public void bannerAllDVDS(){
+        io.print("\n~~~~~ All DVDs ~~~~~");
+    }
+    public void bannerError(String errMsg){
+        io.print("\n~~~~~ ERROR ~~~~~");
+        io.print(errMsg);
+    }
+    public void bannerImportSuccess(int num){
+        io.print("Imported "+num+" DVDs\n");
+    }    
+    public void bannerSaveSuccess(int num){
+        io.print("Saved "+num+" DVDs\n");
+    }
+    public void bannerBadInput(){
+        io.getString("Invalid input. Please hit return.");
+    }
+    public void bannerGoodBye(){
+        io.print("\n~~~~~ GOOD BYE ~~~~~");
+    }
     public String getDVDTitle(){
         String title = io.getString("\nPlease input the title of the DVD.");
         if(!title.isEmpty()){return title;}
         return "~no title provided~";
-    }
-    
-    public void importSuccess(int num){
-        io.print("Imported "+num+" DVDs\n");
-    }
-    
-    public void saveSuccess(int num){
-        io.print("Saved "+num+" DVDs\n");
-    }
-    
+    } 
     public String getTitle(){
         String holder = "";
         boolean validTitle = false;
@@ -193,8 +187,7 @@ public class DVDView {
             if(!holder.isEmpty()){validTitle = true;}
         }
         return holder;
-    }
-    
+    }    
     public LocalDate getDate(){
         return io.getDate("Release Date: MM/DD/YYYY", "01/01/2000");
     }
@@ -220,25 +213,5 @@ public class DVDView {
         String holder = io.getString("Comment:");
         if(!holder.isEmpty()){return holder;}
         return "none";
-    }
-    
-    public int confirmDelete(){
-        io.print("Do you really want to delete this DVD?");
-        io.print("1.) Yes       2.) No");
-        return io.getInt("",1,2);
-    }
-    
-    public int getMenuSearch(){
-        io.print("\n~~~~~ Advanced Search ~~~~~");
-        io.print("1.) List DVDs released after a given year");
-        io.print("2.) List DVDs by MPAA rating");
-        io.print("3.) List DVDs by director");
-        io.print("4.) List DVDs by studio");
-        io.print("5.) Get average age of all DVDs in library");
-        io.print("6.) Get the newest DVD in library");
-        io.print("7.) Get the oldest DVD in library");
-        io.print("8.) See how many DVDs have user notes");
-        io.print("9.) Go back");
-        return io.getInt("What would you like to see?",1,9);
     }
 }
