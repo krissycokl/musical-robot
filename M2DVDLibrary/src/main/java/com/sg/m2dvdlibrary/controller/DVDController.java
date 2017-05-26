@@ -19,7 +19,6 @@ public class DVDController {
         this.view = view;
         this.service  = service;
     }
-    
     public void begin() {
         boolean run = true;
         try{
@@ -42,7 +41,6 @@ public class DVDController {
             view.bannerError(er.getMessage());
         }
     }
-    
     public boolean run() throws DVDDaoException, DVDDataValidationException{
         int choice = getSelectionMain();
         switch(choice){
@@ -73,16 +71,54 @@ public class DVDController {
         }
         return true;
     }
-    
     private void addDVD() throws DVDDataValidationException, DVDDaoException{
         service.addDVD(view.getNewDVDInfo());
     }
-        
     private int getSelectionMain(){
         return view.getMenuMain();
     }
-    
-    private void getSelectionASearch() {
+    private void getSelectionDVD(int key) throws DVDDataValidationException, DVDDaoException {
+        DVD dvd = service.getDVD(key);
+        int action;
+        boolean stop = false;
+        while (!stop){
+            action = view.getMenuDVD(dvd);
+            switch(action){
+                case 1:
+                    service.editDVD(dvd, DVDFields.fields.TITLE, view.getTitle());
+                    break;
+                case 2:
+                    service.editDVD(dvd, DVDFields.fields.YEAR, view.getDate().format(DateTimeFormatter.ofPattern("MM/dd/uuuu")));
+                    break;
+                case 3:
+                    service.editDVD(dvd, DVDFields.fields.DIRECTOR, view.getDirector());
+                    break;
+                case 4:
+                    service.editDVD(dvd, DVDFields.fields.STUDIO, view.getStudio());
+                    break;
+                case 5:
+                    service.editDVD(dvd, DVDFields.fields.RATING, view.getRating());
+                    break;
+                case 6:
+                    service.editDVD(dvd, DVDFields.fields.COMMENT, view.getNote());
+                    break;
+                case 7:
+                    int conf = view.confirmDelete();
+                    if (conf==1){
+                        String title = service.getDVD(key).getTitle();
+                        service.removeDVD(key);
+                        view.bannerDeleted(title);
+                    }
+                    break;
+                case 8:
+                    stop = true;
+                    break;
+                default:
+                    invalidInput();
+            }
+        }
+    }
+    private void getSelectionASearch() throws DVDDataValidationException, DVDDaoException {
         int key;
         int search = view.getMenuSearch();
         switch(search){
@@ -90,13 +126,13 @@ public class DVDController {
                 int year = view.getYear();
                 view.bannerMoviesAfter(year);
                 view.showDVDs(service.getDVDsAfterYear(year));
-                view.getMenuMultiple();
+                chooseFromMultiple(view.getMenuMultiple());
                 break;
             case 2:
                 String rating = view.getRating();
                 view.bannerMoviesRated(rating);
                 view.showDVDs(service.getDVDsByRating(rating));
-                view.getMenuMultiple();
+                chooseFromMultiple(view.getMenuMultiple());
                 break;
             case 3:
                 String director = view.getDirector();
@@ -112,7 +148,7 @@ public class DVDController {
                 String studio = view.getStudio();
                 view.bannerMoviesBy("Studio", studio);
                 view.showDVDs(service.getDVDsByStudio(studio));
-                view.getMenuMultiple();
+                chooseFromMultiple(view.getMenuMultiple());
                 break;
             case 5:
                 view.bannerAverageAge(service.getAverageAge());
@@ -120,12 +156,12 @@ public class DVDController {
             case 6:
                 key = service.getByAge(true);
                 view.bannerMovieByAge(true);
-                view.getMenuDVD(service.getDVD(key));
+                getSelectionDVD(key);
                 break;
             case 7:
                 key = service.getByAge(false);
                 view.bannerMovieByAge(false);
-                view.getMenuDVD(service.getDVD(key));
+                getSelectionDVD(key);
                 break;
             case 8:
                 view.bannerNumberOfNotes(service.getNotes());
@@ -136,48 +172,9 @@ public class DVDController {
                 invalidInput();
         }
     }
-    
-    private void getSelectionDVD(int key) throws DVDDataValidationException, DVDDaoException {
-        DVD dvd = service.getDVD(key);
-        int action = view.getMenuDVD(dvd);
-        switch(action){
-            case 1:
-                service.editDVD(dvd, DVDFields.fields.TITLE, view.getTitle());
-                break;
-            case 2:
-                service.editDVD(dvd, DVDFields.fields.YEAR, view.getDate().format(DateTimeFormatter.ofPattern("mm/DD/uuuu")));
-                break;
-            case 3:
-                service.editDVD(dvd, DVDFields.fields.DIRECTOR, view.getDirector());
-                break;
-            case 4:
-                service.editDVD(dvd, DVDFields.fields.STUDIO, view.getStudio());
-                break;
-            case 5:
-                service.editDVD(dvd, DVDFields.fields.RATING, view.getRating());
-                break;
-            case 6:
-                service.editDVD(dvd, DVDFields.fields.COMMENT, view.getNote());
-                break;
-            case 7:
-                int conf = view.confirmDelete();
-                if (conf==1){
-                    String title = service.getDVD(key).getTitle();
-                    service.removeDVD(key);
-                    view.bannerDeleted(title);
-                }
-                break;
-            case 8:
-                break;
-            default:
-                invalidInput();
-        }
-    }
-    
     private void invalidInput(){
         view.bannerBadInput();
     }
-    
     private int exitAndSave() throws DVDDaoException{
         int save = view.confirmSave();
         if(save==1){
@@ -186,23 +183,19 @@ public class DVDController {
         }
         return save;
     }
-    
     private int exitWithoutSave() {
         return view.confirmExit();
     }
-    
     private void chooseFromMultiple(int key) throws DVDDaoException, DVDDataValidationException{
         if (service.getDVD(key) != null){
             getSelectionDVD(key);
-        } 
+        }
     }
-    
     private void getDVDByName() throws DVDDaoException, DVDDataValidationException{
         Map<Integer, DVD> dvds = service.listDVDs(view.getDVDTitle());
         view.showDVDs(dvds);
         chooseFromMultiple(view.getMenuMultiple());
     }
-    
     private void listAllDVDs() throws DVDDaoException, DVDDataValidationException{
         view.bannerAllDVDS();
         view.showDVDs(service.listDVDs());        

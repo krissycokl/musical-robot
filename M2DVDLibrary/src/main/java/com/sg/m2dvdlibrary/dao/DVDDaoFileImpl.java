@@ -34,12 +34,12 @@ public class DVDDaoFileImpl implements DVDDao {
                 dvd.setTitle(value);
                 break;
             case YEAR:
-                oldValue = dvd.getYear().format(DateTimeFormatter.ofPattern("mm/DD/uuuu"));
+                oldValue = dvd.getYear().format(DateTimeFormatter.ofPattern("MM/dd/uuuu"));
                 LocalDate ld;
                 try{
-                    ld = LocalDate.parse(value,DateTimeFormatter.ofPattern("mm/DD/uuuu"));
+                    ld = LocalDate.parse(value,DateTimeFormatter.ofPattern("MM/dd/uuuu"));
                 } catch (DateTimeParseException e){
-                    ld = LocalDate.parse("01/01/2000",DateTimeFormatter.ofPattern("mm/DD/uuuu"));
+                    ld = LocalDate.parse("01/01/2000",DateTimeFormatter.ofPattern("MM/dd/uuuu"));
                 }
                 dvd.setYear(ld);
                 break;

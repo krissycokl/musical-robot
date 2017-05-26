@@ -22,7 +22,7 @@ public class DVDServiceImpl implements DVDService {
         {
         validateDVDInfo(dvd);
         String oldValue = dao.editDVD(dvd, field, value);
-        String entry = field.toString()+"changed from "+oldValue+"->"+value;
+        String entry = dvd.getTitle()+": "+field.toString()+" changed from "+oldValue+"->"+value;
         auditDao.writeAuditEntry(entry);
         return dvd;
     }
