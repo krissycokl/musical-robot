@@ -18,7 +18,7 @@ public class DVDAuditDaoImpl implements DVDAuditDao {
         }
         
         LocalDateTime timestamp = LocalDateTime.now();
-        out.append(entry+"::("+timestamp.toString()+")");
+        out.append(entry+"::("+timestamp.toString()+")\n");
         out.flush();
         out.close();
     }

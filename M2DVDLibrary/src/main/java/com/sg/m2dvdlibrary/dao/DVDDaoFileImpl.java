@@ -26,34 +26,41 @@ public class DVDDaoFileImpl implements DVDDao {
     HashMap<Integer, DVD> library = new HashMap<>();
 
     @Override
-    public DVD editDVD(DVD dvd, DVDFields.fields field, String value){
+    public String editDVD(DVD dvd, DVDFields.fields field, String value){
+        String oldValue = "";
         switch(field){
             case TITLE:
+                oldValue = dvd.getTitle();
                 dvd.setTitle(value);
                 break;
             case YEAR:
+                oldValue = dvd.getYear().format(DateTimeFormatter.ofPattern("mm/DD/uuuu"));
                 LocalDate ld;
                 try{
-                    ld = LocalDate.parse(value,DateTimeFormatter.ofPattern("MM/dd/uuuu"));
+                    ld = LocalDate.parse(value,DateTimeFormatter.ofPattern("mm/DD/uuuu"));
                 } catch (DateTimeParseException e){
-                    ld = LocalDate.parse("01/01/2000",DateTimeFormatter.ofPattern("MM/dd/uuuu"));
+                    ld = LocalDate.parse("01/01/2000",DateTimeFormatter.ofPattern("mm/DD/uuuu"));
                 }
                 dvd.setYear(ld);
                 break;
             case DIRECTOR:
+                oldValue = dvd.getDirector();
                 dvd.setDirector(value);
                 break;
             case STUDIO:
+                oldValue = dvd.getStudio();
                 dvd.setStudio(value);
                 break;
             case RATING:
+                oldValue = dvd.getRating();
                 dvd.setRating(value);
                 break;
             case COMMENT:
+                oldValue = dvd.getNote();
                 dvd.setNote(value);
                 break;
         }
-        return dvd;
+        return oldValue;
     }
     
     @Override

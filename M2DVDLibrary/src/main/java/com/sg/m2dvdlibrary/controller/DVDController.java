@@ -6,6 +6,7 @@ import com.sg.m2dvdlibrary.dto.DVD;
 import com.sg.m2dvdlibrary.service.DVDDataValidationException;
 import com.sg.m2dvdlibrary.service.DVDService;
 import com.sg.m2dvdlibrary.ui.DVDView;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -89,9 +90,13 @@ public class DVDController {
                 int year = view.getYear();
                 view.bannerMoviesAfter(year);
                 view.showDVDs(service.getDVDsAfterYear(year));
+                view.getMenuMultiple();
                 break;
             case 2:
-                view.showDVDs(service.getDVDsByRating(view.getRating()));
+                String rating = view.getRating();
+                view.bannerMoviesRated(rating);
+                view.showDVDs(service.getDVDsByRating(rating));
+                view.getMenuMultiple();
                 break;
             case 3:
                 String director = view.getDirector();
@@ -107,6 +112,7 @@ public class DVDController {
                 String studio = view.getStudio();
                 view.bannerMoviesBy("Studio", studio);
                 view.showDVDs(service.getDVDsByStudio(studio));
+                view.getMenuMultiple();
                 break;
             case 5:
                 view.bannerAverageAge(service.getAverageAge());
@@ -124,6 +130,8 @@ public class DVDController {
             case 8:
                 view.bannerNumberOfNotes(service.getNotes());
                 break;
+            case 9:
+                break;
             default:
                 invalidInput();
         }
@@ -137,7 +145,7 @@ public class DVDController {
                 service.editDVD(dvd, DVDFields.fields.TITLE, view.getTitle());
                 break;
             case 2:
-                service.editDVD(dvd, DVDFields.fields.YEAR, view.getDate());
+                service.editDVD(dvd, DVDFields.fields.YEAR, view.getDate().format(DateTimeFormatter.ofPattern("mm/DD/uuuu")));
                 break;
             case 3:
                 service.editDVD(dvd, DVDFields.fields.DIRECTOR, view.getDirector());
@@ -154,7 +162,9 @@ public class DVDController {
             case 7:
                 int conf = view.confirmDelete();
                 if (conf==1){
+                    String title = service.getDVD(key).getTitle();
                     service.removeDVD(key);
+                    view.bannerDeleted(title);
                 }
                 break;
             case 8:

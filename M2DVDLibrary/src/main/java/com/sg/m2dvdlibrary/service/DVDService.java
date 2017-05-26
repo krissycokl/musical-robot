@@ -9,7 +9,9 @@ import java.util.Map;
 public interface DVDService {
 
     public DVD getDVD(Integer key);
-    public DVD editDVD(DVD dvd, DVDFields.fields field, String value) throws DVDDataValidationException;
+    public DVD editDVD(DVD dvd, DVDFields.fields field, String value) throws
+            DVDDataValidationException,
+            DVDDaoException;
     public DVD addDVD(DVD dvd) throws
             DVDDataValidationException,
             DVDDaoException;

@@ -2,7 +2,6 @@ package com.sg.m2dvdlibrary.service;
 
 import com.sg.m2dvdlibrary.dao.*;
 import com.sg.m2dvdlibrary.dto.DVD;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,9 +16,14 @@ public class DVDServiceImpl implements DVDService {
     }
     
     @Override
-    public DVD editDVD(DVD dvd, DVDFields.fields field, String value) throws DVDDataValidationException{
+    public DVD editDVD(DVD dvd, DVDFields.fields field, String value) throws
+            DVDDataValidationException,
+            DVDDaoException
+        {
         validateDVDInfo(dvd);
-        dao.editDVD(dvd, field, value);
+        String oldValue = dao.editDVD(dvd, field, value);
+        String entry = field.toString()+"changed from "+oldValue+"->"+value;
+        auditDao.writeAuditEntry(entry);
         return dvd;
     }
 

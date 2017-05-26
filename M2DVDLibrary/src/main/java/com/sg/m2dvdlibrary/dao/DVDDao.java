@@ -1,7 +1,6 @@
 package com.sg.m2dvdlibrary.dao;
 
 import com.sg.m2dvdlibrary.dto.DVD;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,7 +8,7 @@ public interface DVDDao {
 
     public DVD getDVD(Integer key);
     public DVD addDVD(DVD dvd);
-    public DVD editDVD(DVD dvd, DVDFields.fields field, String value);
+    public String editDVD(DVD dvd, DVDFields.fields field, String value);
     public DVD removeDVD(Integer key);
     public Map<Integer,DVD> listDVDs();
     public Map<Integer,DVD> listDVDs(String title);

@@ -97,16 +97,7 @@ public class DVDView {
         DVD dvd = new DVD();
         io.print("\n~~~~~ Add DVD ~~~~~");
         dvd.setTitle   (getTitle());
-        
-        String year = getDate();
-        LocalDate ld;
-                try{
-                    ld = LocalDate.parse(year,DateTimeFormatter.ofPattern("MM/dd/uuuu"));
-                } catch (DateTimeParseException e){
-                    ld = LocalDate.parse("01/01/2000",DateTimeFormatter.ofPattern("MM/dd/uuuu"));
-                }
-        
-        dvd.setYear    (ld);
+        dvd.setYear    (getDate());
         dvd.setDirector(getDirector());
         dvd.setStudio  (getStudio());
         dvd.setRating  (getRating());
@@ -138,13 +129,19 @@ public class DVDView {
     
     public void groupMoviesByRating(Map<String, List<DVD>> DVDs){
         for (String rating : DVDs.keySet()){
-            io.print("\n\tRated "+rating+":");
+            if (rating.equals("none")){io.print("\n\tUnrated:");
+            } else {                   io.print("\n\tRated "+rating+":");
+            }
             showDVDs(DVDs.get(rating));
         }
     }
     
     public void bannerNoResults(){
         io.print("\nNo DVDs found.");
+    }
+    
+    public void bannerDeleted(String title){
+        io.print("\n"+title+" deleted");
     }
     
     public void bannerAverageAge(double age){
@@ -198,9 +195,8 @@ public class DVDView {
         return holder;
     }
     
-    public String getDate(){
-        String holder = io.getString("Release Date: MM/DD/YYYY");
-        return holder;
+    public LocalDate getDate(){
+        return io.getDate("Release Date: MM/DD/YYYY", "01/01/2000");
     }
     public int getYear(){
         return io.getInt("Year:");
@@ -242,6 +238,7 @@ public class DVDView {
         io.print("6.) Get the newest DVD in library");
         io.print("7.) Get the oldest DVD in library");
         io.print("8.) See how many DVDs have user notes");
-        return io.getInt("What would you like to see?",1,8);
+        io.print("9.) Go back");
+        return io.getInt("What would you like to see?",1,9);
     }
 }

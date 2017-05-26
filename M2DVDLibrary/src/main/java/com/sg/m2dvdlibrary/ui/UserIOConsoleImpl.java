@@ -1,5 +1,8 @@
 package com.sg.m2dvdlibrary.ui;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class UserIOConsoleImpl implements UserIO {
@@ -98,6 +101,28 @@ public class UserIOConsoleImpl implements UserIO {
                     return responseDouble;
                 }
             } catch (NumberFormatException e) {}
+        }
+    }
+    
+    @Override
+    public LocalDate getDate(String prompt, String otherwise){
+        System.out.println(prompt);
+        LocalDate ld;
+        String ans;
+        boolean tried = false;
+        while (true){
+            ans = sc.nextLine();
+            try{
+                if(ans.isEmpty() && tried){
+                    return LocalDate.parse(otherwise,DateTimeFormatter.ofPattern("MM/dd/uuuu"));
+                }
+                ld = LocalDate.parse(ans,DateTimeFormatter.ofPattern("MM/dd/uuuu"));
+                return ld;
+            } catch (DateTimeParseException e){
+                System.out.println("Please enter a date in format MM/DD/YYYY,"
+                        + " or hit enter to use system default of "+otherwise+".");
+                tried = true;
+            }
         }
     }
     
