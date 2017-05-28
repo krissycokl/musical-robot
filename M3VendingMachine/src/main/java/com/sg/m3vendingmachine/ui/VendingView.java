@@ -5,6 +5,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class VendingView {
     private final UserIO io;
@@ -18,16 +20,15 @@ public class VendingView {
         io.print(" _____________________________\n" +
 "|.-----------------..--------.|");
     }
-    public void machineItem(Item item){
+    public void machineItem(Item item, int index){
         String name = String.format("%-12.12s", item.getName());
         if(item.getQty()>0){
-                        io.print("|| "+item.getID()+". "
+                        io.print("|| "+(index+1)+". "
                                 +name+" || $"
                                 +item.getCost()+"  ||");
                     } else {
-                        io.print("|| "+item.getID()+". "
-                                +name+" || $"
-                                +"O O S  ||");
+                        io.print("|| "+(index+1)+". "
+                                +name+" ||  OOS   ||");
         }
     }
     public void machineBalanceAndBottom(BigDecimal balance){
@@ -56,7 +57,7 @@ public class VendingView {
         io.print("No input file found. Building from sratch.");
     }
     public void bannerVend(String itemName){
-        io.print("KER-THUNK! Please take your "+itemName);
+        io.print("KER-THUNK! Please take your "+itemName+"!");
     }
     public void bannerError(String message){
         io.print(message);
@@ -93,20 +94,21 @@ public class VendingView {
         machineBalanceAndBottom(balance);
     }
     public void showChange(BigDecimal[] change){
-        io.print("Coin return:");
-        io.print(change[0].toPlainString()+" quarter"+plural(change[0].intValueExact()));
-        io.print(change[1].toPlainString()+" dime"+plural(change[1].intValueExact()));
-        io.print(change[2].toPlainString()+" nickel"+plural(change[2].intValueExact()));
-        io.print(change[3].toPlainString()+" penn"+pluralIes(change[3].intValueExact()));
+        io.print("\nThanks for your purchase!");
+        if(change[0].add(change[1].add(change[2].add(change[3]))).intValue()!=0){
+            io.print("Don't forget your change!");
+            if(change[0].intValue()!=0) {io.print("   ( 25¢ ) x "+change[0].toPlainString());}
+            if(change[1].intValue()!=0) {io.print("     (10¢) x "+change[1].toPlainString());}
+            if(change[2].intValue()!=0) {io.print("    ( 5¢ ) x "+change[2].toPlainString());}
+            if(change[3].intValue()!=0) {io.print("     ( 1¢) x "+change[3].setScale(0).toPlainString());}
+            io.print("");
+        }
     }
     public void showInventoryAndMenu(List<Item> stock){
         machineTop();
-        stock
-                .stream()
-                .filter(e-> e.getActive())
-                .forEachOrdered(e-> {
-                    machineItem(e);
-                });
+        List<Item> active = stock.stream().filter(e->e.getActive()).collect(Collectors.toList());
+        IntStream.range(0, active.size())
+                .forEachOrdered(index->machineItem(active.get(index),index));
     }
     
     public void adminBannerActivated(boolean activated){
@@ -157,14 +159,5 @@ public class VendingView {
                     );
                 });
         io.print("-1.) Go back");
-    }
-    
-    public String plural(int num){
-        if(num==1) {return "";}
-        else {return "s";}
-    }
-    public String pluralIes(int num){
-        if(num==1) {return "y";}
-        else {return "ies";}
     }
 }

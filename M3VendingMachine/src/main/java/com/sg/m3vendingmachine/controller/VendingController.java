@@ -191,7 +191,9 @@ public class VendingController {
     
     public void buy(int itemKey) throws IOException {
         try{
+            
             BigDecimal[] change = service.buy(itemKey);
+            view.bannerVend(service.getItem(itemKey).getName());
             view.showChange(change);
             service.saveStock();
         } catch(InsufficientFundsException | ItemOutOfStockException e){
