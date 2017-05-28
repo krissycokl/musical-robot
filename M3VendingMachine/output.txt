@@ -1,0 +1,5 @@
+1::Pepsi Max::0.75::7::true
+2::Ocean Water::1.15::10::true
+3::2% Milk::1.00::6::true
+4::Orbitz::2.00::5::true
+5::Water of Life::70000.00::1::true
