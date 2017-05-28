@@ -37,7 +37,7 @@ public class Change {
         changeByType[3] = change.subtract(changeByType[0].multiply(quarter))
                          .subtract(changeByType[1].multiply(dime))
                          .subtract(changeByType[2].multiply(nickel))
-                         .multiply(new BigDecimal("100"));
+                         .multiply(new BigDecimal("100").setScale(0));
         
         balance = new BigDecimal("0").setScale(2);
         

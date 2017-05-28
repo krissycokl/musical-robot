@@ -1,11 +1,16 @@
 package com.sg.m3vendingmachine.controller;
 
 import com.sg.m3vendingmachine.dto.Change;
+import com.sg.m3vendingmachine.dto.Item;
 import com.sg.m3vendingmachine.service.*;
 import com.sg.m3vendingmachine.ui.VendingView;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class VendingController {
     private VendingService service;
@@ -25,42 +30,67 @@ public class VendingController {
         int choice;
         boolean stop = false;
         while (!stop) {
-            view.showBalance(service.getBalance());
+            List<Item> itemsForDisplay = service.getStock()
+                                                .stream()
+                                                .filter(e->e.getActive())
+                                                .collect(Collectors.toList());
+            
             view.showInventoryAndMenu(service.getStock());
+            view.showBalance(service.getBalance());
             choice = view.getChoice();
             switch(choice){
-                case 11:
-                    buy(1);
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                case 6:
+                    buy(itemsForDisplay.get(choice-1).getID());
                     break;
-                case 12:
-                    buy(2);
-                    break;
-                case 13:
-                    buy(3);
-                    break;
-                case 21:
-                    buy(4);
-                    break;
-                case 22:
-                    buy(5);
-                    break;
-                case 23:
-                    buy(6);
-                    break;
-                case 250:
+                case 7:
+            {
+                try {
                     service.changeBalance(Change.quarter);
+                } catch (FullOfMoneyException ex) {
+                    view.bannerError(ex.getMessage());
+                }
+            }
                     break;
-                case 50:
+                case 8:
+            {
+                try {
                     service.changeBalance(Change.nickel);
+                } catch (FullOfMoneyException ex) {
+                    view.bannerError(ex.getMessage());
+                }
+            }
                     break;
-                case 100:
+                case 9:
+            {
+                try {
                     service.changeBalance(Change.dime);
+                } catch (FullOfMoneyException ex) {
+                    view.bannerError(ex.getMessage());
+                }
+            }
                     break;
                 case 10:
+            {
+                try {
                     service.changeBalance(Change.penny);
+                } catch (FullOfMoneyException ex) {
+                    view.bannerError(ex.getMessage());
+                }
+            }
                     break;
-                case 1000:
+                case 11:
+            {
+                try {
                     service.changeBalance(Change.dollar);
+                } catch (FullOfMoneyException ex) {
+                    view.bannerError(ex.getMessage());
+                }
+            }
                     break;
                 case 91119:
                     adminMenu();
@@ -129,14 +159,22 @@ public class VendingController {
                                 while (service.getItem(itemKey).getQty()>0){
                                     service.decStock(itemKey);
                                 }
-                                service.toggleActive(itemKey);
+                                try {
+                                    service.toggleActive(itemKey);
+                                } catch (MachineAtCapacityException ex) {
+                                    view.bannerError(ex.getMessage());
+                                }
                                 view.adminBannerActivated(false);
                             }
                         } else {
                             view.adminBannerActivated(false);
                         }
                     } else {
-                        service.getItem(itemKey).toggleActive();
+                        try {
+                            service.toggleActive(itemKey);
+                        } catch (MachineAtCapacityException ex) {
+                            view.bannerError(ex.getMessage());
+                        }
                         view.adminBannerActivated(true);
                     }
                     service.saveStock();
@@ -157,7 +195,7 @@ public class VendingController {
             view.showChange(change);
             service.saveStock();
         } catch(InsufficientFundsException | ItemOutOfStockException e){
-            view.communicate(e.getMessage());
+            view.bannerError(e.getMessage());
         }
     }
 }

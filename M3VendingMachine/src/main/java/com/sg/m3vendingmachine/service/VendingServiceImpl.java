@@ -21,8 +21,12 @@ public class VendingServiceImpl implements VendingService {
     }
     
     @Override
-    public void changeBalance(BigDecimal increment){
-        dao.changeBalance(increment);
+    public void changeBalance(BigDecimal increment) throws FullOfMoneyException{
+        if (dao.getBalance().add(increment).compareTo(new BigDecimal("9.99")) == 1){
+            throw new FullOfMoneyException("The machine will take no more money.");
+        } else {
+            dao.changeBalance(increment);
+        }
     }
     
     @Override
@@ -66,8 +70,16 @@ public class VendingServiceImpl implements VendingService {
     }
 
     @Override
-    public void toggleActive(int id) {
-        dao.toggleActive(id);
+    public void toggleActive(int id) throws MachineAtCapacityException {
+        if (dao.getStock()
+                .stream()
+                .filter(e->e.getActive())
+                .count() >=6 && !dao.getItem(id).getActive()){
+            throw new MachineAtCapacityException("Only 6 items may be sold at once."
+                    + "\nPlease disactivate another item first.");
+        } else {
+            dao.toggleActive(id);
+        }
     }
     
     @Override
@@ -79,9 +91,9 @@ public class VendingServiceImpl implements VendingService {
         if (qtyOH<1){
             throw new ItemOutOfStockException("No "+itemName+" in stock.");
         } else if (balance.compareTo(itemCost)==-1){
-            throw new InsufficientFundsException(itemName+" costs "
-                    +itemCost.toPlainString()+"but you only have "
-                    +balance.toPlainString());
+            throw new InsufficientFundsException(itemName+" costs $"
+                    +itemCost.toPlainString()+". You have inserted $"
+                    +balance.toPlainString()+".");
         } else {
             dao.decStock(itemKey);
             return dao.makeChange(itemKey);
