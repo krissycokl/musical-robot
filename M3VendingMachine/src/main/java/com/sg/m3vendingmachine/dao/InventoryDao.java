@@ -7,7 +7,8 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public interface InventoryDao {
-    public void setBalance(BigDecimal increment);
+    public void changeBalance(BigDecimal increment);
+    public BigDecimal[] makeChange(int itemKey);
     public BigDecimal getBalance();
     public void addStock(int id, int qty);
     public void decStock(int id);

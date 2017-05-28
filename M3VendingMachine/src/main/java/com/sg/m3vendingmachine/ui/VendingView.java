@@ -59,11 +59,11 @@ public class VendingView {
                 .filter(e-> e.getActive())
                 .forEachOrdered(e-> {
                     if(e.getQty()>0){
-                       io.print(" "+e.getID()+".) "
+                        io.print(" "+e.getID()+".) "
                             +e.getName()+" $"
                             +e.getCost());
                     } else {
-                        io.print(e.getID()+".) "
+                        io.print(" "+e.getID()+".) "
                             +e.getName()+" Out of Stock");
                     }
                 });
@@ -128,7 +128,30 @@ public class VendingView {
         return 0;
     }
     
+    public void communicate(String message){
+        io.print(message);
+    }
+    
     public void bannerInvalidInput(){
         io.print("Invalid input.");
     }
+    
+    public void showChange(BigDecimal[] change){
+        io.print("Coin return:");
+        io.print(change[0].toPlainString()+" quarter"+plural(change[0].intValueExact()));
+        io.print(change[1].toPlainString()+" dime"+plural(change[1].intValueExact()));
+        io.print(change[2].toPlainString()+" nickel"+plural(change[2].intValueExact()));
+        io.print(change[3].toPlainString()+" quarter"+pluralIes(change[3].intValueExact()));
+    }
+    
+    public String plural(int num){
+        if(num==1) {return "";}
+        else {return "s";}
+    }
+    
+    public String pluralIes(int num){
+        if(num==1) {return "y";}
+        else {return "ies";}
+    }
+
 }

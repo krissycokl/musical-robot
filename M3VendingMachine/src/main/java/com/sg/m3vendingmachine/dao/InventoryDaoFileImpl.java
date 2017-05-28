@@ -15,44 +15,53 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class InventoryDaoFileImpl implements InventoryDao {
-
-    private HashMap<Integer,Item> stock = new HashMap<Integer,Item>();
+    private final String    DELIM = "::";
+    private final String FILENAME;
     private int currId = 1;
     private Change currentBalance = new Change(BigDecimal.ZERO);
-    private final String FILENAME;
-    private final String    DELIM = "::";
+    private HashMap<Integer,Item> stock = new HashMap<Integer,Item>();
     
     public InventoryDaoFileImpl(String filename){
         this.FILENAME = filename;
     }
     
     @Override
-    public void setBalance(BigDecimal increment){
+    public int addItem(){
+        currId++;
+        stock.put(currId, new Item(currId));
+        return currId;
+    }
+
+    @Override
+    public BigDecimal[] makeChange(int itemKey) {
+        return currentBalance.makeChange(getItem(itemKey).getCost());
+    }
+    @Override
+    public void changeBalance(BigDecimal increment){
         currentBalance.changeBalance(increment);
     }
-    
-    @Override
-    public BigDecimal getBalance(){
-        return currentBalance.getBalance();
-    }
-    
     @Override
     public void addStock(int id, int qty) {
         stock.get(id).addQty(qty);
     }
-
+    @Override
+    public void decStock(int id) {
+        stock.get(id).decQty();
+    }
+    @Override
+    public BigDecimal getBalance(){
+        return currentBalance.getBalance();
+    }
     @Override
     public Item getItem(int id) {
         return stock.get(id);
     }
-
     @Override
     public List<Item> getStock() {
         return stock.values()
                 .stream()
                 .collect(Collectors.toList());
     }
-
     @Override
     public void loadStock() throws FileNotFoundException {
         Scanner sc = new Scanner(new BufferedReader(new FileReader(FILENAME)));
@@ -77,12 +86,6 @@ public class InventoryDaoFileImpl implements InventoryDao {
                 .getAsInt();
         currId = Math.max(tempId, currId);
     }
-
-    @Override
-    public void decStock(int id) {
-        stock.get(id).decQty();
-    }
-
     @Override
     public void saveStock() throws IOException {
         PrintWriter out = new PrintWriter(new FileWriter(FILENAME, false));
@@ -96,14 +99,6 @@ public class InventoryDaoFileImpl implements InventoryDao {
         }
         out.close();
     }
-    
-    @Override
-    public int addItem(){
-        currId++;
-        stock.put(currId, new Item(currId));
-        return currId;
-    }
-    
     @Override
     public void toggleActive(int id){
         stock.get(id).toggleActive();

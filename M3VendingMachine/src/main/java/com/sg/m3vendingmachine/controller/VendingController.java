@@ -1,11 +1,11 @@
 package com.sg.m3vendingmachine.controller;
 
 import com.sg.m3vendingmachine.dto.Change;
-import com.sg.m3vendingmachine.dto.Item;
-import com.sg.m3vendingmachine.service.VendingService;
+import com.sg.m3vendingmachine.service.*;
 import com.sg.m3vendingmachine.ui.VendingView;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.math.BigDecimal;
 
 public class VendingController {
     private VendingService service;
@@ -16,7 +16,7 @@ public class VendingController {
         this.view = view;
     }
     
-    public void run(){
+    public void run() throws IOException{
         try{
             service.loadStock();
         } catch (FileNotFoundException e){
@@ -30,27 +30,42 @@ public class VendingController {
             choice = view.getChoice();
             switch(choice){
                 case 11:
-                    //buy item 1
+                    buy(1);
+                    break;
+                case 12:
+                    buy(2);
+                    break;
+                case 13:
+                    buy(3);
+                    break;
+                case 21:
+                    buy(4);
+                    break;
                 case 22:
-                    //buy item 2
-                case 33:
-                    //buy item 3
-                case 44:
-                    //buy item 4
-                case 55:
-                    //buy item 5
+                    buy(5);
+                    break;
+                case 23:
+                    buy(6);
+                    break;
                 case 250:
-                    service.setBalance(Change.quarter);
+                    service.changeBalance(Change.quarter);
+                    break;
                 case 50:
-                    //add nickel
+                    service.changeBalance(Change.nickel);
+                    break;
                 case 100:
-                    //add dime
+                    service.changeBalance(Change.dime);
+                    break;
                 case 10:
-                    //add penny
+                    service.changeBalance(Change.penny);
+                    break;
+                case 1000:
+                    service.changeBalance(Change.dollar);
+                    break;
                 case 91119:
                     adminMenu();
                     break;
-                case 66:
+                case -1:
                     stop = true;
                     break;
             }
@@ -133,6 +148,16 @@ public class VendingController {
                 default:
                     break;
             }
+        }
+    }
+    
+    public void buy(int itemKey) throws IOException {
+        try{
+            BigDecimal[] change = service.buy(itemKey);
+            view.showChange(change);
+            service.saveStock();
+        } catch(InsufficientFundsException | ItemOutOfStockException e){
+            view.communicate(e.getMessage());
         }
     }
 }

@@ -44,7 +44,7 @@ public class InventoryDaoFileImplTest {
     public void testSetAndGetBalance() {
         BigDecimal tempBal = dao.getBalance();
         BigDecimal  change = new BigDecimal("5");
-        dao.setBalance(new BigDecimal("5"));
+        dao.changeBalance(new BigDecimal("5"));
         assertEquals(dao.getBalance().subtract(change),tempBal);
     }
 

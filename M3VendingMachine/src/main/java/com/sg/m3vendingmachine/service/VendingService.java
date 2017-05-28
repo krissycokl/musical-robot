@@ -8,7 +8,8 @@ import java.util.List;
 
 public interface VendingService {
     public BigDecimal getBalance();
-    public void setBalance(BigDecimal increment);
+    public void changeBalance(BigDecimal increment);
+    public BigDecimal[] makeChange(int itemKey);
     public void addStock(int id, int qty);
     public void decStock(int id);
     public Item getItem(int id);
@@ -17,4 +18,5 @@ public interface VendingService {
     public void saveStock() throws IOException;
     public int addItem();
     public void toggleActive(int id);
+    public BigDecimal[] buy(int itemKey) throws ItemOutOfStockException, InsufficientFundsException;
 }

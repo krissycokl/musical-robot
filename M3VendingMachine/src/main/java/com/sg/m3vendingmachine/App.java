@@ -4,9 +4,10 @@ import com.sg.m3vendingmachine.dao.*;
 import com.sg.m3vendingmachine.controller.*;
 import com.sg.m3vendingmachine.service.*;
 import com.sg.m3vendingmachine.ui.*;
+import java.io.IOException;
 
 public class App {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         String              filename = "output.txt";
         
         UserIO                    io = new UserIOConsoleImpl();

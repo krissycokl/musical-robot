@@ -26,7 +26,7 @@ public class Change {
     public BigDecimal[] makeChange(BigDecimal cost){
         
         BigDecimal[] changeByType = new BigDecimal[4];
-        BigDecimal change = cost.subtract(getBalance());
+        BigDecimal change = getBalance().subtract(cost);
         
         changeByType[0] = change.divideToIntegralValue(quarter);
         changeByType[1] = change.subtract(changeByType[0].multiply(quarter))
@@ -38,6 +38,8 @@ public class Change {
                          .subtract(changeByType[1].multiply(dime))
                          .subtract(changeByType[2].multiply(nickel))
                          .multiply(new BigDecimal("100"));
+        
+        balance = new BigDecimal("0").setScale(2);
         
         return changeByType;
     }
