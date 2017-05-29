@@ -60,8 +60,11 @@ public class VendingServiceImplTest {
     }
 
     @Test
-    public void testMakeChange() {
-        System.out.println(service.getBalance().toPlainString());
+    public void testMakeChange() throws FullOfMoneyException{
+        service.changeBalance(new BigDecimal("1.41"));
+        BigDecimal one = BigDecimal.ONE.setScale(0);
+        BigDecimal[] expectedChange = new BigDecimal[]{one, one, one, one};
+        assertArrayEquals(expectedChange, service.makeChange(1));
     }
 
     @Test
