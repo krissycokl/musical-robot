@@ -6,18 +6,19 @@
 
 package com.sg.m3vendingmachine.service;
 
-import com.sg.m3vendingmachine.dao.InventoryDao;
 import java.math.BigDecimal;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class VendingServiceImplTest {
 
     private VendingService service;
     
     public VendingServiceImplTest() {
-        InventoryDao dao = new InventoryDaoStubImpl();
-        service = new VendingServiceImpl(dao);
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+        service = ctx.getBean("service",VendingService.class);
     }
 
     @Test

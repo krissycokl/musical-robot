@@ -1,20 +1,15 @@
 package com.sg.m3vendingmachine;
 
-import com.sg.m3vendingmachine.dao.*;
 import com.sg.m3vendingmachine.controller.*;
-import com.sg.m3vendingmachine.service.*;
-import com.sg.m3vendingmachine.ui.*;
 import java.io.IOException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class App {
     public static void main(String[] args) throws IOException {
-        String              filename = "output.txt";
-        
-        UserIO                    io = new UserIOConsoleImpl();
-        InventoryDao             dao = new InventoryDaoFileImpl(filename);
-        VendingView             view = new VendingView(io);
-        VendingService       service = new VendingServiceImpl(dao);
-        VendingController controller = new VendingController(service, view);
+    
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+        VendingController controller = ctx.getBean("controller",VendingController.class);
         
         controller.run();
     }
