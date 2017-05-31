@@ -1,1 +1,5 @@
 2017-05-31T08:48:28.706: Student 4 added.
+2017-05-31T16:00:13.693: createStudent: ID: Josie |Name: Entrada Canseco |Cohort: Java
+2017-05-31T16:00:27.341: removeStudent: Josie
+2017-05-31T16:03:41.505: createStudent: ID: 01 |Name: Lucille Ball |Cohort: s
+2017-05-31T16:03:46.253: removeStudent: 01

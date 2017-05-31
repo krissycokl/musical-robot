@@ -40,4 +40,23 @@
         <constructor-arg ref="view"/>
     </bean>
    
+   <bean id="loggingAdvice"
+         class="com.sg.classroster.advice.LoggingAdvice">
+       <constructor-arg ref="auditDao"/>
+   </bean>
+   
+   <aop:config>
+       <aop:aspect ref="loggingAdvice">
+           <aop:after-returning
+                method="createAuditEntry"
+                pointcut="execution(* com.sg.classroster.service.ClassRosterService.createStudent(..))"
+           />
+           
+           <aop:after-returning
+               method="createAuditEntry"
+               pointcut="execution(* com.sg.classroster.service.ClassRosterService.removeStudent(..))"
+           />
+       </aop:aspect>
+   </aop:config>
+   
 </beans>

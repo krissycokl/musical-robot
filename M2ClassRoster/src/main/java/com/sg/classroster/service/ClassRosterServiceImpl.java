@@ -9,11 +9,11 @@ import java.util.List;
 public class ClassRosterServiceImpl implements ClassRosterService {
 
 ClassRosterDao dao;
-private ClassRosterAuditDao auditDao;
+//private ClassRosterAuditDao auditDao;
 
 public ClassRosterServiceImpl(ClassRosterDao dao, ClassRosterAuditDao auditDao){
     this.dao = dao;
-    this.auditDao = auditDao;
+    //this.auditDao = auditDao;
 }
 
     @Override
@@ -28,7 +28,7 @@ public ClassRosterServiceImpl(ClassRosterDao dao, ClassRosterAuditDao auditDao){
         
         validateStudentData(student);
         dao.addStudent(student.getStudentID(), student);
-        auditDao.writeAuditEntry("Student "+student.getStudentID()+" added.");
+        //auditDao.writeAuditEntry("Student "+student.getStudentID()+" added.");
     }
 
     @Override
@@ -47,7 +47,7 @@ public ClassRosterServiceImpl(ClassRosterDao dao, ClassRosterAuditDao auditDao){
     public Student removeStudent(String StudentID) throws
             ClassRosterPersistenceException {
         Student removedStudent = dao.removeStudent(StudentID);
-        auditDao.writeAuditEntry("Student "+StudentID+" removed.");
+        //auditDao.writeAuditEntry("Student "+StudentID+" removed.");
         return removedStudent;
     }
     

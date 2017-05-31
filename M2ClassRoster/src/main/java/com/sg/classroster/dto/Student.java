@@ -12,6 +12,12 @@ public class Student {
         this.studentID = studentID;
     }
     
+    @Override
+    public String toString() {
+        return "ID: " + studentID + " |Name: " + firstName + " " 
+            + lastName + " |Cohort: " + cohort;
+}
+    
     public String getStudentID(){
         return studentID;
     }
