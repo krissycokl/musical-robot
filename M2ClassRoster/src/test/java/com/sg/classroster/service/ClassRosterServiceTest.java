@@ -11,16 +11,22 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class ClassRosterServiceTest {
     
     private ClassRosterService service;
 
     public ClassRosterServiceTest() {
-        ClassRosterDao dao = new ClassRosterDaoStubImpl();
+        /*ClassRosterDao dao = new ClassRosterDaoStubImpl();
         ClassRosterAuditDao auditDao = new ClassRosterAuditDaoStubImpl();
         
-        service = new ClassRosterServiceImpl(dao, auditDao);
+        service = new ClassRosterServiceImpl(dao, auditDao);*/
+        
+        ApplicationContext ctx = 
+                new ClassPathXmlApplicationContext("applicationContext.xml");
+        service = ctx.getBean("service", ClassRosterService.class);
     }
 
     @BeforeClass
