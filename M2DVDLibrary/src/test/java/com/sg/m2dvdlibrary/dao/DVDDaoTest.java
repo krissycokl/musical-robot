@@ -16,12 +16,18 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class DVDDaoTest {
 
-    DVDDao dao = new DVDDaoFileImpl();
+    //DVDDao dao = new DVDDaoFileImpl();
+    
+    DVDDao dao;
     
     public DVDDaoTest() {
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+        dao = ctx.getBean("dao",DVDDao.class);
     }
 
     @BeforeClass
