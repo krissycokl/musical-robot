@@ -10,9 +10,9 @@ import java.util.Map;
 public interface DVDService {
 
     public DVD getDVD(Integer key);
-    public DVD editDVD(DVD dvd, DVDFields.fields field, String value) throws
+    public String editDVD(DVD dvd, DVDFields.fields field, String value) throws
             DVDDaoException;
-    public DVD editDVDDate(DVD dvd, LocalDate value) throws
+    public LocalDate editDVDDate(DVD dvd, LocalDate value) throws
             DVDDaoException;
     public DVD addDVD(DVD dvd) throws
             DVDDataValidationException,

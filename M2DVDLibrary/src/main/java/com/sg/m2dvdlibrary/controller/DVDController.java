@@ -88,7 +88,7 @@ public class DVDController {
                     service.editDVD(dvd, DVDFields.fields.TITLE, view.getTitle());
                     break;
                 case 2:
-                    service.editDVD(dvd, DVDFields.fields.YEAR, view.getDate().format(DateTimeFormatter.ofPattern("MM/dd/uuuu")));
+                    service.editDVDDate(dvd, view.getDate());
                     break;
                 case 3:
                     service.editDVD(dvd, DVDFields.fields.DIRECTOR, view.getDirector());

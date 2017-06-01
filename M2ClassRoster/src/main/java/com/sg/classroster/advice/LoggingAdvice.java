@@ -1,13 +1,12 @@
 package com.sg.classroster.advice;
 
 import com.sg.classroster.dao.ClassRosterAuditDao;
-import com.sg.classroster.dao.ClassRosterAuditDaoFileImpl;
 import com.sg.classroster.dao.ClassRosterPersistenceException;
 import org.aspectj.lang.JoinPoint;
 
 public class LoggingAdvice {
     
-    ClassRosterAuditDao auditDao = new ClassRosterAuditDaoFileImpl();
+    ClassRosterAuditDao auditDao;
     
     public LoggingAdvice(ClassRosterAuditDao auditDao){
         this.auditDao = auditDao;

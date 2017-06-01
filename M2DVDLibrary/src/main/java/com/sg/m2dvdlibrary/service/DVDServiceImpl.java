@@ -7,29 +7,23 @@ import java.util.List;
 import java.util.Map;
 
 public class DVDServiceImpl implements DVDService {
-    
+
     DVDDao dao;
     DVDAuditDao auditDao;
-    
-    public DVDServiceImpl(DVDDao dao, DVDAuditDao auditDao){
+
+    public DVDServiceImpl(DVDDao dao, DVDAuditDao auditDao) {
         this.dao = dao;
         this.auditDao = auditDao;
     }
-    
+
     @Override
-    public DVD editDVD(DVD dvd, DVDFields.fields field, String value) throws DVDDaoException {
-        String oldValue = dao.editDVD(dvd, field, value);
-        String entry = dvd.getTitle()+": "+field.toString()+" changed from "+oldValue+"->"+value;
-        auditDao.writeAuditEntry(entry);
-        return dvd;
+    public String editDVD(DVD dvd, DVDFields.fields field, String value) throws DVDDaoException {
+        return dao.editDVD(dvd, field, value);
     }
-    
+
     @Override
-    public DVD editDVDDate(DVD dvd, LocalDate value) throws DVDDaoException {
-        LocalDate oldValue = dao.editDVDDate(dvd, value);
-        String entry = dvd.getTitle()+": Release date changed from "+oldValue+"->"+value;
-        auditDao.writeAuditEntry(entry);
-        return dvd;
+    public LocalDate editDVDDate(DVD dvd, LocalDate value) throws DVDDaoException {
+        return dao.editDVDDate(dvd, value);
     }
 
     @Override
@@ -41,13 +35,11 @@ public class DVDServiceImpl implements DVDService {
     public DVD addDVD(DVD dvd) throws DVDDataValidationException,
             DVDDaoException {
         validateDVDInfo(dvd);
-        auditDao.writeAuditEntry(dvd.getTitle()+" ("+dvd.getYear().getYear()+") added.");
         return dao.addDVD(dvd);
     }
 
     @Override
     public DVD removeDVD(Integer key) throws DVDDaoException {
-        auditDao.writeAuditEntry(dao.getDVD(key).getTitle()+" ("+dao.getDVD(key).getYear().getYear()+") removed.");
         return dao.removeDVD(key);
     }
 
@@ -72,20 +64,20 @@ public class DVDServiceImpl implements DVDService {
     }
 
     private void validateDVDInfo(DVD dvd) throws DVDDataValidationException {
-        if (dvd.getTitle().isEmpty() ||
-            dvd.getTitle() == null   ||
-            dvd.getTitle().equals("none")){
+        if (dvd.getTitle().isEmpty()
+                || dvd.getTitle() == null
+                || dvd.getTitle().equals("none")) {
             throw new DVDDataValidationException("Title is a required field.");
         }
     }
 
     @Override
-    public Map<Integer,DVD> getDVDsAfterYear(int year) {
+    public Map<Integer, DVD> getDVDsAfterYear(int year) {
         return dao.getDVDsAfterYear(year);
     }
 
     @Override
-    public Map<Integer,DVD> getDVDsByRating(String rating) {
+    public Map<Integer, DVD> getDVDsByRating(String rating) {
         return dao.getDVDsByRating(rating);
     }
 
@@ -95,7 +87,7 @@ public class DVDServiceImpl implements DVDService {
     }
 
     @Override
-    public Map<Integer,DVD> getDVDsByStudio(String studio) {
+    public Map<Integer, DVD> getDVDsByStudio(String studio) {
         return dao.getDVDsByStudio(studio);
     }
 
@@ -113,7 +105,7 @@ public class DVDServiceImpl implements DVDService {
     public long getNotesNumber() {
         return dao.getNotesNumber();
     }
-    
+
     @Override
     public double getNotesAvgLen() {
         return dao.getNotesAvgLen();

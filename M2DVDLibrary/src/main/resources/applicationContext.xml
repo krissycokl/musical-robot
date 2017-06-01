@@ -34,4 +34,36 @@
         <constructor-arg ref="view"/>
         <constructor-arg ref="service"/>
     </bean>
+    
+    <bean id="loggingAdvice" class="com.sg.m2dvdlibrary.advice.LoggingAdvice">
+        <constructor-arg ref="auditDao"/>
+        <constructor-arg ref="dao"/>
+    </bean>
+    
+    <aop:config>
+        <aop:aspect ref="loggingAdvice">
+            <aop:after-returning 
+                method="auditAdd"
+                pointcut="execution(* com.sg.m2dvdlibrary.service.DVDService.addDVD(..))" 
+            />
+            
+            <aop:after-returning
+                returning="returnVal"
+                method="auditRemove"
+                pointcut="execution(* com.sg.m2dvdlibrary.service.DVDService.removeDVD(..))"
+            />
+            
+            <aop:after-returning
+                returning="returnVal"
+                method="auditEdit"
+                pointcut="execution(* com.sg.m2dvdlibrary.service.DVDService.editDVD(..))"
+            />
+            
+            <aop:after-returning
+                returning="returnVal"
+                method="auditEditDate"
+                pointcut="execution(* com.sg.m2dvdlibrary.service.DVDService.editDVDDate(..))"
+            />
+        </aop:aspect>
+    </aop:config>
 </beans>
