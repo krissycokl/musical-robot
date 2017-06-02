@@ -51,7 +51,7 @@ public class DVD {
     }
 
     
-    
+    private int key;
     private String title;
     private LocalDate year;
     private String rating;
@@ -59,6 +59,14 @@ public class DVD {
     private String studio;
     private String note;
 
+    public int getKey() {
+        return key;
+    }
+
+    public void setKey(int key) {
+        this.key = key;
+    }
+    
     public String getTitle() {
         return title;
     }

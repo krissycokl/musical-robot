@@ -1,0 +1,5 @@
+editDVD: COMMENT changed from Not seen to Very bad probably: ID 0, The Smurfs. (2017-06-02T09:35:46.997)
+addDVD: ID 17, Test. (2017-06-02T09:36:04.682)
+editDVD: STUDIO changed from none to Good Studio: ID 17, Test. (2017-06-02T09:36:28.575)
+editDVDDate: RELEASE DATE changed from 2017-04-01 to 2017-01-04: ID 17, Test. (2017-06-02T09:36:32.265)
+removeDVD: ID 17, Test. (2017-06-02T09:36:34.830)

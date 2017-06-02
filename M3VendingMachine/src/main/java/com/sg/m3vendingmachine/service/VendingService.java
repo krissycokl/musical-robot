@@ -18,5 +18,5 @@ public interface VendingService {
     public void saveStock() throws IOException;
     public int addItem();
     public void toggleActive(int id) throws MachineAtCapacityException;
-    public BigDecimal[] buy(int itemKey) throws ItemOutOfStockException, InsufficientFundsException;
+    public void buy(int itemKey) throws ItemOutOfStockException, InsufficientFundsException;
 }

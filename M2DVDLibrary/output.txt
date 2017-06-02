@@ -12,5 +12,5 @@
 11::Terminator 2: Judgement Day::1991-07-03::James Cameron::Carolco::R::none
 12::Titanic::1997-12-19::James Cameron::20th Century Fox::PG-13::none
 13::Hannibal::2001-02-09::Ridley Scott::MGM::R::none
-14::The Smurfs::2011-07-29::Raja Gosnell::Sony Pictures::PG::Not seen
+14::The Smurfs::2011-07-29::Raja Gosnell::Sony Pictures::PG::Very bad probably
 15::The Gamers::2002-11-03::Matt Vancil::Dead Gentlemen Productions::none::none

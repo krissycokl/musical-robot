@@ -16,7 +16,10 @@ public class LoggingAdvice {
         this.dao      = dao;
     }
     
-    public void tryWrite(String auditEntry){
+    public void auditDVD(String action, DVD dvd) {
+        String auditEntry = action +": "+
+                "ID " + dvd.getKey() + ", "
+                +dvd.getTitle()+".";
         try {
             auditDao.writeAuditEntry(auditEntry);
         } catch (DVDDaoException ex) {
@@ -26,37 +29,30 @@ public class LoggingAdvice {
     
     public void auditAdd(JoinPoint jp){
         DVD dvd = (DVD) jp.getArgs()[0];
-        String name = dvd.getTitle();
-        String auditEntry = jp.getSignature().getName()+": "+
-                name+".";
-        tryWrite(auditEntry);
+        String action = jp.getSignature().getName();
+        auditDVD(action, dvd);
     }
     
     public void auditRemove(JoinPoint jp, DVD returnVal){
-        int key = Integer.parseInt(jp.getArgs()[0].toString());
-        String name = returnVal.getTitle();
-        String auditEntry = jp.getSignature().getName()+": "+
-                "ID " + key + ", "+name+".";
-        tryWrite(auditEntry);
+        String action = jp.getSignature().getName();
+        auditDVD(action, returnVal);
     }
     
     public void auditEdit(JoinPoint jp, String returnVal){
         DVD dvd = (DVD) jp.getArgs()[0];
-        String name = dvd.getTitle();
         String oldVal = returnVal;
-        String auditEntry = jp.getSignature().getName()+": "+
-                name +" "+ jp.getArgs()[1].toString()+" changed from "+
+        String action = jp.getSignature().getName()+": "+
+                jp.getArgs()[1].toString()+" changed from "+
                 oldVal + " to "+jp.getArgs()[2].toString();
-        tryWrite(auditEntry);
+        auditDVD(action, dvd);
     }
     
     public void auditEditDate(JoinPoint jp, LocalDate returnVal){
         DVD dvd = (DVD) jp.getArgs()[0];
-        String name = dvd.getTitle();
         String oldVal = returnVal.toString();
-        String auditEntry = jp.getSignature().getName()+": "+
-                name +" RELEASE DATE changed from "+
-                oldVal + " to "+jp.getArgs()[1].toString();
-        tryWrite(auditEntry);
+        String action = jp.getSignature().getName()+": "+
+                "RELEASE DATE changed from "+
+                oldVal + " to "+dvd.getYear().toString();
+        auditDVD(action, dvd);
     }
 }

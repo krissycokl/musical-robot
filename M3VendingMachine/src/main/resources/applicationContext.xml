@@ -19,6 +19,9 @@
     <bean id="dao"        class="com.sg.m3vendingmachine.dao.InventoryDaoFileImpl">
         <constructor-arg  value="output.txt"/>
     </bean>
+    <bean id="auditDao"   class="com.sg.m3vendingmachine.dao.VendingAuditDaoFileImpl">
+        <constructor-arg  value="log.txt"/>
+    </bean>
     <bean id="view"       class="com.sg.m3vendingmachine.ui.VendingView">
         <constructor-arg  ref="io"/>
     </bean>
@@ -29,4 +32,31 @@
         <constructor-arg  ref="service"/>
         <constructor-arg  ref="view"/>
     </bean>
+    <bean id="logging"    class="com.sg.m3vendingmachine.advice.LoggingAdvice">
+        <constructor-arg  ref="dao"/>
+        <constructor-arg  ref="auditDao"/>
+    </bean>
+    
+    <aop:config>
+        <aop:aspect ref="logging">
+            <aop:after-returning
+                          method="logPurchase"
+                          pointcut="execution (* com.sg.m3vendingmachine.service.VendingService.buy(..))"
+            />
+            <aop:after-throwing
+                          method="logError"
+                          pointcut="execution (* com.sg.m3vendingmachine.service.VendingService.buy(..))"
+                          throwing="thrown"
+            />
+            <aop:after-returning
+                          method="logInsertCoin"
+                          pointcut="execution (* com.sg.m3vendingmachine.service.VendingService.changeBalance(..))"
+            />
+            <aop:after-returning
+                          method="logCoinReturn"
+                          pointcut="execution (* com.sg.m3vendingmachine.service.VendingService.makeChange(..))"
+                          returning="changeAry"
+            />
+        </aop:aspect>
+    </aop:config>
 </beans>

@@ -66,6 +66,7 @@ public class DVDDaoFileImpl implements DVDDao {
 
     @Override
     public DVD addDVD(DVD dvd) {
+        dvd.setKey(currKey);
         library.put(currKey, dvd);
         currKey++;
         return dvd;

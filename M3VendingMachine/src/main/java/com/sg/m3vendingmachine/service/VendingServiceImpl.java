@@ -83,7 +83,7 @@ public class VendingServiceImpl implements VendingService {
     }
     
     @Override
-    public BigDecimal[] buy(int itemKey) throws ItemOutOfStockException, InsufficientFundsException {
+    public void buy(int itemKey) throws ItemOutOfStockException, InsufficientFundsException {
         BigDecimal balance = dao.getBalance();
         BigDecimal itemCost = dao.getItem(itemKey).getCost();
         String itemName = dao.getItem(itemKey).getName();
@@ -96,7 +96,6 @@ public class VendingServiceImpl implements VendingService {
                     +balance.toPlainString()+".");
         } else {
             dao.decStock(itemKey);
-            return dao.makeChange(itemKey);
         }
     }
 

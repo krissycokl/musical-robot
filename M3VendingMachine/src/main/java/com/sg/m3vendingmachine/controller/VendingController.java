@@ -8,8 +8,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class VendingController {
@@ -192,7 +190,8 @@ public class VendingController {
     public void buy(int itemKey) throws IOException {
         try{
             
-            BigDecimal[] change = service.buy(itemKey);
+            service.buy(itemKey);
+            BigDecimal[] change = service.makeChange(itemKey);
             view.bannerVend(service.getItem(itemKey).getName());
             view.showChange(change);
             service.saveStock();
