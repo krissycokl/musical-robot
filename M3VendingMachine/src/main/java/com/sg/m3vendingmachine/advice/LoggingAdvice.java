@@ -26,7 +26,8 @@ public class LoggingAdvice {
     }
     
     public void logInsertCoin(JoinPoint jp){
-        auditDao.writeAuditEntry("User added $"+(BigDecimal) jp.getArgs()[0]+".");
+        String entry = "User added $"+(BigDecimal) jp.getArgs()[0]+".";
+        auditDao.writeAuditEntry(entry);
     }
     
     public void logCoinReturn(JoinPoint jp, BigDecimal[] changeAry){
@@ -45,6 +46,10 @@ public class LoggingAdvice {
     }
     
     public void logServiceEdit(JoinPoint jp){
-        
+        auditDao.writeAuditEntry(jp.getSignature().getName());
+    }
+    
+    public void logServiceToggleActive(JoinPoint jp){
+        auditDao.writeAuditEntry(jp.getSignature().getName());
     }
 }
