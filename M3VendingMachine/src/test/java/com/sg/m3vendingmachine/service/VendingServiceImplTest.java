@@ -6,9 +6,13 @@
 
 package com.sg.m3vendingmachine.service;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.math.BigDecimal;
+import org.junit.After;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Before;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -19,6 +23,16 @@ public class VendingServiceImplTest {
     public VendingServiceImplTest() {
         ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
         service = ctx.getBean("service",VendingService.class);
+    }
+    
+    @Before
+    public void setUp() throws FileNotFoundException{
+        service.loadStock();
+    }
+
+    @After
+    public void tearDown() throws IOException {
+        service.saveStock();
     }
 
     @Test
@@ -71,7 +85,7 @@ public class VendingServiceImplTest {
     @Test
     public void testToggleActive() throws Exception {
         boolean currentStatus = service.getItem(1).getActive();
-        currentStatus = !currentStatus;
+        service.toggleActive(1);
         assertNotEquals(currentStatus, service.getItem(1).getActive());
     }
 

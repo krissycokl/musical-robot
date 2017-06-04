@@ -16,11 +16,6 @@ public class InventoryDaoStubImpl implements InventoryDao {
     private Change currentBalance = new Change(BigDecimal.ZERO);
     
     public InventoryDaoStubImpl(){
-        Item item = itemList.put(1, new Item(1));
-        itemList.get(1).setName("Test Item 1");
-        itemList.get(1).setActive(true);
-        itemList.get(1).addQty(1);
-        itemList.get(1).setCost(BigDecimal.ONE);
     }
     
     @Override
@@ -62,7 +57,11 @@ public class InventoryDaoStubImpl implements InventoryDao {
 
     @Override
     public void loadStock() throws FileNotFoundException {
-        // Not needed in stub
+        Item item = itemList.put(1, new Item(1));
+        itemList.get(1).setName("Test Item 1");
+        itemList.get(1).setActive(true);
+        itemList.get(1).addQty(1);
+        itemList.get(1).setCost(BigDecimal.ONE);
     }
 
     @Override
@@ -72,7 +71,7 @@ public class InventoryDaoStubImpl implements InventoryDao {
 
     @Override
     public void saveStock() throws IOException {
-        // Not needed in stub
+        itemList = null;
     }
 
     @Override

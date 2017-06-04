@@ -15,12 +15,16 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class InventoryDaoFileImplTest {
     
-    InventoryDao dao = new InventoryDaoFileImpl("outputTest.txt");
-
+    private InventoryDao dao;
+    
     public InventoryDaoFileImplTest() {
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+        dao = ctx.getBean("dao", InventoryDao.class);
     }
 
     @BeforeClass
@@ -35,32 +39,25 @@ public class InventoryDaoFileImplTest {
     public void setUp() throws FileNotFoundException {
         dao.loadStock();
     }
-
-    @After
-    public void tearDown() throws IOException {
-    }
-
+    
     @Test
     public void testSetAndGetBalance() {
         BigDecimal tempBal = dao.getBalance();
         BigDecimal  change = new BigDecimal("5");
-        dao.changeBalance(new BigDecimal("5"));
+        dao.changeBalance(change);
         assertEquals(dao.getBalance().subtract(change),tempBal);
     }
 
     @Test
     public void testAddItem() {
         int itemID = dao.addItem();
-        dao.addStock(itemID, 3);
         assertNotNull(dao.getItem(itemID));
     }
 
     @Test
     public void testAddAndGetStock() {
         int tempQty = dao.getItem(1).getQty();
-        System.out.println(tempQty);
         dao.addStock(1, 4);
-        System.out.println(dao.getItem(1).getQty());
         assertEquals(4, dao.getItem(1).getQty()-tempQty);
     }
 
