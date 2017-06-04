@@ -57,7 +57,7 @@ public class InventoryDaoStubImpl implements InventoryDao {
 
     @Override
     public void loadStock() throws FileNotFoundException {
-        Item item = itemList.put(1, new Item(1));
+        itemList.put(1, new Item(1));
         itemList.get(1).setName("Test Item 1");
         itemList.get(1).setActive(true);
         itemList.get(1).addQty(1);
@@ -65,8 +65,8 @@ public class InventoryDaoStubImpl implements InventoryDao {
     }
 
     @Override
-    public BigDecimal[] makeChange(int itemKey) {
-        return currentBalance.makeChange(itemList.get(itemKey).getCost());
+    public BigDecimal[] makeChange(BigDecimal cost) {
+        return currentBalance.makeChange(cost);
     }
 
     @Override

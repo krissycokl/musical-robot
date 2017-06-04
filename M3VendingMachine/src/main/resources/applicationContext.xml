@@ -40,22 +40,45 @@
     <aop:config>
         <aop:aspect ref="logging">
             <aop:after-returning
-                          method="logPurchase"
-                          pointcut="execution (* com.sg.m3vendingmachine.service.VendingService.buy(..))"
+                method="logPurchase"
+                pointcut="execution (* com.sg.m3vendingmachine.service.VendingService.buy(..))"
             />
             <aop:after-throwing
-                          method="logError"
-                          pointcut="execution (* com.sg.m3vendingmachine.service.VendingService.buy(..))"
-                          throwing="thrown"
+                method="logError"
+                pointcut="execution (* com.sg.m3vendingmachine.service.VendingService.*(..))"
+                throwing="thrown"
             />
             <aop:after-returning
-                          method="logInsertCoin"
-                          pointcut="execution (* com.sg.m3vendingmachine.service.VendingService.changeBalance(..))"
+                method="logInsertCoin"
+                pointcut="execution (* com.sg.m3vendingmachine.service.VendingService.changeBalance(..))"
             />
             <aop:after-returning
-                          method="logCoinReturn"
-                          pointcut="execution (* com.sg.m3vendingmachine.service.VendingService.makeChange(..))"
-                          returning="changeAry"
+                method="logCoinReturn"
+                pointcut="execution (* com.sg.m3vendingmachine.service.VendingService.makeChange(..))"
+                returning="changeAry"
+            />
+            <aop:after-returning
+                method="logServiceStock"
+                pointcut="execution (* com.sg.m3vendingmachine.service.VendingService.addStock(..))"
+            />
+            <aop:after-returning
+                method="logServiceNewItem"
+                pointcut="execution (* com.sg.m3vendingmachine.service.VendingService.addItem(..))"
+                returning="key"
+            />
+            <aop:after-returning
+                method="logServiceEditName"
+                pointcut="execution (* com.sg.m3vendingmachine.service.VendingService.itemSetName(..))"
+                returning="oldVal"
+            />
+            <aop:after-returning
+                method="logServiceEditCost"
+                pointcut="execution (* com.sg.m3vendingmachine.service.VendingService.itemSetCost(..))"
+                returning="oldVal"
+            />
+            <aop:after-returning 
+                method="logServiceActivate"
+                pointcut="execution (* com.sg.m3vendingmachine.service.VendingService.toggleActive(..))"
             />
         </aop:aspect>
     </aop:config>

@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface InventoryDao {
     public void changeBalance(BigDecimal increment);
-    public BigDecimal[] makeChange(int itemKey);
+    public BigDecimal[] makeChange(BigDecimal cost);
     public BigDecimal getBalance();
     public void addStock(int id, int qty);
     public void decStock(int id);

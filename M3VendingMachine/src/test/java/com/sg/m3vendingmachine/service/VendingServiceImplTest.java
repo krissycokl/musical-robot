@@ -79,7 +79,7 @@ public class VendingServiceImplTest {
         service.changeBalance(new BigDecimal("1.41"));
         BigDecimal one = BigDecimal.ONE.setScale(0);
         BigDecimal[] expectedChange = new BigDecimal[]{one, one, one, one};
-        assertArrayEquals(expectedChange, service.makeChange(1));
+        assertArrayEquals(expectedChange, service.makeChange(service.getItem(1).getCost()));
     }
 
     @Test

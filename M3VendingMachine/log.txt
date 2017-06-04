@@ -1,0 +1,51 @@
+User added $1.00. - 2017-06-04T18:53:49.763
+User added $1.00. - 2017-06-04T18:53:51.294
+User added $0.10. - 2017-06-04T18:53:52.431
+One 2% Milk vended. - 2017-06-04T18:53:55.654
+Machine returned 4 Qs, 1 Ds, 0 Ns, 0 Ps - 2017-06-04T18:53:55.655
+User added $0.25. - 2017-06-04T19:00:15.731
+User added $0.25. - 2017-06-04T19:00:16.03
+User added $0.05. - 2017-06-04T19:00:16.436
+User added $0.25. - 2017-06-04T19:00:16.946
+User added $0.05. - 2017-06-04T19:00:17.355
+User added $0.05. - 2017-06-04T19:00:17.563
+User added $0.05. - 2017-06-04T19:00:17.772
+User added $0.05. - 2017-06-04T19:00:17.975
+User added $0.05. - 2017-06-04T19:00:18.289
+User added $0.05. - 2017-06-04T19:00:18.394
+User added $0.05. - 2017-06-04T19:00:19.63
+User added $0.05. - 2017-06-04T19:00:21.054
+User added $0.10. - 2017-06-04T19:00:22.274
+User added $0.25. - 2017-06-04T19:00:23.287
+One Pink Lemonade vended. - 2017-06-04T19:00:25.145
+Machine returned 0 Qs, 0 Ds, 1 Ns, 0 Ps - 2017-06-04T19:00:25.147
+8: Item null added to offering. - 2017-06-04T19:00:29.546
+7: Item Pink Lemonade toggled (in)active. - 2017-06-04T19:00:44.563
+8: Item Locust Blood toggled (in)active. - 2017-06-04T19:00:50.02
+Attempted buy. Error: Locust Blood costs $10.00. You have inserted $0.00. - 2017-06-04T19:00:54.245
+5: Item name changed from Water of Life to Eau de Vie - 2017-06-04T19:01:16.244
+7: Maintenance stocked 4 EA Pink Lemonade. - 2017-06-04T19:04:25.817
+8: Item Locust Blood cost changed from 10.00 to 3.49. - 2017-06-04T19:06:44.737
+User added $1.00. - 2017-06-04T19:06:50.148
+User added $1.00. - 2017-06-04T19:06:50.353
+User added $1.00. - 2017-06-04T19:06:50.661
+User added $1.00. - 2017-06-04T19:06:51.381
+User added $1.00. - 2017-06-04T19:06:51.59
+User added $1.00. - 2017-06-04T19:06:51.894
+User added $1.00. - 2017-06-04T19:06:52.101
+8: One Locust Blood vended. - 2017-06-04T19:06:54.669
+Machine returned 14 Qs, 0 Ds, 0 Ns, 1 Ps - 2017-06-04T19:06:54.67
+User added $1.00. - 2017-06-04T19:06:55.594
+User added $1.00. - 2017-06-04T19:06:55.903
+User added $1.00. - 2017-06-04T19:06:56.112
+User added $1.00. - 2017-06-04T19:06:56.422
+8: One Locust Blood vended. - 2017-06-04T19:06:57.865
+Machine returned 2 Qs, 0 Ds, 0 Ns, 1 Ps - 2017-06-04T19:06:57.866
+User added $1.00. - 2017-06-04T19:06:59.108
+User added $1.00. - 2017-06-04T19:06:59.421
+User added $1.00. - 2017-06-04T19:06:59.731
+User added $1.00. - 2017-06-04T19:06:59.938
+Attempted buy. Error: No Locust Blood in stock. - 2017-06-04T19:07:00.863
+User added $0.01. - 2017-06-04T19:12:36.278
+User added $0.01. - 2017-06-04T19:12:36.881
+Machine returned 0 Qs, 0 Ds, 0 Ns, 2 Ps - 2017-06-04T19:12:37.914

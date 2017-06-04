@@ -95,6 +95,7 @@ public class VendingController {
                     break;
                 case -1:
                     stop = true;
+                    view.showChange(service.makeChange(BigDecimal.ZERO));
                     break;
             }
         }
@@ -134,17 +135,17 @@ public class VendingController {
         while(!valid){
             switch(action){
                 case 1:
-                    service.getItem(itemKey).setName(view.adminGetName());
+                    service.itemSetName(itemKey, view.adminGetName());
                     service.saveStock();
                     valid = true;
                     break;
                 case 2:
-                    service.getItem(itemKey).addQty(view.adminGetAddQty());
+                    service.addStock(itemKey, view.adminGetAddQty());
                     service.saveStock();
                     valid = true;
                     break;
                 case 3:
-                    service.getItem(itemKey).setCost(view.adminGetPrice());
+                    service.itemSetCost(itemKey, view.adminGetPrice());
                     service.saveStock();
                     valid = true;
                     break;
@@ -191,7 +192,7 @@ public class VendingController {
         try{
             
             service.buy(itemKey);
-            BigDecimal[] change = service.makeChange(itemKey);
+            BigDecimal[] change = service.makeChange(service.getItem(itemKey).getCost());
             view.bannerVend(service.getItem(itemKey).getName());
             view.showChange(change);
             service.saveStock();

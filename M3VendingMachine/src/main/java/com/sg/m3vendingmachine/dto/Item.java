@@ -16,16 +16,20 @@ public class Item {
         return name;
     }
 
-    public void setName(String name) {
+    public String setName(String name) {
+        String currName = this.name;
         this.name = name;
+        return currName;
     }
 
     public BigDecimal getCost() {
         return cost;
     }
 
-    public void setCost(BigDecimal cost) {
+    public BigDecimal setCost(BigDecimal cost) {
+        BigDecimal currCost = this.cost;
         this.cost = cost;
+        return currCost;
     }
 
     public int getQty() {

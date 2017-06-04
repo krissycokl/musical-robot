@@ -50,6 +50,16 @@ public class VendingServiceImpl implements VendingService {
     }
 
     @Override
+    public BigDecimal itemSetCost(int itemKey, BigDecimal newCost) {
+        return dao.getItem(itemKey).setCost(newCost);
+    }
+
+    @Override
+    public String itemSetName(int itemKey, String newName) {
+        return dao.getItem(itemKey).setName(newName);
+    }
+
+    @Override
     public void loadStock() throws FileNotFoundException {
         dao.loadStock();
     }
@@ -60,8 +70,8 @@ public class VendingServiceImpl implements VendingService {
     }
 
     @Override
-    public BigDecimal[] makeChange(int itemKey) {
-        return dao.makeChange(itemKey);
+    public BigDecimal[] makeChange(BigDecimal cost) {
+        return dao.makeChange(cost);
     }
 
     @Override

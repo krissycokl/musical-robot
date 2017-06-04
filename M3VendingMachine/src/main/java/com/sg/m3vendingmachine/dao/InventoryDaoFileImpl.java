@@ -33,8 +33,8 @@ public class InventoryDaoFileImpl implements InventoryDao {
     }
 
     @Override
-    public BigDecimal[] makeChange(int itemKey) {
-        return currentBalance.makeChange(getItem(itemKey).getCost());
+    public BigDecimal[] makeChange(BigDecimal cost) {
+        return currentBalance.makeChange(cost);
     }
     @Override
     public void changeBalance(BigDecimal increment){

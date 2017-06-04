@@ -9,7 +9,7 @@ import java.util.List;
 public interface VendingService {
     public BigDecimal getBalance();
     public void changeBalance(BigDecimal increment) throws FullOfMoneyException;
-    public BigDecimal[] makeChange(int itemKey);
+    public BigDecimal[] makeChange(BigDecimal cost);
     public void addStock(int id, int qty);
     public void decStock(int id);
     public Item getItem(int id);
@@ -19,4 +19,6 @@ public interface VendingService {
     public int addItem();
     public void toggleActive(int id) throws MachineAtCapacityException;
     public void buy(int itemKey) throws ItemOutOfStockException, InsufficientFundsException;
+    public String itemSetName(int itemKey, String newName);
+    public BigDecimal itemSetCost(int itemKey, BigDecimal newCost);
 }

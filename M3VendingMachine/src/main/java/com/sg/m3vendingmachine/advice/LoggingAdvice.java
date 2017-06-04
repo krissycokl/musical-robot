@@ -2,6 +2,7 @@ package com.sg.m3vendingmachine.advice;
 
 import com.sg.m3vendingmachine.dao.InventoryDao;
 import com.sg.m3vendingmachine.dao.VendingAuditDao;
+import com.sg.m3vendingmachine.dto.Item;
 import java.math.BigDecimal;
 import org.aspectj.lang.JoinPoint;
 
@@ -21,7 +22,7 @@ public class LoggingAdvice {
     }
     
     public void logPurchase(JoinPoint jp){
-        String entry = "One "+dao.getItem((int) jp.getArgs()[0]).getName()+" vended.";
+        String entry = (int) jp.getArgs()[0]+": One "+dao.getItem((int) jp.getArgs()[0]).getName()+" vended.";
         auditDao.writeAuditEntry(entry);
     }
     
@@ -38,18 +39,32 @@ public class LoggingAdvice {
     
     // Service menu logging
     public void logServiceStock(JoinPoint jp){
-        auditDao.writeAuditEntry(jp.getSignature().getName());
+        Item item = dao.getItem((int) jp.getArgs()[0]);
+        int qty = (int) jp.getArgs()[1];
+        String entry = item.getID()+": Maintenance stocked "+qty+" EA "+item.getName()+".";
+        auditDao.writeAuditEntry(entry);
     }
     
-    public void logServiceNewItem(JoinPoint jp){
-        auditDao.writeAuditEntry(jp.getSignature().getName());
+    public void logServiceNewItem(JoinPoint jp, int key){
+        String entry = key + ": New item added to offering.";
+        auditDao.writeAuditEntry(entry);
     }
     
-    public void logServiceEdit(JoinPoint jp){
-        auditDao.writeAuditEntry(jp.getSignature().getName());
+    public void logServiceEditName(JoinPoint jp, String oldVal){
+        Item item = dao.getItem((int) jp.getArgs()[0]);
+        String entry = item.getID()+": Item name changed from "+oldVal+" to "+item.getName()+".";
+        auditDao.writeAuditEntry(entry);
     }
     
-    public void logServiceToggleActive(JoinPoint jp){
-        auditDao.writeAuditEntry(jp.getSignature().getName());
+    public void logServiceEditCost(JoinPoint jp, BigDecimal oldVal){
+        Item item = dao.getItem((int) jp.getArgs()[0]);
+        String entry = item.getID()+": Item "+item.getName()+" cost changed from "+oldVal+" to "+item.getCost()+".";
+        auditDao.writeAuditEntry(entry);
+    }
+    
+    public void logServiceActivate(JoinPoint jp){
+        Item item = dao.getItem((int) jp.getArgs()[0]);
+        String entry = item.getID()+": Item "+item.getName()+" toggled (in)active.";
+        auditDao.writeAuditEntry(entry);
     }
 }
