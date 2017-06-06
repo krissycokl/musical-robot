@@ -8,6 +8,7 @@ package com.sg.m5flooringmastery.dao;
 
 import com.sg.m5flooringmastery.model.Order;
 import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Month;
@@ -22,6 +23,8 @@ public class FlooringDaoFileImplTest {
     FlooringDao dao;
     Order testOrder;
     File f;
+    LocalDate testDay1 = LocalDate.of(1900, Month.JANUARY, 1);
+    LocalDate testDay2 = LocalDate.of(1900, Month.JANUARY, 2);
 
     public FlooringDaoFileImplTest() {
         ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
@@ -33,7 +36,7 @@ public class FlooringDaoFileImplTest {
         testOrder = new Order(1);
         testOrder.setArea(BigDecimal.ONE);
         testOrder.setCustomerName("Joe");
-        testOrder.setDay(LocalDate.now());
+        testOrder.setDay(testDay1);
         testOrder.setMaterial("Wood");
         testOrder.setLaborCostPerSqFt(BigDecimal.ONE);
         testOrder.setMaterialCostPerSqFt(BigDecimal.ONE);
@@ -50,41 +53,31 @@ public class FlooringDaoFileImplTest {
 
     @Test
     public void testAddAndGetOrder() {
-        dao.addOrder(testOrder);
-        assertEquals(testOrder,dao.getOrder(1));
+        dao.addOrder(testOrder, testDay1);
+        assertEquals(testOrder,dao.getOrder(1,testDay1));
     }
 
     @Test
     public void testRemoveOrder() {
-        dao.addOrder(testOrder);
-        dao.removeOrder(1);
-        assertNull(dao.getOrder(1));
+        dao.addOrder(testOrder, testDay1);
+        dao.removeOrder(1, testDay1);
+        assertNull(dao.getOrder(1, testDay1));
     }
 
-//    @Test
-//    public void testChangeOrderDay() {
-//    }
+    @Test
+    public void testChangeOrderDay() throws IOException {
+        dao.addOrder(testOrder, testDay1);
+        dao.changeOrderDay(testOrder, testDay2);
+        assertEquals(testOrder, dao.getOrder(1, testDay2));
+        new File("OrderArchive/Orders_01021900.txt").delete();
+    }
 
     @Test
     public void testEditOrder() {
-        dao.addOrder(testOrder);
-        Order testOrder2 = dao.getOrder(1);
+        dao.addOrder(testOrder, testDay1);
+        Order testOrder2 = dao.getOrder(1, testDay1);
         testOrder2.setArea(BigDecimal.TEN);
-        dao.editOrder(testOrder2);
-        assertEquals(testOrder2, dao.getOrder(1));
-    }
-
-    @Test
-    public void testSaveAndLoad() throws Exception {
-        LocalDate testDay = LocalDate.of(1900, Month.JANUARY, 1);
-        dao.addOrder(testOrder);
-        dao.save(testDay);
-        dao.removeOrder(1);
-        dao.load(testDay);
-        Order o1 = dao.getOrder(1);
-        Order o2 = testOrder;
-        assertEquals(o1.getArea(),o2.getArea());
-        assertEquals(o1.getOrderNum(),o2.getOrderNum());
-        assertEquals(o1.getCustomerName(),o2.getCustomerName());
+        dao.editOrder(testOrder2, testDay1);
+        assertEquals(testOrder2, dao.getOrder(1, testDay1));
     }
 }

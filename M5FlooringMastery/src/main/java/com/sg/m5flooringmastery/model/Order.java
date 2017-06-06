@@ -6,8 +6,16 @@ import java.util.Objects;
 
 public class Order {
     private LocalDate day;
+
+    public LocalDate getDay() {
+        return day;
+    }
+    public void setDay(LocalDate day) {
+        this.day = day;
+    }
+    
     private String customerName;
-    private final int ORDERNUM;
+    private int orderNum;
     private String state;
     private BigDecimal taxRate;
     private String material;
@@ -19,14 +27,21 @@ public class Order {
     private BigDecimal taxAmount;
     private BigDecimal totalCost;
 
+    public Order() {
+    }
+    
     public Order(int orderNum){
-        this.ORDERNUM = orderNum;
+        this.orderNum = orderNum;
     }
     
     public BigDecimal getMaterialCost() {
         return materialCost;
     }
 
+    public void setKey(int key){
+        this.orderNum = key;
+    }
+    
     public void setMaterialCost(BigDecimal materialCost) {
         this.materialCost = materialCost;
     }
@@ -39,14 +54,6 @@ public class Order {
         this.laborCost = laborCost;
     }
     
-    public LocalDate getDay() {
-        return day;
-    }
-
-    public void setDay(LocalDate day) {
-        this.day = day;
-    }
-
     public String getCustomerName() {
         return customerName;
     }
@@ -56,7 +63,7 @@ public class Order {
     }
 
     public int getOrderNum() {
-        return ORDERNUM;
+        return orderNum;
     }
 
     public void setState(String state) {
@@ -126,7 +133,7 @@ public class Order {
     @Override
     public String toString() {
         StringBuilder out = new StringBuilder();
-        out.append(this.ORDERNUM).append(",");
+        out.append(this.orderNum).append(",");
         out.append(this.customerName).append(",");
         out.append(this.state).append(",");
         out.append(this.taxRate.multiply(new BigDecimal("100"))).append(",");
@@ -144,9 +151,8 @@ public class Order {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 11 * hash + Objects.hashCode(this.day);
         hash = 11 * hash + Objects.hashCode(this.customerName);
-        hash = 11 * hash + this.ORDERNUM;
+        hash = 11 * hash + this.orderNum;
         hash = 11 * hash + Objects.hashCode(this.state);
         hash = 11 * hash + Objects.hashCode(this.taxRate);
         hash = 11 * hash + Objects.hashCode(this.material);
@@ -170,7 +176,7 @@ public class Order {
             return false;
         }
         final Order other = (Order) obj;
-        if (this.ORDERNUM != other.ORDERNUM) {
+        if (this.orderNum != other.orderNum) {
             return false;
         }
         if (!Objects.equals(this.customerName, other.customerName)) {
@@ -182,27 +188,24 @@ public class Order {
         if (!Objects.equals(this.material, other.material)) {
             return false;
         }
-        if (!Objects.equals(this.day, other.day)) {
+        if (this.taxRate.compareTo(other.taxRate) != 0) {
             return false;
         }
-//        if (this.taxRate.compareTo(other.taxRate) != 0) {
-//            return false;
-//        }
-//        if (this.area.compareTo(other.area) != 0) {
-//            return false;
-//        }
-//        if (this.materialCostPerSqFt.compareTo(other.materialCostPerSqFt) != 0) {
-//            return false;
-//        }
-//        if (this.laborCostPerSqFt.compareTo(other.laborCostPerSqFt) != 0) {
-//            return false;
-//        }
-//        if (this.taxAmount.compareTo(other.taxAmount) != 0) {
-//            return false;
-//        }
-//        if (this.totalCost.compareTo(other.totalCost) != 0) {
-//            return false;
-//        }
+        if (this.area.compareTo(other.area) != 0) {
+            return false;
+        }
+        if (this.materialCostPerSqFt.compareTo(other.materialCostPerSqFt) != 0) {
+            return false;
+        }
+        if (this.laborCostPerSqFt.compareTo(other.laborCostPerSqFt) != 0) {
+            return false;
+        }
+        if (this.taxAmount.compareTo(other.taxAmount) != 0) {
+            return false;
+        }
+        if (this.totalCost.compareTo(other.totalCost) != 0) {
+            return false;
+        }
         return true;
     }
 

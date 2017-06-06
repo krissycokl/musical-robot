@@ -15,6 +15,22 @@
           http://www.springframework.org/schema/aop  
           http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
 
-    <!-- Bean definitions go here -->
+    <bean id="io"               class="com.sg.m5flooringmastery.view.UserIOConsoleImpl"/>
+    <bean id="view"             class="com.sg.m5flooringmastery.view.FlooringView">
+        <constructor-arg        ref="io"/>
+    </bean>
+    <bean id="flooringDao"      class="com.sg.m5flooringmastery.dao.FlooringDaoFileImpl"/>
+    <bean id="flooringAuditDao" class="com.sg.m5flooringmastery.dao.FlooringAuditDaoFileImpl"/>
+    <bean id="materialsDao"     class="com.sg.m5flooringmastery.dao.MaterialsDaoFileImpl"/>
+    <bean id="taxesDao"         class="com.sg.m5flooringmastery.dao.TaxesDaoFileImpl"/>
+    <bean id="service"          class="com.sg.m5flooringmastery.service.FlooringServiceImpl">
+        <constructor-arg        ref="flooringDao"/>
+        <constructor-arg        ref="materialsDao"/>
+        <constructor-arg        ref="taxesDao"/>
+    </bean>
+    <bean id="controller"       class="com.sg.m5flooringmastery.controller.FlooringController">
+        <constructor-arg        ref="view"/>
+        <constructor-arg        ref="service"/>
+    </bean>
    
 </beans>

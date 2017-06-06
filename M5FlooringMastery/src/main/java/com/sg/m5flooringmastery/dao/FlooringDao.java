@@ -4,6 +4,7 @@ import com.sg.m5flooringmastery.model.Order;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
 
 public interface FlooringDao {
     public void load(LocalDate day) throws FileNotFoundException;
@@ -11,10 +12,12 @@ public interface FlooringDao {
     public int loadKey() throws FileNotFoundException;
     public int saveKey() throws IOException;
     
-    public int addOrder(Order order);
-    public Order editOrder(Order order);
-    public Order removeOrder(int id);
-    public Order getOrder(int id);
+    public int addOrder(Order order, LocalDate day);
+    public Order editOrder(Order order, LocalDate day);
+    public Order removeOrder(int id, LocalDate day);
+    public Order getOrder(int id, LocalDate day);
+    
+    public List<Order> getOrderList(LocalDate day);
 
-    public void changeOrderDay(Order order, LocalDate newDay);
+    public void changeOrderDay(Order order, LocalDate newDay) throws IOException, FileNotFoundException;
 }

@@ -1,5 +1,6 @@
 package com.sg.m5flooringmastery.view;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -7,6 +8,37 @@ import java.util.Scanner;
 
 public class UserIOConsoleImpl implements UserIO {
     private static Scanner sc = new Scanner(System.in);
+
+    @Override
+    public BigDecimal getBigD(String prompt) {
+        String response;
+        BigDecimal responseBigD;
+        while (true){
+            System.out.println(prompt);
+            response = sc.nextLine();
+            try{
+                responseBigD = new BigDecimal(response);
+                return responseBigD;
+            } catch (Exception e){}
+        }
+    }
+
+    @Override
+    public BigDecimal getBigD(String prompt, BigDecimal min, BigDecimal max) {
+        String response;
+        BigDecimal responseBigD;
+        while (true){
+            System.out.println(prompt);
+            response = sc.nextLine();
+            try{
+                responseBigD = new BigDecimal(response);
+                if (    responseBigD.compareTo(max)<=0
+                     && responseBigD.compareTo(min)>=0){
+                    return responseBigD;
+                }
+            } catch (Exception e){}
+        }
+    }
     
     @Override
     public int getInt(String prompt){
@@ -105,7 +137,7 @@ public class UserIOConsoleImpl implements UserIO {
     }
     
     @Override
-    public LocalDate getDate(String prompt, String otherwise){
+    public LocalDate getDate(String prompt, LocalDate otherwise){
         System.out.println(prompt);
         LocalDate ld;
         String ans;
@@ -114,7 +146,7 @@ public class UserIOConsoleImpl implements UserIO {
             ans = sc.nextLine();
             try{
                 if(ans.isEmpty() && tried){
-                    return LocalDate.parse(otherwise,DateTimeFormatter.ofPattern("MM/dd/uuuu"));
+                    return otherwise;
                 }
                 ld = LocalDate.parse(ans,DateTimeFormatter.ofPattern("MM/dd/uuuu"));
                 return ld;

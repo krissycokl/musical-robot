@@ -12,6 +12,10 @@ public class TaxesDaoFileImpl implements TaxesDao {
 
     Map<String, BigDecimal> stateTaxRates = new HashMap<>();
     
+    public TaxesDaoFileImpl() throws FileNotFoundException{
+        load();
+    }
+    
     @Override
     public BigDecimal getRate(String state) {
         return stateTaxRates.get(state);

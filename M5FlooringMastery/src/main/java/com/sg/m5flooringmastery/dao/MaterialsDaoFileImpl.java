@@ -12,6 +12,10 @@ public class MaterialsDaoFileImpl implements MaterialsDao {
 
     Map<String, BigDecimal[]> materials = new HashMap<>();
     
+    public MaterialsDaoFileImpl() throws FileNotFoundException{
+        load();
+    }
+    
     @Override
     public BigDecimal getMaterialCostPerSqFt(String material) {
         return materials.get(material)[0];
