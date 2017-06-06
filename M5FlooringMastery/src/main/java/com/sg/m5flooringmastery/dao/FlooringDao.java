@@ -8,7 +8,8 @@ import java.time.LocalDate;
 public interface FlooringDao {
     public void load(LocalDate day) throws FileNotFoundException;
     public void save(LocalDate day) throws IOException;
-    public int setKey() throws FileNotFoundException;
+    public int loadKey() throws FileNotFoundException;
+    public int saveKey() throws IOException;
     
     public int addOrder(Order order);
     public Order editOrder(Order order);

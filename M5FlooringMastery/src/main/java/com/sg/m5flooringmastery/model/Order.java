@@ -129,7 +129,7 @@ public class Order {
         out.append(this.ORDERNUM).append(",");
         out.append(this.customerName).append(",");
         out.append(this.state).append(",");
-        out.append(this.taxRate).append(",");
+        out.append(this.taxRate.multiply(new BigDecimal("100"))).append(",");
         out.append(this.material).append(",");
         out.append(this.area).append(",");
         out.append(this.materialCostPerSqFt).append(",");
@@ -137,7 +137,7 @@ public class Order {
         out.append(this.materialCost).append(",");
         out.append(this.laborCost).append(",");
         out.append(this.taxAmount).append(",");
-        out.append(this.totalCost).append("\n");
+        out.append(this.totalCost);
         return out.toString();
     }
     
@@ -185,24 +185,24 @@ public class Order {
         if (!Objects.equals(this.day, other.day)) {
             return false;
         }
-        if (!Objects.equals(this.taxRate, other.taxRate)) {
-            return false;
-        }
-        if (!Objects.equals(this.area, other.area)) {
-            return false;
-        }
-        if (!Objects.equals(this.materialCostPerSqFt, other.materialCostPerSqFt)) {
-            return false;
-        }
-        if (!Objects.equals(this.laborCostPerSqFt, other.laborCostPerSqFt)) {
-            return false;
-        }
-        if (!Objects.equals(this.taxAmount, other.taxAmount)) {
-            return false;
-        }
-        if (!Objects.equals(this.totalCost, other.totalCost)) {
-            return false;
-        }
+//        if (this.taxRate.compareTo(other.taxRate) != 0) {
+//            return false;
+//        }
+//        if (this.area.compareTo(other.area) != 0) {
+//            return false;
+//        }
+//        if (this.materialCostPerSqFt.compareTo(other.materialCostPerSqFt) != 0) {
+//            return false;
+//        }
+//        if (this.laborCostPerSqFt.compareTo(other.laborCostPerSqFt) != 0) {
+//            return false;
+//        }
+//        if (this.taxAmount.compareTo(other.taxAmount) != 0) {
+//            return false;
+//        }
+//        if (this.totalCost.compareTo(other.totalCost) != 0) {
+//            return false;
+//        }
         return true;
     }
 
