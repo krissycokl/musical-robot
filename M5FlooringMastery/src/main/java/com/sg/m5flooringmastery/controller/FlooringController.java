@@ -11,4 +11,8 @@ public class FlooringController {
         this.view = view;
         this.service = service;
     }
+    
+    public boolean run() {
+        return true;
+    }
 }
