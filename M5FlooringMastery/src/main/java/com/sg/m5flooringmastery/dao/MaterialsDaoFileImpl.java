@@ -4,12 +4,13 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
 public class MaterialsDaoFileImpl implements MaterialsDao {
 
-    Map<String, BigDecimal[]> materials;
+    Map<String, BigDecimal[]> materials = new HashMap<>();
     
     @Override
     public BigDecimal getMaterialCostPerSqFt(String material) {

@@ -15,6 +15,9 @@
           http://www.springframework.org/schema/aop  
           http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
 
-    <!-- Bean definitions go here -->
+    <bean id="flooringDao"  class="com.sg.m5flooringmastery.dao.FlooringDaoFileImpl"/>
+    <bean id="taxesDao"     class="com.sg.m5flooringmastery.dao.TaxesDaoFileImpl"/>
+    <bean id="materialsDao" class="com.sg.m5flooringmastery.dao.MaterialsDaoFileImpl"/>
+    
    
 </beans>

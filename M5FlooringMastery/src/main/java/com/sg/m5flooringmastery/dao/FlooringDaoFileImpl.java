@@ -49,7 +49,7 @@ public class FlooringDaoFileImpl implements FlooringDao {
         ordersForDay = null;
         String dayAsString = day.format(DateTimeFormatter.ofPattern("MMdduuuu"));
         Scanner sc = new Scanner(new BufferedReader(new FileReader(
-                "Orders_"+dayAsString+".txt"
+                "OrderArchive/Orders_"+dayAsString+".txt"
         )));
         sc.nextLine();
         while(sc.hasNextLine()){

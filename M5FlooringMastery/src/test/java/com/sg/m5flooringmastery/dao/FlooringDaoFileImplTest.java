@@ -12,13 +12,17 @@ import java.time.LocalDate;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class FlooringDaoFileImplTest {
     
-    FlooringDao dao = new FlooringDaoFileImpl();
+    FlooringDao dao;
     Order testOrder;
 
     public FlooringDaoFileImplTest() {
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+        dao = ctx.getBean("flooringDao",FlooringDao.class);
     }
     
     @Before
