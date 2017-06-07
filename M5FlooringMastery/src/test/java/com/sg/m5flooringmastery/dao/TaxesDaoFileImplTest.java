@@ -11,16 +11,13 @@ import java.math.BigDecimal;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class TaxesDaoFileImplTest {
 
-    TaxesDao dao;
+    TaxesDaoFileImpl dao;
     
-    public TaxesDaoFileImplTest() {
-        ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
-        dao = ctx.getBean("taxesDao", TaxesDao.class);
+    public TaxesDaoFileImplTest() throws FileNotFoundException {
+        this.dao = new TaxesDaoFileImpl();
     }
     
     @Before

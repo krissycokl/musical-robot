@@ -28,7 +28,6 @@ public class TaxesDaoFileImpl implements TaxesDao {
         return stateTaxRates.keySet().stream().collect(Collectors.toList());
     }
 
-    @Override
     public void load() throws FileNotFoundException {
         Scanner sc = new Scanner(new BufferedReader(new FileReader("Taxes.txt")));
         sc.nextLine();

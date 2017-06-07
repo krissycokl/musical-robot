@@ -91,7 +91,7 @@ public class FlooringServiceImpl implements FlooringService {
             calculateCosts(editedOrder);
             return flooringDao.editOrder(editedOrder, editedOrder.getDay());
         } else {
-            throw new InvalidOrderException("Unknown validation error. Order not added.");
+            throw new OrderEditException("Unknown validation error. Order not added.");
         }
     }
 
@@ -136,8 +136,8 @@ public class FlooringServiceImpl implements FlooringService {
             throw new InvalidOrderException("Order is null. Not added.");
         } else if (
                 // BigDecimal field validations
-                order.getArea().compareTo(BigDecimal.ZERO)<=0
-            ||  order.getArea() == null
+                order.getArea() == null
+            ||  order.getArea().compareTo(BigDecimal.ZERO)<=0  
             ){
             throw new InvalidOrderException("Order area null or 0. Not added.");
         } else if (

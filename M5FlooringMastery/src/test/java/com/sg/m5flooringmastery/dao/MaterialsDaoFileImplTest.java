@@ -8,21 +8,16 @@ package com.sg.m5flooringmastery.dao;
 
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Map;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class MaterialsDaoFileImplTest {
     
-    MaterialsDao dao;
+    MaterialsDaoFileImpl dao;
     
-    public MaterialsDaoFileImplTest() {
-        ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
-        dao = ctx.getBean("materialsDao", MaterialsDao.class);
+    public MaterialsDaoFileImplTest() throws FileNotFoundException {
+        this.dao = new MaterialsDaoFileImpl();
     }
 
     @Before

@@ -15,9 +15,13 @@
           http://www.springframework.org/schema/aop  
           http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
 
-    <bean id="flooringDao"  class="com.sg.m5flooringmastery.dao.FlooringDaoFileImpl"/>
-    <bean id="taxesDao"     class="com.sg.m5flooringmastery.dao.TaxesDaoFileImpl"/>
-    <bean id="materialsDao" class="com.sg.m5flooringmastery.dao.MaterialsDaoFileImpl"/>
-    
+    <bean id="flooringDao"  class="com.sg.m5flooringmastery.dao.FlooringDaoStubImpl"/>
+    <bean id="taxesDao"     class="com.sg.m5flooringmastery.dao.TaxesDaoStubImpl"/>
+    <bean id="materialsDao" class="com.sg.m5flooringmastery.dao.MaterialsDaoStubImpl"/>
+    <bean id="service"          class="com.sg.m5flooringmastery.service.FlooringServiceImpl">
+        <constructor-arg        ref="flooringDao"/>
+        <constructor-arg        ref="materialsDao"/>
+        <constructor-arg        ref="taxesDao"/>
+    </bean>
    
 </beans>

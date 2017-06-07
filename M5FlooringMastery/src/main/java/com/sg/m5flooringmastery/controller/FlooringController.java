@@ -25,6 +25,7 @@ public class FlooringController {
     }
 
     public boolean run() {
+        view.bannerMainMenu();
         switch(view.getMainMenuChoice()){
             case 1:
                 orderListByDay();
@@ -85,6 +86,7 @@ public class FlooringController {
     }
     
     private void orderList(Map<Integer,Order> orderMap) {
+        view.bannerOrderSearchResults();
         view.showOrders(orderMap.values().stream().collect(Collectors.toList()));
         if(!orderMap.isEmpty()){
             boolean stop = false;
@@ -105,6 +107,7 @@ public class FlooringController {
     private void singleOrderAction(int orderNum, LocalDate orderDay){
         try {
             Order order = service.getOrder(orderNum, orderDay);
+            view.bannerSingleOrder(orderNum);
             view.showSingleOrderInfo(order);
             boolean stop = false;
             int action = view.getAction();
@@ -130,10 +133,14 @@ public class FlooringController {
     
     private void addOrder(){
         Order order = buildOrder();
+        int orderNum;
         {
             try {
-                service.addOrder(order, order.getDay());
-            } catch (InvalidOrderException ex) {
+                orderNum = service.addOrder(order, order.getDay());
+                order = service.getOrder(orderNum, order.getDay());
+                view.showSingleOrderInfo(order);
+                view.bannerAddSuccess(order.getOrderNum());
+            } catch (InvalidOrderException | NoSuchOrderException ex) {
                 view.showError(ex);
             }
         }
@@ -179,22 +186,6 @@ public class FlooringController {
         LocalDate   newDay   = view.getOrderDay(order.getDay(), true);
         String      newMater = view.getOrderMaterial(order.getMaterial(), service.getValidMaterials());
         String      newState = view.getOrderState(order.getState(), service.getValidStates());
-        
-        if(newArea.compareTo(BigDecimal.ZERO)==0){
-            newArea = order.getArea();
-        }
-        if(newName.isEmpty()){
-            newName = order.getCustomerName();
-        }
-        if(newDay.equals(LocalDate.of(1900, Month.JANUARY, 1))){
-            newDay = order.getDay();
-        }
-        if(newMater.isEmpty()){
-            newMater = order.getMaterial();
-        }
-        if(newState.isEmpty()){
-            newState = order.getState();
-        }
         
         Order editedOrder = new Order();
         editedOrder.setArea(newArea);

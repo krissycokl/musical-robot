@@ -40,7 +40,11 @@ public class FlooringView {
         if (area.compareTo(BigDecimal.ZERO) != 0){
             prompt += "(currently "+area.toPlainString()+" sq ft, press Enter to leave unchanged)";
         }
-        return io.getBigD(prompt, blankOk, BigDecimal.ONE, new BigDecimal("1000000"));
+        BigDecimal newArea = io.getBigD(prompt, blankOk, BigDecimal.ONE, new BigDecimal("1000000"));
+        if(newArea.compareTo(BigDecimal.ZERO)==0){
+            return area;
+        }
+        return newArea;
     }
 
     public String getOrderCustomer(String name) {
@@ -48,7 +52,11 @@ public class FlooringView {
         if (!name.isEmpty()){
             prompt += "(currently "+name+", press Enter to leave unchanged)";
         }
-        return io.getString(prompt);
+        String newName = io.getString(prompt);
+        if(newName.isEmpty()){
+            return name;
+        }
+        return newName;
     }
 
     public String getOrderMaterial(String material, List<String> validMaterials) {
@@ -106,11 +114,11 @@ public class FlooringView {
             io.print("No orders found with selected criteria.");
         } else {
             io.print(
-                    "  Ord |    Date    |   Customer  |  Cost"
+                    "  Ord # |    Date    |       Customer       |  Cost"
             );
             orders.stream().forEach(order->
             {
-                String p1=String.format("%5d", order.getOrderNum());
+                String p1=String.format("%7d", order.getOrderNum());
                 String p2=" | "+order.getDay().format(DateTimeFormatter.ofPattern("MM/dd/uuuu"));
                 String p3=" | "+String.format("%20.20s",order.getCustomerName());
                 String p4=" | $"+String.format("%10s",order.getTotalCost().toPlainString());
@@ -127,5 +135,21 @@ public class FlooringView {
     public int confirmRemove(){
         io.print("Really delete this order? This action cannot be undone.");
         return io.getInt("1. Delete   2. Cancel",false,1,2);
+    }
+    
+    public void bannerAddSuccess(int orderNum){
+        io.print("\n=== Order #"+orderNum+" Successfully Created ===");
+    }
+    
+    public void bannerMainMenu(){
+        io.print("\n=== Main Menu ===");
+    }
+    
+    public void bannerOrderSearchResults(){
+        io.print("\n=== Search Results ===");
+    }
+    
+    public void bannerSingleOrder(int orderNum){
+        io.print("\n=== Order #"+orderNum+" ===");
     }
 }

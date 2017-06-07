@@ -33,7 +33,6 @@ public class MaterialsDaoFileImpl implements MaterialsDao {
         return materials.keySet().stream().collect(Collectors.toList());
     }
     
-    @Override
     public void load() throws FileNotFoundException {
         Scanner sc = new Scanner(new BufferedReader(new FileReader("Products.txt")));
         sc.nextLine();
