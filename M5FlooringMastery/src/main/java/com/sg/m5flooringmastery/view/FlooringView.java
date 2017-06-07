@@ -2,10 +2,11 @@ package com.sg.m5flooringmastery.view;
 
 import com.sg.m5flooringmastery.model.Order;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class FlooringView {
     UserIO io;
@@ -19,28 +20,67 @@ public class FlooringView {
         //io.print("2. Look up order by customer name");
         //io.print("3. Look up order by number");
         io.print("4. Add an order");
-        io.print("5. Edit an order");
-        io.print("6. Remove an order");
-        io.print("7. Quit");
-        return io.getInt("What would you like to do?", 1,7);
+        io.print("5. Quit");
+        return io.getInt("What would you like to do?", false, 1,5);
     }
 
-    private BigDecimal getOrderArea() {
-        return io.getBigD("Please enter the area to be floored:", BigDecimal.ZERO, new BigDecimal("1000000"));
+    public int getOrderFromList(){
+        return io.getInt("Enter # of desired order.", false);
+    }
+    
+    public int getAction(){
+        io.print("1.) Edit order");
+        io.print("2.) Remove order");
+        io.print("3.) Back");
+        return io.getInt("What would you like to do?",false,1,3);
+    }
+    
+    public BigDecimal getOrderArea(BigDecimal area, boolean blankOk) {
+        String prompt = String.format("%15s","Area in sq ft: ");
+        if (area.compareTo(BigDecimal.ZERO) != 0){
+            prompt += "(currently "+area.toPlainString()+" sq ft, press Enter to leave unchanged)";
+        }
+        return io.getBigD(prompt, blankOk, BigDecimal.ONE, new BigDecimal("1000000"));
     }
 
-    private String getOrderCustomer() {
-        return io.getString("Please enter the customer's name:");
+    public String getOrderCustomer(String name) {
+        String prompt = String.format("%15s","Customer name: ");
+        if (!name.isEmpty()){
+            prompt += "(currently "+name+", press Enter to leave unchanged)";
+        }
+        return io.getString(prompt);
     }
 
-    private String getOrderMaterial() {
-        return io.getString("Material:");
-        //going to print known materials
+    public String getOrderMaterial(String material, List<String> validMaterials) {
+        String prompt = String.format("%15s","Material: ");
+        if (!material.isEmpty()){
+            prompt += "(currently "+material+", press Enter to leave unchanged)";
+        }
+        IntStream.range(0, validMaterials.size()).forEach(index->{
+            io.print((index+1)+".) "+validMaterials.get(index));
+        });
+        int choice = io.getInt(prompt, true, 1, validMaterials.size()+1);
+        return validMaterials.get(choice-1);
     }
 
-    private String getOrderState() {
-        return io.getString("State:");
-        //going to print known states
+    public String getOrderState(String state, List<String> validStates) {
+        String prompt = String.format("%15s","State: ");
+        if (!state.isEmpty()){
+            prompt += "(currently "+state+", press Enter to leave unchanged)";
+        }
+        IntStream.range(0, validStates.size()).forEach(index->{
+            io.print((index+1)+".) "+validStates.get(index));
+        });
+        int choice = io.getInt(prompt, true, 1, validStates.size()+1);
+        return validStates.get(choice-1);
+    }
+    
+    public LocalDate getOrderDay(LocalDate day, boolean blankOk){
+        String prompt = String.format("%15s","Date: ");
+        if(!day.isEqual(LocalDate.of(1900, Month.JANUARY, 1))){
+            prompt += "(currently "+day.format(DateTimeFormatter.ofPattern("MM/dd/uuuu"))+", press Enter to leave unchanged)";
+        }
+        return io.getDate(prompt, blankOk, day);
     }
     
     public void showOrders(List<Order> orders){
@@ -48,7 +88,7 @@ public class FlooringView {
             io.print("No orders found with selected criteria.");
         } else {
             io.print(
-                    "  Ord |   Date   |  Customer  |  Cost"
+                    "  Ord |    Date    |  Customer  |  Cost"
             );
             orders.stream().forEach(order->
             {
@@ -62,21 +102,12 @@ public class FlooringView {
         }
     }
     
-    public LocalDate getOrderDay(){
-        return io.getDate("Please enter a date of format MM/DD/YYYY", LocalDate.now());
-    }
-    
     public void showError(Throwable ex){
         io.print(ex.getMessage());
     }
     
-    public Order getOrder(){
-        Order thisOrder = new Order();
-        thisOrder.setArea(getOrderArea());
-        thisOrder.setCustomerName(getOrderCustomer());
-        thisOrder.setDay(getOrderDay());
-        thisOrder.setMaterial(getOrderMaterial());
-        thisOrder.setState(getOrderState());
-        return thisOrder;
+    public int confirmRemove(){
+        io.print("Really delete this order? This action cannot be undone.");
+        return io.getInt("1. Delete   2. Cancel",false,1,2);
     }
 }

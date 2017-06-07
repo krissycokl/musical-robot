@@ -8,12 +8,42 @@ import java.util.List;
 
 public interface FlooringService {
     public int addOrder(Order order, LocalDate day) throws InvalidOrderException;
-    public void changeOrderDay(Order order, LocalDate newDay) throws IOException, FileNotFoundException;
-    public Order editOrder(Order order, LocalDate day) throws InvalidOrderException;
-    public Order getOrder(int id, LocalDate day) throws NoSuchOrderException;
+    
+    public List<String> getValidMaterials();
+    public List<String> getValidStates();
+    
+    public void changeOrderDay(Order order, LocalDate newDay) throws 
+            IOException,
+            FileNotFoundException,
+            OrderEditException;
+    
+    public Order editOrder(Order order, Order editedOrder, LocalDate day) throws
+            InvalidOrderException,
+            OrderEditException,
+            IOException;
+    
+    public Order getOrder(int id, LocalDate day) throws
+            NoSuchOrderException;
+    
     public List<Order> getOrderList(LocalDate day);
-    public Order removeOrder(int id, LocalDate day) throws NoSuchOrderException;
-    public int loadKey() throws FileNotFoundException;
-    public int saveKey() throws IOException;
-    public boolean validateOrder(Order order) throws InvalidOrderException;
+    
+    public Order removeOrder(int id, LocalDate day) throws
+            NoSuchOrderException;
+    
+    public int loadKey() throws
+            FileNotFoundException;
+    
+    public int saveKey() throws
+            IOException;
+    
+    public boolean validateOrder(Order order) throws
+            InvalidOrderException;
+    
+    public Order calculateCosts(Order order);
+    
+    public Order retrieveCosts(Order order) throws
+            InvalidOrderException;
+    
+    public Order retrieveTaxRate(Order order) throws
+            InvalidOrderException;
 }

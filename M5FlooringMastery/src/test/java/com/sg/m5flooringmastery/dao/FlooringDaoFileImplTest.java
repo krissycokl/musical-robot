@@ -47,8 +47,7 @@ public class FlooringDaoFileImplTest {
         testOrder.setTaxRate(BigDecimal.ONE);
         testOrder.setTotalCost(BigDecimal.TEN);
         
-        f = new File("OrderArchive/Orders_01011900.txt");
-        f.delete();
+        new File("OrderArchive/Orders_01011900.txt").delete();
     }
 
     @Test

@@ -17,6 +17,16 @@ public class FlooringServiceImpl implements FlooringService {
     private MaterialsDao materialsDao;
     private TaxesDao taxesDao;
     
+    @Override
+    public List<String> getValidMaterials(){
+        return materialsDao.getMaterialsList();
+    }
+    
+    @Override
+    public List<String> getValidStates(){
+        return taxesDao.getStatesList();
+    }
+    
     public FlooringServiceImpl(FlooringDao flooringDao,
                                MaterialsDao materialsDao,
                                TaxesDao taxesDao)
@@ -29,6 +39,9 @@ public class FlooringServiceImpl implements FlooringService {
     @Override
     public int addOrder(Order order, LocalDate day) throws InvalidOrderException{
         if (validateOrder(order)){
+            order = retrieveCosts(order);
+            order = retrieveTaxRate(order);
+            order = calculateCosts(order);
             return flooringDao.addOrder(order, day);
         } else {
             throw new InvalidOrderException("Order parameters invalid. Not added.");
@@ -36,14 +49,36 @@ public class FlooringServiceImpl implements FlooringService {
     }
 
     @Override
-    public void changeOrderDay(Order order, LocalDate newDay) throws IOException, FileNotFoundException {
+    public void changeOrderDay(Order order, LocalDate newDay) throws
+            IOException,
+            FileNotFoundException,
+            OrderEditException
+    {
+        if(newDay.isBefore(LocalDate.now())){
+            throw new OrderEditException("Cannot backdate an order. Not changed.");
+        }
         flooringDao.changeOrderDay(order, newDay);
     }
 
     @Override
-    public Order editOrder(Order order, LocalDate day) throws InvalidOrderException{
-        if (validateOrder(order)){
-            return flooringDao.editOrder(order, day);
+    public Order editOrder(Order order, Order editedOrder, LocalDate day) throws
+            InvalidOrderException,
+            OrderEditException,
+            IOException
+    {
+        editedOrder.setKey(order.getOrderNum());
+        if (validateOrder(editedOrder)){
+            if (!editedOrder.getDay().equals(order.getDay())){
+                changeOrderDay(order, editedOrder.getDay());
+            }
+            if(!order.getMaterial().equals(editedOrder.getMaterial())){
+                retrieveCosts(editedOrder);
+            }
+            if(!order.getState().equals(editedOrder.getState())){
+                retrieveTaxRate(editedOrder);
+            }
+            calculateCosts(editedOrder);
+            return flooringDao.editOrder(editedOrder, editedOrder.getDay());
         } else {
             throw new InvalidOrderException("Unknown validation error. Order not added.");
         }
@@ -109,27 +144,61 @@ public class FlooringServiceImpl implements FlooringService {
                 order.getOrderNum()<0
             ||  order.getDay() == null
                 ){
-            throw new InvalidOrderException("Order num negative or day null. Not added.");
+            throw new InvalidOrderException("Order num negative or day null. Order not updated.");
         } else {
-            try{
-                // Retrieve material costs & tax rate
-                order.setMaterialCostPerSqFt(materialsDao.getMaterialCostPerSqFt(order.getMaterial()));
-                order.setLaborCostPerSqFt(materialsDao.getLaborCostPerSqFt(order.getMaterial()));
-                order.setTaxRate(taxesDao.getRate(order.getState()));
-            } catch (Exception ex){
-                throw new InvalidOrderException("State or material not recognized. Order not added.");
+            if (taxesDao.getRate(order.getState()) == null) {
+                throw new InvalidOrderException("State not recognized. Order not updated.");
             }
-            
-            // Calculate aggregate fields
-            order.setLaborCost(order.getArea().multiply(order.getLaborCostPerSqFt()).setScale(2, RoundingMode.HALF_UP));
-            order.setMaterialCost(order.getArea().multiply(order.getMaterialCostPerSqFt().setScale(2, RoundingMode.HALF_UP)));
-            BigDecimal grossCost = order.getLaborCost().add(order.getMaterialCost());
-            BigDecimal tax = order.getTaxRate().multiply(grossCost);
-            order.setTaxAmount(tax.setScale(2, RoundingMode.HALF_UP));
-            order.setTotalCost(grossCost.add(tax).setScale(2, RoundingMode.HALF_UP));
-            
+            try {
+                materialsDao.getMaterialCostPerSqFt(order.getMaterial());
+            } catch (NullPointerException e){
+                throw new InvalidOrderException("Material not recognized.  Order not updated.");
+            }
             return true;
         }
+    }
+    
+    @Override
+    public Order retrieveCosts(Order order) throws InvalidOrderException{
+        order.setMaterialCostPerSqFt(materialsDao.getMaterialCostPerSqFt(order.getMaterial()));
+        order.setLaborCostPerSqFt(materialsDao.getLaborCostPerSqFt(order.getMaterial()));
+        
+        if(order.getMaterialCostPerSqFt() == null){
+            throw new InvalidOrderException("Material not recognized. Order not updated.");
+        }
+        
+        return order;
+    }
+    
+    @Override
+    public Order retrieveTaxRate(Order order) throws InvalidOrderException{
+        order.setTaxRate(taxesDao.getRate(order.getState()));
+        
+        if(order.getTaxRate()== null){
+            throw new InvalidOrderException("State not recognized. Order not updated.");
+        }
+        
+        return order;
+    }
+    
+    @Override
+    public Order calculateCosts(Order order){
+        order.setLaborCost(order.getArea().multiply(
+            order.getLaborCostPerSqFt()).setScale(2, RoundingMode.HALF_UP));
+        
+        order.setMaterialCost(order.getArea().multiply(
+            order.getMaterialCostPerSqFt().setScale(2, RoundingMode.HALF_UP)));
+        
+        BigDecimal grossCost = order.getLaborCost().add(
+            order.getMaterialCost());
+        
+        BigDecimal tax = order.getTaxRate().multiply(grossCost);
+        
+        order.setTaxAmount(tax.setScale(2, RoundingMode.HALF_UP));
+        
+        order.setTotalCost(grossCost.add(tax).setScale(2, RoundingMode.HALF_UP));
+        
+        return order;
     }
     
 }

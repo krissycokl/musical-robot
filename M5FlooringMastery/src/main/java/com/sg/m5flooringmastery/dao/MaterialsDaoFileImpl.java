@@ -5,8 +5,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class MaterialsDaoFileImpl implements MaterialsDao {
 
@@ -24,6 +26,11 @@ public class MaterialsDaoFileImpl implements MaterialsDao {
     @Override
     public BigDecimal getLaborCostPerSqFt(String material) {
         return materials.get(material)[1];
+    }
+
+    @Override
+    public List<String> getMaterialsList() {
+        return materials.keySet().stream().collect(Collectors.toList());
     }
     
     @Override

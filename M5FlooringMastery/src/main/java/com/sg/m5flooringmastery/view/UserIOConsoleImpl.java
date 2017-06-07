@@ -10,12 +10,15 @@ public class UserIOConsoleImpl implements UserIO {
     private static Scanner sc = new Scanner(System.in);
 
     @Override
-    public BigDecimal getBigD(String prompt) {
+    public BigDecimal getBigD(String prompt, boolean blankOk) {
         String response;
         BigDecimal responseBigD;
         while (true){
             System.out.println(prompt);
             response = sc.nextLine();
+            if(response.isEmpty() && blankOk){
+                return BigDecimal.ZERO.setScale(0);
+            }
             try{
                 responseBigD = new BigDecimal(response);
                 return responseBigD;
@@ -24,12 +27,15 @@ public class UserIOConsoleImpl implements UserIO {
     }
 
     @Override
-    public BigDecimal getBigD(String prompt, BigDecimal min, BigDecimal max) {
+    public BigDecimal getBigD(String prompt, boolean blankOk, BigDecimal min, BigDecimal max) {
         String response;
         BigDecimal responseBigD;
         while (true){
             System.out.println(prompt);
             response = sc.nextLine();
+            if(response.isEmpty() && blankOk){
+                return BigDecimal.ZERO.setScale(0);
+            }
             try{
                 responseBigD = new BigDecimal(response);
                 if (    responseBigD.compareTo(max)<=0
@@ -39,14 +45,43 @@ public class UserIOConsoleImpl implements UserIO {
             } catch (Exception e){}
         }
     }
+
+    @Override
+    public LocalDate getDate(String prompt, boolean blankOk, LocalDate min, LocalDate max) {
+        System.out.println(prompt);
+        LocalDate ld;
+        String ans;
+        while (true){
+            ans = sc.nextLine();
+            if(ans.isEmpty() && blankOk){
+                return max;
+            }
+            try{
+                ld = LocalDate.parse(ans,DateTimeFormatter.ofPattern("MM/dd/uuuu"));
+                if ( (ld.isAfter(min) || ld.isEqual(min))
+                        &&
+                     (ld.isBefore(max) || ld.isEqual(max)) ){
+                    return ld;
+                }
+            } catch (DateTimeParseException e){
+                System.out.println("Please enter a date in format MM/DD/YYYY.");
+                if(blankOk){
+                    System.out.println("Hit enter to use default of "+max+".");
+                }
+            }
+        }
+    }
     
     @Override
-    public int getInt(String prompt){
+    public int getInt(String prompt, boolean blankOk){
         String response;
         int responseInt;
         while (true){
             System.out.println(prompt);
             response = sc.nextLine();
+            if(response.isEmpty() && blankOk){
+                return 0;
+            }
             try{
                 responseInt = Integer.parseInt(response);
                 return responseInt;
@@ -55,12 +90,15 @@ public class UserIOConsoleImpl implements UserIO {
     }
     
     @Override
-    public int getInt(String prompt, int min, int max){
+    public int getInt(String prompt, boolean blankOk, int min, int max){
         String response;
         int responseInt;
         while (true){
             System.out.println(prompt);
             response = sc.nextLine();
+            if(response.isEmpty() && blankOk){
+                return 0;
+            }
             try{
                 responseInt = Integer.parseInt(response);
                 if(responseInt <= max && responseInt >= min){
@@ -137,23 +175,23 @@ public class UserIOConsoleImpl implements UserIO {
     }
     
     @Override
-    public LocalDate getDate(String prompt, LocalDate otherwise){
+    public LocalDate getDate(String prompt, boolean blankOk, LocalDate otherwise){
         System.out.println(prompt);
         LocalDate ld;
         String ans;
-        boolean tried = false;
         while (true){
             ans = sc.nextLine();
+            if(ans.isEmpty() && blankOk){
+                return otherwise;
+            }
             try{
-                if(ans.isEmpty() && tried){
-                    return otherwise;
-                }
                 ld = LocalDate.parse(ans,DateTimeFormatter.ofPattern("MM/dd/uuuu"));
                 return ld;
             } catch (DateTimeParseException e){
-                System.out.println("Please enter a date in format MM/DD/YYYY,"
-                        + " or hit enter to use system default of "+otherwise+".");
-                tried = true;
+                System.out.println("Please enter a date in format MM/DD/YYYY.");
+                if(blankOk){
+                    System.out.println("Hit enter to use default of "+otherwise+".");
+                }
             }
         }
     }

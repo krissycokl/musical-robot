@@ -5,8 +5,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class TaxesDaoFileImpl implements TaxesDao {
 
@@ -19,6 +21,11 @@ public class TaxesDaoFileImpl implements TaxesDao {
     @Override
     public BigDecimal getRate(String state) {
         return stateTaxRates.get(state);
+    }
+
+    @Override
+    public List<String> getStatesList() {
+        return stateTaxRates.keySet().stream().collect(Collectors.toList());
     }
 
     @Override

@@ -24,21 +24,23 @@ public class FlooringDaoFileImpl implements FlooringDao {
     
     @Override
     public int addOrder(Order order, LocalDate day) {
-        try {
-            loadKey();
-        } catch (FileNotFoundException ex) {
-            currKey = 1;
+        if(order.getOrderNum() == 0){
+            try {
+                loadKey();
+            } catch (FileNotFoundException ex) {
+                currKey = 1;
+            }
+            currKey++;
+            order.setKey(currKey);
+            try {
+                saveKey();
+            } catch (IOException ex) {
+                System.out.println("Failed to persist Order Number at "+currKey);
+            }
         }
-        currKey++;
         load(day);
-        order.setKey(currKey);
-        ordersForDay.put(currKey, order);
+        ordersForDay.put(order.getOrderNum(), order);
         save(day);
-        try {
-            saveKey();
-        } catch (IOException ex) {
-            System.out.println("Failed to persist Order Number at "+currKey);
-        }
         return currKey;
     }
 
@@ -114,17 +116,21 @@ public class FlooringDaoFileImpl implements FlooringDao {
     public void save(LocalDate day) {
         String dayAsString = day.format(DateTimeFormatter.ofPattern("MMdduuuu"));
         File filename = new File("OrderArchive/Orders_"+dayAsString+".txt");
-        try {
-            PrintWriter out2 = new PrintWriter(new FileWriter(filename, false));
-            ordersForDay.values().stream().forEachOrdered(
-                    order->{
-                        out2.println(order.toString());
-                        out2.flush();
-                    }
-            );
-            out2.close();
-        } catch (IOException ex) {
-            System.out.println("Unexpected error writing to "+filename+".");
+        if(ordersForDay.isEmpty()){
+            filename.delete();
+        } else {
+            try {
+                PrintWriter out2 = new PrintWriter(new FileWriter(filename, false));
+                ordersForDay.values().stream().forEachOrdered(
+                        order->{
+                            out2.println(order.toString());
+                            out2.flush();
+                        }
+                );
+                out2.close();
+            } catch (IOException ex) {
+                System.out.println("Unexpected error writing to "+filename+".");
+            }
         }
     }
 
