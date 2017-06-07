@@ -11,16 +11,32 @@ import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class FlooringDaoFileImpl implements FlooringDao {
     
     Map<Integer, Order> ordersForDay = new HashMap<>();
     int currKey;
+    
+    @Override
+    public List<LocalDate> getDatesWithOrders(){
+        File dir = new File("OrderArchive/");
+        File[] list = dir.listFiles();
+        List<LocalDate> validDates = new ArrayList<>();
+        IntStream.range(0, list.length).forEach(idx->{
+            if(list[idx].getName().contains("Orders_")){
+                String dateStr = list[idx].getName().substring(7,15);
+                validDates.add(LocalDate.parse(dateStr, DateTimeFormatter.ofPattern("MMdduuuu")));
+            }
+        });
+        return validDates;
+    }
     
     @Override
     public int addOrder(Order order, LocalDate day) {
@@ -66,9 +82,9 @@ public class FlooringDaoFileImpl implements FlooringDao {
     }
 
     @Override
-    public List<Order> getOrderList(LocalDate day) {
+    public Map<Integer,Order> getOrderMap(LocalDate day) {
         load(day);
-        return ordersForDay.values().stream().collect(Collectors.toList());
+        return ordersForDay;
     }
 
     @Override

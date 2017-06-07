@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 public interface FlooringService {
     public int addOrder(Order order, LocalDate day) throws InvalidOrderException;
@@ -25,7 +26,7 @@ public interface FlooringService {
     public Order getOrder(int id, LocalDate day) throws
             NoSuchOrderException;
     
-    public List<Order> getOrderList(LocalDate day);
+    public Map<Integer,Order> getOrderMap(LocalDate day);
     
     public Order removeOrder(int id, LocalDate day) throws
             NoSuchOrderException;
@@ -46,4 +47,6 @@ public interface FlooringService {
     
     public Order retrieveTaxRate(Order order) throws
             InvalidOrderException;
+    
+    public List<LocalDate> getDatesWithOrders();
 }

@@ -17,8 +17,8 @@ public class FlooringView {
     
     public int getMainMenuChoice(){
         io.print("1. Display orders by date");
-        //io.print("2. Look up order by customer name");
-        //io.print("3. Look up order by number");
+        io.print("2. Look up order by customer name");
+        io.print("3. Look up order by number");
         io.print("4. Add an order");
         io.print("5. Quit");
         return io.getInt("What would you like to do?", false, 1,5);
@@ -60,6 +60,9 @@ public class FlooringView {
             io.print((index+1)+".) "+validMaterials.get(index));
         });
         int choice = io.getInt(prompt, true, 1, validMaterials.size()+1);
+        if (choice == 0){
+            return material;
+        }
         return validMaterials.get(choice-1);
     }
 
@@ -72,6 +75,9 @@ public class FlooringView {
             io.print((index+1)+".) "+validStates.get(index));
         });
         int choice = io.getInt(prompt, true, 1, validStates.size()+1);
+        if (choice == 0){
+            return state;
+        }
         return validStates.get(choice-1);
     }
     
@@ -83,18 +89,30 @@ public class FlooringView {
         return io.getDate(prompt, blankOk, day);
     }
     
+    public void showSingleOrderInfo(Order order){
+        io.print(String.format("%16s","Order #: ")+order.getOrderNum());
+        io.print(String.format("%16s","Area (sqft): ")+order.getArea());
+        io.print(String.format("%16s","Customer Name: ")+order.getCustomerName());
+        io.print(String.format("%16s","Material: ")+order.getMaterial());
+        io.print(String.format("%16s","State: ")+order.getState());
+        io.print(String.format("%17s","Material Cost: $")+order.getMaterialCost());
+        io.print(String.format("%17s","Labor Cost: $")+order.getLaborCost());
+        io.print(String.format("%17s","Tax Amount: $")+order.getTaxAmount());
+        io.print(String.format("%17s","Total Cost: $")+order.getTotalCost());
+    }
+    
     public void showOrders(List<Order> orders){
         if (orders.isEmpty()) {
             io.print("No orders found with selected criteria.");
         } else {
             io.print(
-                    "  Ord |    Date    |  Customer  |  Cost"
+                    "  Ord |    Date    |   Customer  |  Cost"
             );
             orders.stream().forEach(order->
             {
                 String p1=String.format("%5d", order.getOrderNum());
                 String p2=" | "+order.getDay().format(DateTimeFormatter.ofPattern("MM/dd/uuuu"));
-                String p3=" | "+String.format("%-10s", order.getCustomerName());
+                String p3=" | "+String.format("%20.20s",order.getCustomerName());
                 String p4=" | $"+String.format("%10s",order.getTotalCost().toPlainString());
                 io.print(p1+p2+p3+p4);
             }

@@ -10,12 +10,18 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 public class FlooringServiceImpl implements FlooringService {
     
     private FlooringDao flooringDao;
     private MaterialsDao materialsDao;
     private TaxesDao taxesDao;
+    
+    @Override
+    public List<LocalDate> getDatesWithOrders(){
+        return flooringDao.getDatesWithOrders();
+    }
     
     @Override
     public List<String> getValidMaterials(){
@@ -73,9 +79,14 @@ public class FlooringServiceImpl implements FlooringService {
             }
             if(!order.getMaterial().equals(editedOrder.getMaterial())){
                 retrieveCosts(editedOrder);
+            } else {
+                editedOrder.setLaborCostPerSqFt(order.getLaborCostPerSqFt());
+                editedOrder.setMaterialCostPerSqFt(order.getMaterialCostPerSqFt());
             }
             if(!order.getState().equals(editedOrder.getState())){
                 retrieveTaxRate(editedOrder);
+            } else {
+                editedOrder.setTaxRate(order.getTaxRate());
             }
             calculateCosts(editedOrder);
             return flooringDao.editOrder(editedOrder, editedOrder.getDay());
@@ -95,8 +106,8 @@ public class FlooringServiceImpl implements FlooringService {
     }
     
     @Override
-    public List<Order> getOrderList(LocalDate day){
-        return flooringDao.getOrderList(day);
+    public Map<Integer,Order> getOrderMap(LocalDate day){
+        return flooringDao.getOrderMap(day);
     }
 
     @Override

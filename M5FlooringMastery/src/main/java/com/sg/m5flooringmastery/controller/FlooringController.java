@@ -8,7 +8,12 @@ import com.sg.m5flooringmastery.view.FlooringView;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class FlooringController {
     private FlooringView view;
@@ -18,15 +23,17 @@ public class FlooringController {
         this.view = view;
         this.service = service;
     }
-    
+
     public boolean run() {
         switch(view.getMainMenuChoice()){
             case 1:
-                orderList();
+                orderListByDay();
                 break;
             case 2:
+                orderListByLastName();
                 break;
             case 3:
+                orderListByNumber();
                 break;
             case 4:
                 addOrder();
@@ -37,35 +44,87 @@ public class FlooringController {
         return false;
     }
     
-    private void orderList(){
-        boolean stop = false;
+    private void orderListByDay(){
         LocalDate day = view.getOrderDay(LocalDate.of(1900, Month.JANUARY, 1), false);
-        List<Order> orderList = service.getOrderList(day);
-        view.showOrders(service.getOrderList(day));
-        if(!orderList.isEmpty()){
-            int orderNum = view.getOrderFromList();
-            try{
-                service.getOrder(orderNum, day);
-                //NEED TO SHOW ALL ORDER DEETS HERE
-                int action = view.getAction();
-                while(!stop){
-                    switch(action){
-                        case 1:
-                            editOrder(orderNum, day);
-                            stop = true;
-                            break;
-                        case 2:
-                            removeOrder(orderNum, day);
-                            stop = true;
-                            break;
-                        case 3:
-                            stop = true;
-                            break;
-                    }
+        Map<Integer,Order> matchingOrders = service.getOrderMap(day);
+        orderList(matchingOrders);
+    }
+    
+    private void orderListByLastName() {
+        //LocalDate fromDay = view.getOrderDay(LocalDate.of(1900, Month.JANUARY, 1), false);
+        //LocalDate toDay   = view.getOrderDay(LocalDate.of(1900, Month.JANUARY, 1), false)
+        String findName = view.getOrderCustomer("").toLowerCase();
+        Map<Integer,Order> matchingOrders = new HashMap<>();
+        List<LocalDate> validDates = service.getDatesWithOrders();
+        validDates.stream().forEach(day->{
+            Map<Integer,Order> orderMap = service.getOrderMap(day);
+            orderMap.values().stream().forEach(order->{
+                if(order.getCustomerName().toLowerCase().contains(findName)){
+                    matchingOrders.put(order.getOrderNum(),order);
                 }
-            } catch (NoSuchOrderException ex) {
-                view.showError(ex);
+            });
+        });
+        orderList(matchingOrders);
+    }
+
+    private void orderListByNumber() {
+        int findNumber = view.getOrderFromList();
+        Map<Integer,Order> matchingOrder = new HashMap<>();
+        List<LocalDate> validDates = service.getDatesWithOrders();
+        validDates.stream().forEach(day->{
+            Map<Integer,Order> orderMap = service.getOrderMap(day);
+            orderMap.values().stream().forEach(order->{
+                if(order.getOrderNum()==findNumber){
+                    matchingOrder.put(findNumber, order);
+                    orderList(matchingOrder);
+                    return;
+                }
+            });
+        });
+        orderList(matchingOrder);
+    }
+    
+    private void orderList(Map<Integer,Order> orderMap) {
+        view.showOrders(orderMap.values().stream().collect(Collectors.toList()));
+        if(!orderMap.isEmpty()){
+            boolean stop = false;
+            int orderNum;
+            LocalDate orderDay;
+            while(!stop){
+                Order order = orderMap.get(view.getOrderFromList());
+                try{
+                    orderNum = order.getOrderNum();
+                    orderDay = order.getDay();
+                    singleOrderAction(orderNum, orderDay);
+                    stop = true;
+                } catch (NullPointerException ex) {}
             }
+        }
+    }
+    
+    private void singleOrderAction(int orderNum, LocalDate orderDay){
+        try {
+            Order order = service.getOrder(orderNum, orderDay);
+            view.showSingleOrderInfo(order);
+            boolean stop = false;
+            int action = view.getAction();
+            while(!stop){
+                switch(action){
+                    case 1:
+                        editOrder(orderNum, orderDay);
+                        stop = true;
+                        break;
+                    case 2:
+                        removeOrder(orderNum, orderDay);
+                        stop = true;
+                        break;
+                    case 3:
+                        stop = true;
+                        break;
+                }
+            }
+        } catch (NoSuchOrderException ex) { 
+            view.showError(ex);
         }
     }
     
