@@ -20,7 +20,6 @@
         <constructor-arg        ref="io"/>
     </bean>
     <bean id="flooringDao"      class="com.sg.m5flooringmastery.dao.FlooringDaoFileImpl"/>
-    <bean id="flooringAuditDao" class="com.sg.m5flooringmastery.dao.FlooringAuditDaoFileImpl"/>
     <bean id="materialsDao"     class="com.sg.m5flooringmastery.dao.MaterialsDaoFileImpl"/>
     <bean id="taxesDao"         class="com.sg.m5flooringmastery.dao.TaxesDaoFileImpl"/>
     <bean id="service"          class="com.sg.m5flooringmastery.service.FlooringServiceImpl">
@@ -32,5 +31,38 @@
         <constructor-arg        ref="view"/>
         <constructor-arg        ref="service"/>
     </bean>
+    <bean id="auditDao"         class="com.sg.m5flooringmastery.dao.FlooringAuditDaoFileImpl">
+        <constructor-arg        value="log.txt"/>
+    </bean>
+    <bean id="logging"          class="com.sg.m5flooringmastery.advice.LoggingAdvice">
+        <constructor-arg        ref="auditDao"/>
+    </bean>
+   
+   <aop:config>
+        <aop:aspect ref="logging">
+            <aop:after-throwing
+                method="logError"
+                pointcut="execution (* com.sg.m5flooringmastery.service.FlooringService.*(..))"
+                throwing="ex"
+            />
+            
+            <aop:after-returning
+                method="logAdd"
+                pointcut="execution (* com.sg.m5flooringmastery.service.FlooringService.addOrder(..))"
+            />
+            
+            <aop:after-returning
+                method="logRemove"
+                pointcut="execution (* com.sg.m5flooringmastery.service.FlooringService.removeOrder(..))"
+                returning="removed"
+            />
+            
+            <aop:after-returning
+                method="logEdit"
+                pointcut="execution (* com.sg.m5flooringmastery.service.FlooringService.editOrder(..))"
+                returning="edited"
+            />
+        </aop:aspect>
+    </aop:config>
    
 </beans>

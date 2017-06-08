@@ -99,14 +99,14 @@ public class FlooringView {
     
     public void showSingleOrderInfo(Order order){
         io.print("\n=== Order #"+order.getOrderNum()+" ===");
-        io.print(String.format("%16s","Area (sqft): ")+order.getArea());
-        io.print(String.format("%16s","Customer Name: ")+order.getCustomerName());
-        io.print(String.format("%16s","Material: ")+order.getMaterial());
-        io.print(String.format("%16s","State: ")+order.getState());
-        io.print(String.format("%17s","Material Cost: $")+order.getMaterialCost());
-        io.print(String.format("%17s","Labor Cost: $")+order.getLaborCost());
-        io.print(String.format("%17s","Tax Amount: $")+order.getTaxAmount());
-        io.print(String.format("%17s","Total Cost: $")+order.getTotalCost());
+            io.print(String.format("%16s","Area (sqft): ")+order.getArea());
+            io.print(String.format("%16s","Customer Name: ")+order.getCustomerName());
+            io.print(String.format("%16s","Material: ")+order.getMaterial());
+            io.print(String.format("%16s","State: ")+order.getState());
+            io.print(String.format("%17s","Material Cost: $")+order.getMaterialCost());
+            io.print(String.format("%17s","Labor Cost: $")+order.getLaborCost());
+            io.print(String.format("%17s","Tax Amount: $")+order.getTaxAmount());
+            io.print(String.format("%17s","Total Cost: $")+order.getTotalCost());
     }
     
     public void showOrders(List<Order> orders){
@@ -147,5 +147,13 @@ public class FlooringView {
     
     public void bannerOrderSearchResults(){
         io.print("\n=== Search Results ===");
+    }
+    
+    public void bannerOrderEditSuccess(int orderNum){
+        io.print("\n=== Order #"+orderNum+" Successfully Edited ===");
+    }
+    
+    public void bannerOrderRemoveSuccess(int orderNum){
+        io.print("\n=== Order #"+orderNum+" Successfully Deleted ===");
     }
 }

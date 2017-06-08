@@ -18,11 +18,6 @@ public class FlooringServiceImpl implements FlooringService {
     private MaterialsDao materialsDao;
     private TaxesDao taxesDao;
     
-//    @Override
-//    public List<LocalDate> getDatesWithOrders(){
-//        return flooringDao.getDatesWithOrders();
-//    }
-
     @Override
     public Map<Integer,Order> getOrderMap(LocalDate day){
         return flooringDao.getOrderMap(day);

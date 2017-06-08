@@ -1,0 +1,18 @@
+06/08/2017 10:51:41AM Order #17 added:
+	          Date: 2018-08-22
+	   Area (sqft): 12333
+	 Customer Name: Lord Casperberry
+	      Material: Wood
+	         State: PA
+	 Material Cost: $63514.95
+	    Labor Cost: $58581.75
+	    Tax Amount: $8241.53
+	    Total Cost: $130338.23
+
+06/08/2017 10:52:10AM Order #17 changed:
+	          Date: 2018-08-22 to 2018-08-19
+	   Area (sqft): 12333 to 3000
+	      Material: Wood to Laminate
+	         State: PA to MI
+	    Total Cost: $130338.23 to $12214.13
+

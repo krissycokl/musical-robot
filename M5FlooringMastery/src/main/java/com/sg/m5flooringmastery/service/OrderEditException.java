@@ -1,6 +1,6 @@
 package com.sg.m5flooringmastery.service;
 
-class OrderEditException extends Exception {
+public class OrderEditException extends Exception {
     public OrderEditException(String msg){
         super(msg);
     }

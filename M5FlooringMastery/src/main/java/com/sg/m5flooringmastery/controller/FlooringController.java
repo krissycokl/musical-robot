@@ -127,6 +127,7 @@ public class FlooringController {
             Order editedOrder = editOrder(order);
             try {
                 service.editOrder(order, editedOrder, day);
+                view.bannerOrderEditSuccess(orderNum);
             } catch (Exception ex) {
                 view.showError(ex);
             }
@@ -139,6 +140,7 @@ public class FlooringController {
         if(view.confirmRemove() == 1){
             try {
                 service.removeOrder(orderNum, day);
+                view.bannerOrderRemoveSuccess(orderNum);
             } catch (NoSuchOrderException ex) {
                 view.showError(ex);
             }
