@@ -60,7 +60,9 @@ public class FlooringDaoFileImpl implements FlooringDao {
     }
 
     @Override
-    public void changeOrderDay(Order order, LocalDate newDay) throws IOException, FileNotFoundException {
+    public void changeOrderDay(Order order, LocalDate newDay) throws
+            IOException,
+            FileNotFoundException {
         Order holder = removeOrder(order.getOrderNum(), order.getDay());
         holder.setDay(newDay);
         addOrder(holder, newDay);
@@ -85,7 +87,39 @@ public class FlooringDaoFileImpl implements FlooringDao {
         load(day);
         return ordersForDay;
     }
-
+    
+    @Override
+    public Map<Integer,Order> getOrderMap(String findName){
+        List<LocalDate> validDates = getDatesWithOrders();
+        Map<Integer,Order> matchingOrders = new HashMap<>();
+        validDates.stream().forEach(day->{
+            Map<Integer,Order> tempOrderMap = getOrderMap(day);
+            tempOrderMap.values().stream().forEach(order->{
+                if(order.getCustomerName().toLowerCase().contains(findName)){
+                    matchingOrders.put(order.getOrderNum(),order);
+                }
+            });
+        });
+        return matchingOrders;
+    }
+    
+    @Override
+    public Map<Integer,Order> getOrderMap(int orderNum){
+        List<LocalDate> validDates = getDatesWithOrders();
+        Map<Integer,Order> matchingOrder = new HashMap<>();
+        validDates.stream().forEach(day->{
+            if(matchingOrder.isEmpty()){
+                Map<Integer,Order> tempOrderMap = getOrderMap(day);
+                tempOrderMap.values().stream().forEach(order->{
+                    if(order.getOrderNum() == orderNum){
+                        matchingOrder.put(order.getOrderNum(),order);
+                    }
+                });
+            }
+        });
+        return matchingOrder;
+    }
+    
     @Override
     public Order removeOrder(int id, LocalDate day) {
         load(day);
@@ -94,7 +128,6 @@ public class FlooringDaoFileImpl implements FlooringDao {
         return removed;
     }
 
-    @Override
     public void load(LocalDate day) {
         ordersForDay = new HashMap<>();
         String dayAsString = day.format(DateTimeFormatter.ofPattern("MMdduuuu"));
@@ -127,7 +160,6 @@ public class FlooringDaoFileImpl implements FlooringDao {
         }
     }
 
-    @Override
     public void save(LocalDate day) {
         String dayAsString = day.format(DateTimeFormatter.ofPattern("MMdduuuu"));
         File filename = new File("OrderArchive/Orders_"+dayAsString+".txt");
@@ -149,7 +181,6 @@ public class FlooringDaoFileImpl implements FlooringDao {
         }
     }
 
-    @Override
     public int loadKey() throws FileNotFoundException {
         Scanner sc = new Scanner(new BufferedReader(new FileReader("index.txt")));
         currKey = sc.nextInt();
@@ -157,7 +188,6 @@ public class FlooringDaoFileImpl implements FlooringDao {
         return currKey;
     }
     
-    @Override
     public int saveKey() throws IOException {
         PrintWriter out1 = new PrintWriter(new FileWriter("index.txt", false));
         out1.print(currKey);

@@ -18,9 +18,24 @@ public class FlooringServiceImpl implements FlooringService {
     private MaterialsDao materialsDao;
     private TaxesDao taxesDao;
     
+//    @Override
+//    public List<LocalDate> getDatesWithOrders(){
+//        return flooringDao.getDatesWithOrders();
+//    }
+
     @Override
-    public List<LocalDate> getDatesWithOrders(){
-        return flooringDao.getDatesWithOrders();
+    public Map<Integer,Order> getOrderMap(LocalDate day){
+        return flooringDao.getOrderMap(day);
+    }
+    
+    @Override
+    public Map<Integer,Order> getOrderMap(String findName) {
+        return flooringDao.getOrderMap(findName);
+    }
+
+    @Override
+    public Map<Integer,Order> getOrderMap(int orderNum) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     @Override
@@ -104,11 +119,6 @@ public class FlooringServiceImpl implements FlooringService {
             return order;
         }
     }
-    
-    @Override
-    public Map<Integer,Order> getOrderMap(LocalDate day){
-        return flooringDao.getOrderMap(day);
-    }
 
     @Override
     public Order removeOrder(int id, LocalDate day) throws NoSuchOrderException{
@@ -118,16 +128,6 @@ public class FlooringServiceImpl implements FlooringService {
         } else {
             return order;
         }
-    }
-
-    @Override
-    public int loadKey() throws FileNotFoundException {
-        return flooringDao.loadKey();
-    }
-    
-    @Override
-    public int saveKey() throws IOException {
-        return flooringDao.saveKey();
     }
 
     @Override

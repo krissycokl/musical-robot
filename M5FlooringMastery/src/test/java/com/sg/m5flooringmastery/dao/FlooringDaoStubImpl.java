@@ -49,30 +49,16 @@ public class FlooringDaoStubImpl implements FlooringDao {
     }
 
     @Override
-    public void load(LocalDate day) throws FileNotFoundException {
-        // unneccessary
+    public Map<Integer, Order> getOrderMap(String findName) {
+        return day1;
     }
 
     @Override
-    public int loadKey() throws FileNotFoundException {
-        // unneccessary
-        return 0;
+    public Map<Integer, Order> getOrderMap(int orderNum) {
+        return day1;
     }
-
     @Override
     public Order removeOrder(int id, LocalDate day) {
         return day1.remove(id);
     }
-
-    @Override
-    public void save(LocalDate day) throws IOException {
-        // unneccessary
-    }
-
-    @Override
-    public int saveKey() throws IOException {
-        // unneccessary
-        return 0;
-    }
-
 }

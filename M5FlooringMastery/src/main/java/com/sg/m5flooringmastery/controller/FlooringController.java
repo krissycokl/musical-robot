@@ -55,33 +55,13 @@ public class FlooringController {
         //LocalDate fromDay = view.getOrderDay(LocalDate.of(1900, Month.JANUARY, 1), false);
         //LocalDate toDay   = view.getOrderDay(LocalDate.of(1900, Month.JANUARY, 1), false)
         String findName = view.getOrderCustomer("").toLowerCase();
-        Map<Integer,Order> matchingOrders = new HashMap<>();
-        List<LocalDate> validDates = service.getDatesWithOrders();
-        validDates.stream().forEach(day->{
-            Map<Integer,Order> orderMap = service.getOrderMap(day);
-            orderMap.values().stream().forEach(order->{
-                if(order.getCustomerName().toLowerCase().contains(findName)){
-                    matchingOrders.put(order.getOrderNum(),order);
-                }
-            });
-        });
+        Map<Integer,Order> matchingOrders = service.getOrderMap(findName);
         orderList(matchingOrders);
     }
 
     private void orderListByNumber() {
         int findNumber = view.getOrderFromList();
-        Map<Integer,Order> matchingOrder = new HashMap<>();
-        List<LocalDate> validDates = service.getDatesWithOrders();
-        validDates.stream().forEach(day->{
-            Map<Integer,Order> orderMap = service.getOrderMap(day);
-            orderMap.values().stream().forEach(order->{
-                if(order.getOrderNum()==findNumber){
-                    matchingOrder.put(findNumber, order);
-                    orderList(matchingOrder);
-                    return;
-                }
-            });
-        });
+        Map<Integer,Order> matchingOrder = service.getOrderMap(findNumber);
         orderList(matchingOrder);
     }
     

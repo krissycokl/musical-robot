@@ -26,16 +26,12 @@ public interface FlooringService {
     public Order getOrder(int id, LocalDate day) throws
             NoSuchOrderException;
     
+    public Map<Integer,Order> getOrderMap(String findName);
+    public Map<Integer,Order> getOrderMap(int orderNum);
     public Map<Integer,Order> getOrderMap(LocalDate day);
     
     public Order removeOrder(int id, LocalDate day) throws
             NoSuchOrderException;
-    
-    public int loadKey() throws
-            FileNotFoundException;
-    
-    public int saveKey() throws
-            IOException;
     
     public boolean validateOrder(Order order) throws
             InvalidOrderException;
@@ -47,6 +43,4 @@ public interface FlooringService {
     
     public Order retrieveTaxRate(Order order) throws
             InvalidOrderException;
-    
-    public List<LocalDate> getDatesWithOrders();
 }
