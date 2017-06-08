@@ -16,11 +16,11 @@ public class FlooringView {
     }
     
     public int getMainMenuChoice(){
-        io.print("1. Display orders by date");
-        io.print("2. Look up order by customer name");
-        io.print("3. Look up order by number");
-        io.print("4. Add an order");
-        io.print("5. Quit");
+        io.print("1.) Display orders by date");
+        io.print("2.) Look up order by customer name");
+        io.print("3.) Look up order by number");
+        io.print("4.) Add an order");
+        io.print("5.) Quit");
         return io.getInt("What would you like to do?", false, 1,5);
     }
 
@@ -36,7 +36,7 @@ public class FlooringView {
     }
     
     public BigDecimal getOrderArea(BigDecimal area, boolean blankOk) {
-        String prompt = String.format("%15s","Area in sq ft: ");
+        String prompt = "Area in sq ft: ";
         if (area.compareTo(BigDecimal.ZERO) != 0){
             prompt += "(currently "+area.toPlainString()+" sq ft, press Enter to leave unchanged)";
         }
@@ -48,7 +48,7 @@ public class FlooringView {
     }
 
     public String getOrderCustomer(String name) {
-        String prompt = String.format("%15s","Customer name: ");
+        String prompt = "Customer name: ";
         if (!name.isEmpty()){
             prompt += "(currently "+name+", press Enter to leave unchanged)";
         }
@@ -60,7 +60,7 @@ public class FlooringView {
     }
 
     public String getOrderMaterial(String material, List<String> validMaterials) {
-        String prompt = String.format("%15s","Material: ");
+        String prompt = "Material: ";
         if (!material.isEmpty()){
             prompt += "(currently "+material+", press Enter to leave unchanged)";
         }
@@ -75,7 +75,7 @@ public class FlooringView {
     }
 
     public String getOrderState(String state, List<String> validStates) {
-        String prompt = String.format("%15s","State: ");
+        String prompt = "State: ";
         if (!state.isEmpty()){
             prompt += "(currently "+state+", press Enter to leave unchanged)";
         }
@@ -90,7 +90,7 @@ public class FlooringView {
     }
     
     public LocalDate getOrderDay(LocalDate day, boolean blankOk){
-        String prompt = String.format("%15s","Date: ");
+        String prompt = "Date: ";
         if(!day.isEqual(LocalDate.of(1900, Month.JANUARY, 1))){
             prompt += "(currently "+day.format(DateTimeFormatter.ofPattern("MM/dd/uuuu"))+", press Enter to leave unchanged)";
         }
@@ -98,7 +98,7 @@ public class FlooringView {
     }
     
     public void showSingleOrderInfo(Order order){
-        io.print(String.format("%16s","Order #: ")+order.getOrderNum());
+        io.print("\n=== Order #"+order.getOrderNum()+" ===");
         io.print(String.format("%16s","Area (sqft): ")+order.getArea());
         io.print(String.format("%16s","Customer Name: ")+order.getCustomerName());
         io.print(String.format("%16s","Material: ")+order.getMaterial());
@@ -147,9 +147,5 @@ public class FlooringView {
     
     public void bannerOrderSearchResults(){
         io.print("\n=== Search Results ===");
-    }
-    
-    public void bannerSingleOrder(int orderNum){
-        io.print("\n=== Order #"+orderNum+" ===");
     }
 }

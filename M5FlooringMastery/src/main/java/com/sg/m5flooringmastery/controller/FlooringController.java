@@ -8,11 +8,7 @@ import com.sg.m5flooringmastery.view.FlooringView;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class FlooringController {
@@ -87,7 +83,6 @@ public class FlooringController {
     private void singleOrderAction(int orderNum, LocalDate orderDay){
         try {
             Order order = service.getOrder(orderNum, orderDay);
-            view.bannerSingleOrder(orderNum);
             view.showSingleOrderInfo(order);
             boolean stop = false;
             int action = view.getAction();
