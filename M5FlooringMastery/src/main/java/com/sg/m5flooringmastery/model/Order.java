@@ -130,22 +130,21 @@ public class Order {
         return state;
     }
     
-    @Override
-    public String toString() {
-        StringBuilder out = new StringBuilder();
-        out.append(this.orderNum).append(",");
-        out.append(this.customerName).append(",");
-        out.append(this.state).append(",");
-        out.append(this.taxRate.multiply(new BigDecimal("100"))).append(",");
-        out.append(this.material).append(",");
-        out.append(this.area).append(",");
-        out.append(this.materialCostPerSqFt).append(",");
-        out.append(this.laborCostPerSqFt).append(",");
-        out.append(this.materialCost).append(",");
-        out.append(this.laborCost).append(",");
-        out.append(this.taxAmount).append(",");
-        out.append(this.totalCost);
-        return out.toString();
+    public String[] toStringAry() {
+        String[] stringAry = new String[12];
+        stringAry[0] = ""+this.orderNum;
+        stringAry[1] = this.customerName;
+        stringAry[2] = this.state;
+        stringAry[3] = this.taxRate.multiply(new BigDecimal("100")).toPlainString();
+        stringAry[4] = this.material;
+        stringAry[5] = this.area.toPlainString();
+        stringAry[6] = this.materialCostPerSqFt.toPlainString();
+        stringAry[7] = this.laborCostPerSqFt.toPlainString();
+        stringAry[8] = this.materialCost.toPlainString();
+        stringAry[9] = this.laborCost.toPlainString();
+        stringAry[10]= this.taxAmount.toPlainString();
+        stringAry[11]= this.totalCost.toPlainString();
+        return stringAry;
     }
     
     @Override

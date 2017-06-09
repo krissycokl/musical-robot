@@ -2,8 +2,12 @@ package com.sg.m5flooringmastery.service;
 
 import com.sg.m5flooringmastery.dao.FlooringDao;
 import com.sg.m5flooringmastery.dao.MaterialsDao;
+import com.sg.m5flooringmastery.dao.MaterialsPersistenceException;
+import com.sg.m5flooringmastery.dao.StatePersistenceException;
 import com.sg.m5flooringmastery.dao.TaxesDao;
+import com.sg.m5flooringmastery.model.Material;
 import com.sg.m5flooringmastery.model.Order;
+import com.sg.m5flooringmastery.model.State;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -17,6 +21,60 @@ public class FlooringServiceImpl implements FlooringService {
     private FlooringDao flooringDao;
     private MaterialsDao materialsDao;
     private TaxesDao taxesDao;
+
+    @Override
+    public void adminAddMaterial(Material newMat) throws MaterialOverwriteException, MaterialsPersistenceException {
+        for (Material mat : getValidMaterials()){
+            if(mat.getName().equals(newMat.getName())){
+                throw new MaterialOverwriteException(newMat+" already exists. Please Edit if you wish to change its costs.");
+            }
+        }
+        materialsDao.addMaterial(newMat);
+    }
+
+    @Override
+    public void adminAddState(State newState) throws StateOverwriteException, StatePersistenceException {
+        for (State state : getValidStates()){
+            if(state.getName().equals(newState.getName())){
+                throw new StateOverwriteException(state+" already exists. Please Edit if you wish to change its tax rate.");
+            }
+        }
+        taxesDao.addState(newState);
+    }
+
+    @Override
+    public void adminEditMaterial(String oldMatName, Material newMat) throws MaterialOverwriteException, MaterialsPersistenceException {
+        if(!oldMatName.equals(newMat.getName())){
+            for (Material mat : getValidMaterials()){
+                if(mat.getName().equals(newMat.getName())){
+                    throw new MaterialOverwriteException("Cannot change name to existing material "+mat+".");
+                }
+            }
+        }
+        materialsDao.editMaterial(materialsDao.getMaterial(oldMatName), newMat);
+    }
+
+    @Override
+    public void adminEditState(String oldStateName, State newState) throws StateOverwriteException, StatePersistenceException {
+        if(!oldStateName.equals(newState.getName())){
+            for (State state : getValidStates()){
+                if(state.getName().equals(newState.getName())){
+                    throw new StateOverwriteException("Cannot change name to existing state "+state+".");
+                }
+            }
+        }
+        taxesDao.editState(taxesDao.getState(oldStateName), newState);
+    }
+
+    @Override
+    public void adminRemoveMaterial(String removeMat) throws MaterialsPersistenceException {
+        materialsDao.removeMaterial(removeMat);
+    }
+
+    @Override
+    public void adminRemoveState(String removeState) throws StatePersistenceException {
+        taxesDao.removeState(removeState);
+    }
     
     @Override
     public Map<Integer,Order> getOrderMap(LocalDate day){
@@ -30,16 +88,16 @@ public class FlooringServiceImpl implements FlooringService {
 
     @Override
     public Map<Integer,Order> getOrderMap(int orderNum) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return flooringDao.getOrderMap(orderNum);
     }
     
     @Override
-    public List<String> getValidMaterials(){
+    public List<Material> getValidMaterials(){
         return materialsDao.getMaterialsList();
     }
     
     @Override
-    public List<String> getValidStates(){
+    public List<State> getValidStates(){
         return taxesDao.getStatesList();
     }
     
@@ -198,9 +256,11 @@ public class FlooringServiceImpl implements FlooringService {
         BigDecimal grossCost = order.getLaborCost().add(
             order.getMaterialCost());
         
-        BigDecimal tax = order.getTaxRate().multiply(grossCost);
+        BigDecimal tax = order.getTaxRate().multiply
+            (grossCost).divide
+            (new BigDecimal("100"),2,RoundingMode.HALF_UP);
         
-        order.setTaxAmount(tax.setScale(2, RoundingMode.HALF_UP));
+        order.setTaxAmount(tax);
         
         order.setTotalCost(grossCost.add(tax).setScale(2, RoundingMode.HALF_UP));
         

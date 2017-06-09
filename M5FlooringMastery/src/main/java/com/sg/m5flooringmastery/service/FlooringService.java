@@ -1,6 +1,10 @@
 package com.sg.m5flooringmastery.service;
 
+import com.sg.m5flooringmastery.dao.MaterialsPersistenceException;
+import com.sg.m5flooringmastery.dao.StatePersistenceException;
+import com.sg.m5flooringmastery.model.Material;
 import com.sg.m5flooringmastery.model.Order;
+import com.sg.m5flooringmastery.model.State;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -9,9 +13,21 @@ import java.util.Map;
 
 public interface FlooringService {
     public int addOrder(Order order, LocalDate day) throws InvalidOrderException;
+
+    public void adminAddMaterial(Material newMat) throws MaterialOverwriteException, MaterialsPersistenceException;
+
+    public void adminAddState(State newState) throws StateOverwriteException, StatePersistenceException;
+
+    public void adminEditMaterial(String oldMatName, Material newMat) throws MaterialOverwriteException, MaterialsPersistenceException;
+
+    public void adminEditState(String oldStateName, State newState) throws StateOverwriteException, StatePersistenceException;
+
+    public void adminRemoveMaterial(String removeMat) throws MaterialsPersistenceException;
+
+    public void adminRemoveState(String removeState) throws StatePersistenceException;
     
-    public List<String> getValidMaterials();
-    public List<String> getValidStates();
+    public List<Material> getValidMaterials();
+    public List<State> getValidStates();
     
     public void changeOrderDay(Order order, LocalDate newDay) throws 
             IOException,

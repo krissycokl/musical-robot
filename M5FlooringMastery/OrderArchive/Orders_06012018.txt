@@ -1,0 +1,2 @@
+"OrderNumber","CustomerName","State","TaxRate","ProductType","Area","CostPerSquareFoot","LaborCostPerSquareFoot","MaterialCost","LaborCost","Tax","Total"
+"20","Fluffkins","IL","1075.00","Marble","500","75","30","37500.00","15000.00","5643.75","58143.75"

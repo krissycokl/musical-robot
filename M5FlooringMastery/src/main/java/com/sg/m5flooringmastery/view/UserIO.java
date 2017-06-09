@@ -28,9 +28,10 @@ public interface UserIO {
      * Forces user to input a string.
      * 
      * @param prompt    Shown to user
+     * @param blankOk   If true, an empty response is acceptable
      * @return          Inputted string
      */
-    public String getString(String prompt);
+    public String getString(String prompt, boolean blankOk);
     
     public float getFloat(String prompt);
     public float getFloat(String prompt, float min, float max);

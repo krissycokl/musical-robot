@@ -17,8 +17,26 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.IntStream;
+import com.opencsv.CSVWriter;
+import com.opencsv.CSVReader;
 
 public class FlooringDaoFileImpl implements FlooringDao {
+    
+    
+    private static final String[] ORDERHEADER = {
+        "OrderNumber",
+        "CustomerName",
+        "State",
+        "TaxRate",
+        "ProductType",
+        "Area",
+        "CostPerSquareFoot",
+        "LaborCostPerSquareFoot",
+        "MaterialCost",
+        "LaborCost",
+        "Tax",
+        "Total"
+    };
     
     Map<Integer, Order> ordersForDay = new HashMap<>();
     int currKey;
@@ -134,9 +152,9 @@ public class FlooringDaoFileImpl implements FlooringDao {
         File filename = new File("OrderArchive/Orders_"+dayAsString+".txt");
         if (filename.exists()){
             try {
-                Scanner sc = new Scanner(new BufferedReader(new FileReader(filename)));
-                while(sc.hasNextLine()){
-                    String[] orderInfo = sc.nextLine().split(",");
+                CSVReader reader = new CSVReader(new FileReader(filename), ',', '"', 1);
+                String[] orderInfo;
+                while ((orderInfo = reader.readNext())!=null){
                     Order tempOrder = new Order(Integer.parseInt(orderInfo[0]));
                     tempOrder.setDay(day);
                     tempOrder.setCustomerName(orderInfo[1]);
@@ -153,9 +171,9 @@ public class FlooringDaoFileImpl implements FlooringDao {
 
                     ordersForDay.put(tempOrder.getOrderNum(), tempOrder);
                 }
-                sc.close();
+                reader.close();
             }
-            catch (FileNotFoundException e) {System.out.println("Unexpected error reading "+filename+".");}
+            catch (IOException e) {System.out.println("Unexpected error reading "+filename+".");}
 
         }
     }
@@ -167,14 +185,19 @@ public class FlooringDaoFileImpl implements FlooringDao {
             filename.delete();
         } else {
             try {
-                PrintWriter out2 = new PrintWriter(new FileWriter(filename, false));
+                CSVWriter out = new CSVWriter(new FileWriter(filename), ',');
+                out.writeNext(ORDERHEADER);
                 ordersForDay.values().stream().forEachOrdered(
                         order->{
-                            out2.println(order.toString());
-                            out2.flush();
+                            try {
+                                out.writeNext(order.toStringAry());
+                                out.flush();
+                            } catch (IOException ex) {
+                                System.out.println("Unexpected error writing to "+filename+".");
+                            }
                         }
                 );
-                out2.close();
+                out.close();
             } catch (IOException ex) {
                 System.out.println("Unexpected error writing to "+filename+".");
             }

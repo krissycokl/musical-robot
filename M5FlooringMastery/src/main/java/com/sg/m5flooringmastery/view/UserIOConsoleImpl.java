@@ -109,9 +109,17 @@ public class UserIOConsoleImpl implements UserIO {
     }
     
     @Override
-    public String getString(String prompt){
-        System.out.println(prompt);
-        return sc.nextLine();
+    public String getString(String prompt, boolean blankOk){
+        String response;
+        while (true){
+            System.out.println(prompt);
+            response = sc.nextLine();
+            if(response.isEmpty() && blankOk){
+                return response;
+            } else if (!response.isEmpty()){
+                return response;
+            }
+        }
     }
     
     @Override

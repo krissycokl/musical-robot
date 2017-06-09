@@ -1,6 +1,8 @@
 package com.sg.m5flooringmastery.view;
 
+import com.sg.m5flooringmastery.model.Material;
 import com.sg.m5flooringmastery.model.Order;
+import com.sg.m5flooringmastery.model.State;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Month;
@@ -14,16 +16,87 @@ public class FlooringView {
     public FlooringView(UserIO io){
         this.io = io;
     }
+
+    public void bannerAdminEditMaterial(String oldMatName) {
+        io.print("\n=== Editing "+oldMatName+" ===");
+    }
+
+    public void bannerAdminEditState(String oldStateName) {
+        io.print("\n=== Editing "+oldStateName+" ===");
+    }
+
+    public void bannerAdminMaterials() {
+        io.print("\n=== Admin: Materials ===");
+    }
+
+    public void bannerAdminMenu() {
+        io.print("\n=== Admin Menu ===");
+    }
+
+    public void bannerAdminNewMaterial() {
+        io.print("\n=== Adding New Material ===");
+    }
+
+    public void bannerAdminNewState() {
+        io.print("\n=== Adding New State ===");
+    }
+
+    public void bannerAdminNewSuccess(String newThingName){
+        io.print("\n=== Successfully added "+newThingName+" ===");
+    }
+    
+    public void bannerAdminEditSuccess(String thingName){
+        io.print("\n=== Successfully edited "+thingName+" ===");
+    }
+    
+    public void bannerAdminRemoveSuccess(String oldThingName){
+        io.print("\n=== Successfully removed "+oldThingName+" ===");
+    }
+    
+    public void bannerAdminState() {
+        io.print("\n=== Admin: States ===");
+    }
+
+    public Material getAdminNewMaterial(){
+        Material material = new Material();
+        material.setName(io.getString("Material name:", false));
+        material.setMaterialCost(io.getBigD("Material cost per sqft", false, BigDecimal.ZERO, new BigDecimal("1000")));
+        material.setLaborCost(io.getBigD("Labor cost per sqft:", false, BigDecimal.ZERO, new BigDecimal("1000")));
+        return material;
+    }
+    
+    public State getAdminNewState(){
+        State state = new State();
+        state.setName(io.getString("State:", false));
+        state.setTaxRate(io.getBigD("Tax rate:", true));
+        return state;
+    }
+    
+    public int getAdminAction(String type) {
+        io.print("1.) Add new "+type);
+        io.print("2.) Edit "+type);
+        io.print("3.) Remove "+type);
+        io.print("4.) Back");
+        return io.getInt("What would you like to do?", true,1,4);
+    }
     
     public int getMainMenuChoice(){
         io.print("1.) Display orders by date");
         io.print("2.) Look up order by customer name");
         io.print("3.) Look up order by number");
         io.print("4.) Add an order");
-        io.print("5.) Quit");
-        return io.getInt("What would you like to do?", false, 1,5);
+        io.print("5.) Admin menu");
+        io.print("6.) Quit");
+        return io.getInt("What would you like to do?", false, 1,6);
     }
 
+    public int getAdminMainMenuChoice(){
+        io.print("1.) Change materials");
+        io.print("2.) Change states");
+        io.print("3.) Back");
+        return io.getInt("What would you like to do?", false, 1, 3);
+    }
+    
     public int getOrderFromList(){
         return io.getInt("Enter # of desired order.", false);
     }
@@ -52,41 +125,57 @@ public class FlooringView {
         if (!name.isEmpty()){
             prompt += "(currently "+name+", press Enter to leave unchanged)";
         }
-        String newName = io.getString(prompt);
+        String newName = io.getString(prompt, true);
         if(newName.isEmpty()){
             return name;
         }
         return newName;
     }
 
-    public String getOrderMaterial(String material, List<String> validMaterials) {
+    public String getOrderMaterial(String material, List<Material> validMaterials) {
         String prompt = "Material: ";
         if (!material.isEmpty()){
             prompt += "(currently "+material+", press Enter to leave unchanged)";
         }
+        io.print(
+                String.format("%15.15s","Material |")
+               +String.format("%10.10s","Mat cost |")
+               +String.format("%10.10s","Labor cost")
+        );
         IntStream.range(0, validMaterials.size()).forEach(index->{
-            io.print((index+1)+".) "+validMaterials.get(index));
+            Material currMat = validMaterials.get(index);
+            String currLine = String.format("%-15.15s",(index+1)+".) "+currMat.getName());
+            currLine += String.format("%10.10s"," $"+currMat.getMaterialCost());
+            currLine += String.format("%10.10s"," $"+currMat.getLaborCost());
+            io.print(currLine);
         });
         int choice = io.getInt(prompt, true, 1, validMaterials.size()+1);
         if (choice == 0){
             return material;
         }
-        return validMaterials.get(choice-1);
+        return validMaterials.get(choice-1).getName();
     }
 
-    public String getOrderState(String state, List<String> validStates) {
+    public String getOrderState(String state, List<State> validStates) {
         String prompt = "State: ";
         if (!state.isEmpty()){
             prompt += "(currently "+state+", press Enter to leave unchanged)";
         }
+        io.print(
+                String.format("%10.10s", "  State  |")
+               +String.format("%10.10s", "Tax rate")
+        );
         IntStream.range(0, validStates.size()).forEach(index->{
-            io.print((index+1)+".) "+validStates.get(index));
+            State currState = validStates.get(index);
+            String currLine = String.format("%-10.10s", (index+1)+".) "+currState.getName());
+            currLine += String.format("%10.10s", currState.getTaxRate());
+            io.print(currLine);
         });
         int choice = io.getInt(prompt, true, 1, validStates.size()+1);
         if (choice == 0){
             return state;
         }
-        return validStates.get(choice-1);
+        return validStates.get(choice-1).getName();
     }
     
     public LocalDate getOrderDay(LocalDate day, boolean blankOk){

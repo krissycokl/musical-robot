@@ -1,9 +1,15 @@
 package com.sg.m5flooringmastery.controller;
 
+import com.sg.m5flooringmastery.dao.MaterialsPersistenceException;
+import com.sg.m5flooringmastery.dao.StatePersistenceException;
+import com.sg.m5flooringmastery.model.Material;
 import com.sg.m5flooringmastery.model.Order;
+import com.sg.m5flooringmastery.model.State;
 import com.sg.m5flooringmastery.service.FlooringService;
 import com.sg.m5flooringmastery.service.InvalidOrderException;
+import com.sg.m5flooringmastery.service.MaterialOverwriteException;
 import com.sg.m5flooringmastery.service.NoSuchOrderException;
+import com.sg.m5flooringmastery.service.StateOverwriteException;
 import com.sg.m5flooringmastery.view.FlooringView;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -18,6 +24,90 @@ public class FlooringController {
     public FlooringController(FlooringView view, FlooringService service){
         this.view = view;
         this.service = service;
+    }
+
+    private void adminMenuMaterials(){
+        view.bannerAdminMaterials();
+        int choice = view.getAdminAction("Material");
+        Material newMat;
+        switch(choice){
+            case 1:
+                view.bannerAdminNewMaterial();
+                newMat = view.getAdminNewMaterial();
+                try{
+                    service.adminAddMaterial(newMat);
+                    view.bannerAdminNewSuccess(newMat.getName());
+                } catch (MaterialOverwriteException | MaterialsPersistenceException e) {view.showError(e);}
+                break;
+            case 2:
+                String oldMatName = view.getOrderMaterial("", service.getValidMaterials());
+                view.bannerAdminEditMaterial(oldMatName);
+                newMat = view.getAdminNewMaterial();
+                try{
+                    service.adminEditMaterial(oldMatName, newMat);
+                    view.bannerAdminEditSuccess(newMat.getName());
+                } catch (MaterialOverwriteException | MaterialsPersistenceException e){view.showError(e);}
+                break;
+            case 3:
+                String removeMat = view.getOrderMaterial("", service.getValidMaterials());
+                try{
+                    service.adminRemoveMaterial(removeMat);
+                    view.bannerAdminRemoveSuccess(removeMat);
+                } catch(MaterialsPersistenceException e){view.showError(e);}
+                break;
+            case 4:
+                break;
+        }
+    }
+    
+    private void adminMenuStates() {
+        view.bannerAdminState();
+        int choice = view.getAdminAction("State");
+        State newState;
+        switch(choice){
+            case 1:
+                view.bannerAdminNewState();
+                newState = view.getAdminNewState();
+                try{
+                    service.adminAddState(newState);
+                    view.bannerAdminNewSuccess(newState.getName());
+                } catch (StateOverwriteException | StatePersistenceException e){
+                    view.showError(e);
+                }
+                break;
+            case 2:
+                String oldStateName = view.getOrderState("", service.getValidStates());
+                view.bannerAdminEditState(oldStateName);
+                newState = view.getAdminNewState();
+                try{
+                    service.adminEditState(oldStateName, newState);
+                    view.bannerAdminEditSuccess(newState.getName());
+                } catch (StateOverwriteException | StatePersistenceException e){view.showError(e);}
+                break;
+            case 3:
+                String removeStateName = view.getOrderState("", service.getValidStates());
+                try{
+                    service.adminRemoveState(removeStateName);
+                    view.bannerAdminRemoveSuccess(removeStateName);
+                } catch(StatePersistenceException e){view.showError(e);};
+                break;
+            case 4:
+                break;
+        }
+    }
+    
+    private void adminMenu() {
+        view.bannerAdminMenu();
+        switch(view.getAdminMainMenuChoice()){
+            case 1:
+                adminMenuMaterials();
+                break;
+            case 2:
+                adminMenuStates();
+                break;
+            case 3:
+                break;
+        }
     }
 
     public boolean run() {
@@ -36,6 +126,9 @@ public class FlooringController {
                 addOrder();
                 break;
             case 5:
+                adminMenu();
+                break;
+            case 6:
                 return true;
         }
         return false;
@@ -75,7 +168,12 @@ public class FlooringController {
                     orderDay = order.getDay();
                     singleOrderAction(orderNum, orderDay);
                     stop = true;
-                } catch (NullPointerException ex) {}
+                } catch (NullPointerException e) {
+                    // If order number is invalid, service.getOrder below
+                    // is never called, so the 
+                    // OrderNotfoundException is not thrown
+                    // FIX FIX FIX FIX 
+                }
             }
         }
     }
@@ -101,8 +199,8 @@ public class FlooringController {
                         break;
                 }
             }
-        } catch (NoSuchOrderException ex) { 
-            view.showError(ex);
+        } catch (NoSuchOrderException e) { 
+            view.showError(e);
         }
     }
     
@@ -115,8 +213,8 @@ public class FlooringController {
                 order = service.getOrder(orderNum, order.getDay());
                 view.showSingleOrderInfo(order);
                 view.bannerAddSuccess(order.getOrderNum());
-            } catch (InvalidOrderException | NoSuchOrderException ex) {
-                view.showError(ex);
+            } catch (InvalidOrderException | NoSuchOrderException e) {
+                view.showError(e);
             }
         }
     }
@@ -128,11 +226,11 @@ public class FlooringController {
             try {
                 service.editOrder(order, editedOrder, day);
                 view.bannerOrderEditSuccess(orderNum);
-            } catch (Exception ex) {
-                view.showError(ex);
+            } catch (Exception e) {
+                view.showError(e);
             }
-        } catch (NoSuchOrderException ex) {
-            view.showError(ex);
+        } catch (NoSuchOrderException e) {
+            view.showError(e);
         }
     }
     
@@ -141,8 +239,8 @@ public class FlooringController {
             try {
                 service.removeOrder(orderNum, day);
                 view.bannerOrderRemoveSuccess(orderNum);
-            } catch (NoSuchOrderException ex) {
-                view.showError(ex);
+            } catch (NoSuchOrderException e) {
+                view.showError(e);
             }
         }
     }
