@@ -18,42 +18,49 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class FlooringController {
+    
     private FlooringView view;
     private FlooringService service;
     
-    public FlooringController(FlooringView view, FlooringService service){
+    public FlooringController(FlooringView view, FlooringService service) {
         this.view = view;
         this.service = service;
     }
-
-    private void adminMenuMaterials(){
+    
+    private void adminMenuMaterials() {
         view.bannerAdminMaterials();
         int choice = view.getAdminAction("Material");
         Material newMat;
-        switch(choice){
+        switch (choice) {
             case 1:
                 view.bannerAdminNewMaterial();
                 newMat = view.getAdminNewMaterial();
-                try{
+                try {
                     service.adminAddMaterial(newMat);
                     view.bannerAdminNewSuccess(newMat.getName());
-                } catch (MaterialOverwriteException | MaterialsPersistenceException e) {view.showError(e);}
+                } catch (MaterialOverwriteException | MaterialsPersistenceException e) {
+                    view.showError(e);
+                }
                 break;
             case 2:
                 String oldMatName = view.getOrderMaterial("", service.getValidMaterials());
                 view.bannerAdminEditMaterial(oldMatName);
                 newMat = view.getAdminNewMaterial();
-                try{
+                try {
                     service.adminEditMaterial(oldMatName, newMat);
                     view.bannerAdminEditSuccess(newMat.getName());
-                } catch (MaterialOverwriteException | MaterialsPersistenceException e){view.showError(e);}
+                } catch (MaterialOverwriteException | MaterialsPersistenceException e) {
+                    view.showError(e);
+                }
                 break;
             case 3:
                 String removeMat = view.getOrderMaterial("", service.getValidMaterials());
-                try{
+                try {
                     service.adminRemoveMaterial(removeMat);
                     view.bannerAdminRemoveSuccess(removeMat);
-                } catch(MaterialsPersistenceException e){view.showError(e);}
+                } catch (MaterialsPersistenceException e) {
+                    view.showError(e);
+                }
                 break;
             case 4:
                 break;
@@ -64,14 +71,14 @@ public class FlooringController {
         view.bannerAdminState();
         int choice = view.getAdminAction("State");
         State newState;
-        switch(choice){
+        switch (choice) {
             case 1:
                 view.bannerAdminNewState();
                 newState = view.getAdminNewState();
-                try{
+                try {
                     service.adminAddState(newState);
                     view.bannerAdminNewSuccess(newState.getName());
-                } catch (StateOverwriteException | StatePersistenceException e){
+                } catch (StateOverwriteException | StatePersistenceException e) {
                     view.showError(e);
                 }
                 break;
@@ -79,17 +86,22 @@ public class FlooringController {
                 String oldStateName = view.getOrderState("", service.getValidStates());
                 view.bannerAdminEditState(oldStateName);
                 newState = view.getAdminNewState();
-                try{
+                try {
                     service.adminEditState(oldStateName, newState);
                     view.bannerAdminEditSuccess(newState.getName());
-                } catch (StateOverwriteException | StatePersistenceException e){view.showError(e);}
+                } catch (StateOverwriteException | StatePersistenceException e) {
+                    view.showError(e);
+                }
                 break;
             case 3:
                 String removeStateName = view.getOrderState("", service.getValidStates());
-                try{
+                try {
                     service.adminRemoveState(removeStateName);
                     view.bannerAdminRemoveSuccess(removeStateName);
-                } catch(StatePersistenceException e){view.showError(e);};
+                } catch (StatePersistenceException e) {
+                    view.showError(e);
+                }
+                ;
                 break;
             case 4:
                 break;
@@ -98,7 +110,7 @@ public class FlooringController {
     
     private void adminMenu() {
         view.bannerAdminMenu();
-        switch(view.getAdminMainMenuChoice()){
+        switch (view.getAdminMainMenuChoice()) {
             case 1:
                 adminMenuMaterials();
                 break;
@@ -109,10 +121,10 @@ public class FlooringController {
                 break;
         }
     }
-
+    
     public boolean run() {
         view.bannerMainMenu();
-        switch(view.getMainMenuChoice()){
+        switch (view.getMainMenuChoice()) {
             case 1:
                 orderListByDay();
                 break;
@@ -134,9 +146,9 @@ public class FlooringController {
         return false;
     }
     
-    private void orderListByDay(){
+    private void orderListByDay() {
         LocalDate day = view.getOrderDay(LocalDate.of(1900, Month.JANUARY, 1), false);
-        Map<Integer,Order> matchingOrders = service.getOrderMap(day);
+        Map<Integer, Order> matchingOrders = service.getOrderMap(day);
         orderList(matchingOrders);
     }
     
@@ -144,50 +156,49 @@ public class FlooringController {
         //LocalDate fromDay = view.getOrderDay(LocalDate.of(1900, Month.JANUARY, 1), false);
         //LocalDate toDay   = view.getOrderDay(LocalDate.of(1900, Month.JANUARY, 1), false)
         String findName = view.getOrderCustomer("").toLowerCase();
-        Map<Integer,Order> matchingOrders = service.getOrderMap(findName);
+        Map<Integer, Order> matchingOrders = service.getOrderMap(findName);
         orderList(matchingOrders);
     }
-
+    
     private void orderListByNumber() {
         int findNumber = view.getOrderFromList();
-        Map<Integer,Order> matchingOrder = service.getOrderMap(findNumber);
+        Map<Integer, Order> matchingOrder = service.getOrderMap(findNumber);
         orderList(matchingOrder);
     }
     
-    private void orderList(Map<Integer,Order> orderMap) {
+    private void orderList(Map<Integer, Order> orderMap) {
         view.bannerOrderSearchResults();
         view.showOrders(orderMap.values().stream().collect(Collectors.toList()));
-        if(!orderMap.isEmpty()){
+        if (!orderMap.isEmpty()) {
             boolean stop = false;
             int orderNum;
             LocalDate orderDay;
-            while(!stop){
+            while (!stop) {
                 Order order = orderMap.get(view.getOrderFromList());
-                try{
+                if (order == null) {
+                    view.bannerOrderSearchResults();
+                    view.showOrders(null);
+                    stop = true;
+                } else {
                     orderNum = order.getOrderNum();
                     orderDay = order.getDay();
                     singleOrderAction(orderNum, orderDay);
                     stop = true;
-                } catch (NullPointerException e) {
-                    // If order number is invalid, service.getOrder below
-                    // is never called, so the 
-                    // OrderNotfoundException is not thrown
-                    // FIX FIX FIX FIX 
                 }
             }
         }
     }
     
-    private void singleOrderAction(int orderNum, LocalDate orderDay){
+    private void singleOrderAction(int orderNum, LocalDate orderDay) {
         try {
             Order order = service.getOrder(orderNum, orderDay);
             view.showSingleOrderInfo(order);
             boolean stop = false;
             int action = view.getAction();
-            while(!stop){
-                switch(action){
+            while (!stop) {
+                switch (action) {
                     case 1:
-                        editOrder(orderNum, orderDay);
+                        editOrder(order);
                         stop = true;
                         break;
                     case 2:
@@ -199,43 +210,38 @@ public class FlooringController {
                         break;
                 }
             }
-        } catch (NoSuchOrderException e) { 
-            view.showError(e);
-        }
-    }
-    
-    private void addOrder(){
-        Order order = buildOrder();
-        int orderNum;
-        {
-            try {
-                orderNum = service.addOrder(order, order.getDay());
-                order = service.getOrder(orderNum, order.getDay());
-                view.showSingleOrderInfo(order);
-                view.bannerAddSuccess(order.getOrderNum());
-            } catch (InvalidOrderException | NoSuchOrderException e) {
-                view.showError(e);
-            }
-        }
-    }
-    
-    private void editOrder(int orderNum, LocalDate day){
-        try {
-            Order order = service.getOrder(orderNum, day);
-            Order editedOrder = editOrder(order);
-            try {
-                service.editOrder(order, editedOrder, day);
-                view.bannerOrderEditSuccess(orderNum);
-            } catch (Exception e) {
-                view.showError(e);
-            }
         } catch (NoSuchOrderException e) {
             view.showError(e);
         }
     }
     
-    private void removeOrder(int orderNum, LocalDate day){
-        if(view.confirmRemove() == 1){
+    private void addOrder() {
+        Order order = buildOrder();
+        int orderNum;
+        {
+            try {
+                order = service.addOrder(order, order.getDay());
+                view.showSingleOrderInfo(order);
+                view.bannerAddSuccess(order.getOrderNum());
+            } catch (InvalidOrderException e) {
+                view.showError(e);
+            }
+        }
+    }
+    
+    private void editOrder(Order order) {
+        Order editedOrder = buildEditedOrder(order);
+        try {
+            service.editOrder(order, editedOrder, order.getDay());
+            view.bannerOrderEditSuccess(order.getOrderNum());
+        } catch (Exception e) {
+            view.showError(e);
+        }
+        
+    }
+    
+    private void removeOrder(int orderNum, LocalDate day) {
+        if (view.confirmRemove() == 1) {
             try {
                 service.removeOrder(orderNum, day);
                 view.bannerOrderRemoveSuccess(orderNum);
@@ -245,7 +251,7 @@ public class FlooringController {
         }
     }
     
-    private Order buildOrder(){
+    private Order buildOrder() {
         Order thisOrder = new Order();
         thisOrder.setArea(view.getOrderArea(BigDecimal.ZERO, false));
         thisOrder.setCustomerName(view.getOrderCustomer(""));
@@ -255,12 +261,12 @@ public class FlooringController {
         return thisOrder;
     }
     
-    private Order editOrder(Order order){
-        BigDecimal  newArea  = view.getOrderArea(order.getArea(), true);
-        String      newName  = view.getOrderCustomer(order.getCustomerName());
-        LocalDate   newDay   = view.getOrderDay(order.getDay(), true);
-        String      newMater = view.getOrderMaterial(order.getMaterial(), service.getValidMaterials());
-        String      newState = view.getOrderState(order.getState(), service.getValidStates());
+    private Order buildEditedOrder(Order order) {
+        BigDecimal newArea = view.getOrderArea(order.getArea(), true);
+        String newName = view.getOrderCustomer(order.getCustomerName());
+        LocalDate newDay = view.getOrderDay(order.getDay(), true);
+        String newMater = view.getOrderMaterial(order.getMaterial(), service.getValidMaterials());
+        String newState = view.getOrderState(order.getState(), service.getValidStates());
         
         Order editedOrder = new Order();
         editedOrder.setArea(newArea);

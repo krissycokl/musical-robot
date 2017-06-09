@@ -5,15 +5,17 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 public class Order {
+
     private LocalDate day;
 
     public LocalDate getDay() {
         return day;
     }
+
     public void setDay(LocalDate day) {
         this.day = day;
     }
-    
+
     private String customerName;
     private int orderNum;
     private String state;
@@ -29,19 +31,19 @@ public class Order {
 
     public Order() {
     }
-    
-    public Order(int orderNum){
+
+    public Order(int orderNum) {
         this.orderNum = orderNum;
     }
-    
+
     public BigDecimal getMaterialCost() {
         return materialCost;
     }
 
-    public void setKey(int key){
+    public void setKey(int key) {
         this.orderNum = key;
     }
-    
+
     public void setMaterialCost(BigDecimal materialCost) {
         this.materialCost = materialCost;
     }
@@ -53,8 +55,9 @@ public class Order {
     public void setLaborCost(BigDecimal laborCost) {
         this.laborCost = laborCost;
     }
-    
+
     public String getCustomerName() {
+        //String tempCustomerName = customerName.replace("\\\\,", ",");
         return customerName;
     }
 
@@ -125,15 +128,15 @@ public class Order {
     public void setTotalCost(BigDecimal totalCost) {
         this.totalCost = totalCost;
     }
-    
+
     public String getState() {
         return state;
     }
-    
+
     public String[] toStringAry() {
         String[] stringAry = new String[12];
-        stringAry[0] = ""+this.orderNum;
-        stringAry[1] = this.customerName;
+        stringAry[0] = "" + this.orderNum;
+        stringAry[1] = this.customerName.replace(",", "\\,");
         stringAry[2] = this.state;
         stringAry[3] = this.taxRate.multiply(new BigDecimal("100")).toPlainString();
         stringAry[4] = this.material;
@@ -142,11 +145,11 @@ public class Order {
         stringAry[7] = this.laborCostPerSqFt.toPlainString();
         stringAry[8] = this.materialCost.toPlainString();
         stringAry[9] = this.laborCost.toPlainString();
-        stringAry[10]= this.taxAmount.toPlainString();
-        stringAry[11]= this.totalCost.toPlainString();
+        stringAry[10] = this.taxAmount.toPlainString();
+        stringAry[11] = this.totalCost.toPlainString();
         return stringAry;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 5;

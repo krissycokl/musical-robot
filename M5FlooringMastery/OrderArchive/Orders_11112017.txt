@@ -1,2 +1,2 @@
-"OrderNumber","CustomerName","State","TaxRate","ProductType","Area","CostPerSquareFoot","LaborCostPerSquareFoot","MaterialCost","LaborCost","Tax","Total"
-"22","Bartges, Inc.","MI","575.00","Marble","9004","75","30","675300.00","270120.00","54361.65","999781.65"
+OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total
+22,Bartges\, Inc.\, TM,MI,575.00,Marble,666,75,30,49950.00,19980.00,4020.98,73950.98
