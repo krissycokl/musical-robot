@@ -92,14 +92,153 @@
 	    Tax Amount: $54361.65
 	    Total Cost: $999781.65
 
-06/11/2017 03:49:36PM Order #23 added:
-	          Date: 2020-07-01
-	   Area (sqft): 500
-	 Customer Name: Stefan
-	      Material: Wood
-	         State: IL
-	 Material Cost: $2575.00
-	    Labor Cost: $2375.00
-	    Tax Amount: $532.13
-	    Total Cost: $5482.13
+06/09/2017 09:30:19AM Order #20 changed:
+	   Area (sqft): 500 to 501
+	    Total Cost: $58143.75 to $58260.04
 
+06/09/2017 09:30:36AM Order #21 changed:
+	   Area (sqft): 666 to 667
+	    Total Cost: $3070.93 to $3075.54
+
+06/09/2017 09:30:47AM Order #22 changed:
+	   Area (sqft): 9004 to 9000
+	    Total Cost: $999781.65 to $999337.50
+
+06/09/2017 09:34:12AM ERROR: null
+06/09/2017 09:45:06AM ERROR: For input string: "OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total"
+06/09/2017 09:45:36AM ERROR: For input string: "21,Satan,IN,600.00,Carpet,667,2.25,2.10,1500.75,1400.70,174.09,3075.54"
+06/09/2017 09:46:09AM ERROR: Unclosed group near index 7
+(?<!\),
+       ^
+06/09/2017 09:48:45AM ERROR: Uncompilable source code - Erroneous sym type: reader.close
+06/09/2017 09:52:10AM Order #22 changed:
+	   Area (sqft): 9000 to 666
+	    Total Cost: $999337.50 to $73950.98
+
+06/09/2017 09:52:16AM ERROR: null
+06/09/2017 09:55:23AM Order #22 changed:
+	 Customer Name: Bartges, Inc. to Bartges\, Inc.\, TM
+
+06/09/2017 09:55:27AM ERROR: null
+06/09/2017 10:09:07AM Order #21 changed:
+	 Customer Name: Satan to Satan\, Jr.
+
+06/09/2017 10:12:34AM Order #23 added:
+	          Date: 3333-03-03
+	   Area (sqft): 5
+	 Customer Name: Robert Downey\, Jr.
+	      Material: Laminate
+	         State: MI
+	 Material Cost: $8.75
+	    Labor Cost: $10.50
+	    Tax Amount: $1.11
+	    Total Cost: $20.36
+
+06/09/2017 10:21:11AM Order #24 added:
+	          Date: 9999-09-09
+	   Area (sqft): 4
+	 Customer Name: hey
+	      Material: Laminate
+	         State: PA
+	 Material Cost: $7.00
+	    Labor Cost: $8.40
+	    Tax Amount: $1.04
+	    Total Cost: $16.44
+
+06/09/2017 10:22:32AM ERROR: Order name/material/state null or empty. Not added.
+06/09/2017 10:33:25AM Order #23 changed:
+	   Area (sqft): 5 to 200
+	 Customer Name: Robert Downey, Jr. to Robert Downey\, Jr.
+	    Total Cost: $20.36 to $814.28
+
+06/09/2017 10:44:29AM Order #20 changed:
+Add: Fluffkins\, Esquire
+Remove: Fluffkins
+	 Customer Name: Fluffkins to Fluffkins\, Esquire
+Add: Fluffkins, Esquire
+Remove: Fluffkins
+
+06/09/2017 10:44:41AM Order #23 changed:
+	   Area (sqft): 200 to 201
+Add: Robert Downey\, Jr.
+Remove: Robert Downey, Jr.
+	 Customer Name: Robert Downey, Jr. to Robert Downey\, Jr.
+Add: Robert Downey, Jr.
+Remove: Robert Downey\, Jr.
+	    Total Cost: $814.28 to $818.35
+
+06/09/2017 10:52:11AM Order #20 changed:
+	   Area (sqft): 501 to 500
+Add: Fluffkins\, Esquire
+Remove: Fluffkins, Esquire
+	 Customer Name: Fluffkins, Esquire to Fluffkins\, Esquire
+Add: Fluffkins, Esquire
+Remove: Fluffkins\, Esquire
+	    Total Cost: $58260.04 to $58143.75
+
+06/09/2017 10:55:43AM Order #20 changed:
+	   Area (sqft): 500 to 501
+Add: Fluffkins, Esquire
+Remove: Fluffkins, Esquire
+Add: Fluffkins, Esquire
+Remove: Fluffkins, Esquire
+	    Total Cost: $58143.75 to $58260.04
+
+06/09/2017 10:58:06AM Order #24 changed:
+
+06/09/2017 11:00:29AM Order #24 changed:
+
+06/09/2017 11:03:03AM Order #24 changed:
+
+06/09/2017 11:10:26AM ERROR: Nothing was changed.
+06/09/2017 11:12:20AM ERROR: Nothing was changed.
+06/09/2017 11:18:35AM ERROR: Order name/material/state null or empty. Not added.
+06/09/2017 11:19:07AM Order #25 added:
+	          Date: 9999-09-09
+	   Area (sqft): 3
+	 Customer Name: Robert \, hey
+	      Material: Laminate
+	         State: PA
+	 Material Cost: $5.25
+	    Labor Cost: $6.30
+	    Tax Amount: $0.78
+	    Total Cost: $12.33
+
+06/09/2017 11:26:09AM ERROR: Order name/material/state null or empty. Not added.
+06/09/2017 11:26:24AM Order #26 added:
+	          Date: 9999-09-09
+	   Area (sqft): 3
+	 Customer Name: Robert \, hey
+	      Material: Laminate
+	         State: PA
+	 Material Cost: $5.25
+	    Labor Cost: $6.30
+	    Tax Amount: $0.78
+	    Total Cost: $12.33
+
+06/09/2017 11:26:58AM Order #25 deleted.
+
+06/09/2017 11:27:07AM Order #26 deleted.
+
+06/09/2017 11:27:37AM Order #20 changed:
+	 Customer Name: Fluffkins\, Esquire to Fluffkins, Esquire
+
+06/09/2017 11:29:28AM Order #20 changed:
+	   Area (sqft): 501 to 2
+	    Total Cost: $58260.04 to $232.58
+
+06/09/2017 11:30:29AM Order #27 added:
+	          Date: 9999-09-09
+	   Area (sqft): 2
+	 Customer Name: SuperCoolCompany \\, TM
+	      Material: Laminate
+	         State: PA
+	 Material Cost: $3.50
+	    Labor Cost: $4.20
+	    Tax Amount: $0.52
+	    Total Cost: $8.22
+
+06/09/2017 11:31:29AM Order #27 changed:
+	 Customer Name: SuperCoolCompany \\, TM to Bow\Flex
+
+06/09/2017 11:40:12AM ERROR: null

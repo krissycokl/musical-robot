@@ -18,10 +18,11 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.IntStream;
 import com.opencsv.CSVWriter;
-import com.opencsv.CSVReader;
+import static com.opencsv.CSVWriter.NO_ESCAPE_CHARACTER;
+import static com.opencsv.CSVWriter.NO_QUOTE_CHARACTER;
 
 public class FlooringDaoFileImpl implements FlooringDao {
-    
+
     private static final String[] ORDERHEADER = {
         "OrderNumber",
         "CustomerName",
@@ -36,27 +37,27 @@ public class FlooringDaoFileImpl implements FlooringDao {
         "Tax",
         "Total"
     };
-    
+
     Map<Integer, Order> ordersForDay = new HashMap<>();
     int currKey;
-    
+
     @Override
-    public List<LocalDate> getDatesWithOrders(){
+    public List<LocalDate> getDatesWithOrders() {
         File dir = new File("OrderArchive/");
         File[] list = dir.listFiles();
         List<LocalDate> validDates = new ArrayList<>();
-        IntStream.range(0, list.length).forEach(idx->{
-            if(list[idx].getName().contains("Orders_")){
-                String dateStr = list[idx].getName().substring(7,15);
+        IntStream.range(0, list.length).forEach(idx -> {
+            if (list[idx].getName().contains("Orders_")) {
+                String dateStr = list[idx].getName().substring(7, 15);
                 validDates.add(LocalDate.parse(dateStr, DateTimeFormatter.ofPattern("MMdduuuu")));
             }
         });
         return validDates;
     }
-    
+
     @Override
-    public int addOrder(Order order, LocalDate day) {
-        if(order.getOrderNum() == 0){
+    public Order addOrder(Order order, LocalDate day) {
+        if (order.getOrderNum() == 0) {
             try {
                 loadKey();
             } catch (FileNotFoundException ex) {
@@ -67,13 +68,13 @@ public class FlooringDaoFileImpl implements FlooringDao {
             try {
                 saveKey();
             } catch (IOException ex) {
-                System.out.println("Failed to persist Order Number at "+currKey);
+                System.out.println("Failed to persist Order Number at " + currKey);
             }
         }
         load(day);
         ordersForDay.put(order.getOrderNum(), order);
         save(day);
-        return currKey;
+        return order;
     }
 
     @Override
@@ -94,49 +95,49 @@ public class FlooringDaoFileImpl implements FlooringDao {
     }
 
     @Override
-    public Order getOrder(int id, LocalDate day){
+    public Order getOrder(int id, LocalDate day) {
         load(day);
         return ordersForDay.get(id);
     }
 
     @Override
-    public Map<Integer,Order> getOrderMap(LocalDate day) {
+    public Map<Integer, Order> getOrderMap(LocalDate day) {
         load(day);
         return ordersForDay;
     }
-    
+
     @Override
-    public Map<Integer,Order> getOrderMap(String findName){
+    public Map<Integer, Order> getOrderMap(String findName) {
         List<LocalDate> validDates = getDatesWithOrders();
-        Map<Integer,Order> matchingOrders = new HashMap<>();
-        validDates.stream().forEach(day->{
-            Map<Integer,Order> tempOrderMap = getOrderMap(day);
-            tempOrderMap.values().stream().forEach(order->{
-                if(order.getCustomerName().toLowerCase().contains(findName)){
-                    matchingOrders.put(order.getOrderNum(),order);
+        Map<Integer, Order> matchingOrders = new HashMap<>();
+        validDates.stream().forEach(day -> {
+            Map<Integer, Order> tempOrderMap = getOrderMap(day);
+            tempOrderMap.values().stream().forEach(order -> {
+                if (order.getCustomerName().toLowerCase().contains(findName)) {
+                    matchingOrders.put(order.getOrderNum(), order);
                 }
             });
         });
         return matchingOrders;
     }
-    
+
     @Override
-    public Map<Integer,Order> getOrderMap(int orderNum){
+    public Map<Integer, Order> getOrderMap(int orderNum) {
         List<LocalDate> validDates = getDatesWithOrders();
-        Map<Integer,Order> matchingOrder = new HashMap<>();
-        validDates.stream().forEach(day->{
-            if(matchingOrder.isEmpty()){
-                Map<Integer,Order> tempOrderMap = getOrderMap(day);
-                tempOrderMap.values().stream().forEach(order->{
-                    if(order.getOrderNum() == orderNum){
-                        matchingOrder.put(order.getOrderNum(),order);
+        Map<Integer, Order> matchingOrder = new HashMap<>();
+        validDates.stream().forEach(day -> {
+            if (matchingOrder.isEmpty()) {
+                Map<Integer, Order> tempOrderMap = getOrderMap(day);
+                tempOrderMap.values().stream().forEach(order -> {
+                    if (order.getOrderNum() == orderNum) {
+                        matchingOrder.put(order.getOrderNum(), order);
                     }
                 });
             }
         });
         return matchingOrder;
     }
-    
+
     @Override
     public Order removeOrder(int id, LocalDate day) {
         load(day);
@@ -148,14 +149,17 @@ public class FlooringDaoFileImpl implements FlooringDao {
     public void load(LocalDate day) {
         ordersForDay = new HashMap<>();
         String dayAsString = day.format(DateTimeFormatter.ofPattern("MMdduuuu"));
-        File filename = new File("OrderArchive/Orders_"+dayAsString+".txt");
-        if (filename.exists()){
+        File filename = new File("OrderArchive/Orders_" + dayAsString + ".txt");
+        if (filename.exists()) {
             try {
-                CSVReader reader = new CSVReader(new FileReader(filename), ',', '"', 1);
+                Scanner sc = new Scanner(new BufferedReader(new FileReader(filename)));
                 String[] orderInfo;
-                while ((orderInfo = reader.readNext())!=null){
+                sc.nextLine();
+                while (sc.hasNextLine()) {
+                    orderInfo = sc.nextLine().split("(?<!\\\\),");
                     Order tempOrder = new Order(Integer.parseInt(orderInfo[0]));
                     tempOrder.setDay(day);
+                    orderInfo[1] = orderInfo[1].replace("\\,", ",");
                     tempOrder.setCustomerName(orderInfo[1]);
                     tempOrder.setState(orderInfo[2]);
                     tempOrder.setTaxRate(new BigDecimal(orderInfo[3]).divide(new BigDecimal("100")));
@@ -170,35 +174,37 @@ public class FlooringDaoFileImpl implements FlooringDao {
 
                     ordersForDay.put(tempOrder.getOrderNum(), tempOrder);
                 }
-                reader.close();
+                sc.close();
+
+            } catch (IOException e) {
+                System.out.println("Unexpected error reading " + filename + ".");
             }
-            catch (IOException e) {System.out.println("Unexpected error reading "+filename+".");}
 
         }
     }
 
     public void save(LocalDate day) {
         String dayAsString = day.format(DateTimeFormatter.ofPattern("MMdduuuu"));
-        File filename = new File("OrderArchive/Orders_"+dayAsString+".txt");
-        if(ordersForDay.isEmpty()){
+        File filename = new File("OrderArchive/Orders_" + dayAsString + ".txt");
+        if (ordersForDay.isEmpty()) {
             filename.delete();
         } else {
             try {
-                CSVWriter out = new CSVWriter(new FileWriter(filename), ',');
+                CSVWriter out = new CSVWriter(new FileWriter(filename), ',', NO_QUOTE_CHARACTER, NO_ESCAPE_CHARACTER);
                 out.writeNext(ORDERHEADER);
                 ordersForDay.values().stream().forEachOrdered(
-                        order->{
+                        order -> {
                             try {
                                 out.writeNext(order.toStringAry());
                                 out.flush();
                             } catch (IOException ex) {
-                                System.out.println("Unexpected error writing to "+filename+".");
+                                System.out.println("Unexpected error writing to " + filename + ".");
                             }
                         }
                 );
                 out.close();
             } catch (IOException ex) {
-                System.out.println("Unexpected error writing to "+filename+".");
+                System.out.println("Unexpected error writing to " + filename + ".");
             }
         }
     }
@@ -209,7 +215,7 @@ public class FlooringDaoFileImpl implements FlooringDao {
         sc.close();
         return currKey;
     }
-    
+
     public int saveKey() throws IOException {
         PrintWriter out1 = new PrintWriter(new FileWriter("index.txt", false));
         out1.print(currKey);

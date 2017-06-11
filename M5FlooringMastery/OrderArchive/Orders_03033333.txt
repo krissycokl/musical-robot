@@ -1,2 +1,2 @@
 OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total
-21,Satan\, Jr.,IN,600.00,Carpet,667,2.25,2.10,1500.75,1400.70,174.09,3075.54
+23,Robert Downey\, Jr.,MI,575.00,Laminate,201,1.75,2.10,351.75,422.10,44.50,818.35
