@@ -1,10 +1,14 @@
 package com.sg.m5flooringmastery.service;
 
 import com.sg.m5flooringmastery.dao.FlooringDao;
+import com.sg.m5flooringmastery.dao.FlooringDaoFileImpl;
+import com.sg.m5flooringmastery.dao.FlooringDaoFileROImpl;
 import com.sg.m5flooringmastery.dao.MaterialsDao;
+import com.sg.m5flooringmastery.dao.MaterialsDaoFileImpl;
 import com.sg.m5flooringmastery.dao.MaterialsPersistenceException;
 import com.sg.m5flooringmastery.dao.StatePersistenceException;
 import com.sg.m5flooringmastery.dao.TaxesDao;
+import com.sg.m5flooringmastery.dao.TaxesDaoFileImpl;
 import com.sg.m5flooringmastery.model.Material;
 import com.sg.m5flooringmastery.model.Order;
 import com.sg.m5flooringmastery.model.State;
@@ -22,6 +26,23 @@ public class FlooringServiceImpl implements FlooringService {
     private MaterialsDao materialsDao;
     private TaxesDao taxesDao;
 
+    
+    @Override
+    public String switchMode() throws FileNotFoundException{
+        if(flooringDao instanceof FlooringDaoFileImpl){
+            System.out.println("it is currently production and recognizes it");
+            flooringDao = new FlooringDaoFileROImpl();
+            materialsDao = new MaterialsDaoFileROImpl();
+            taxesDao = new TaxesDaoFileROImpl();
+            return "Training";
+        } else {
+            flooringDao = new FlooringDaoFileImpl();
+            materialsDao = new MaterialsDaoFileImpl();
+            taxesDao = new TaxesDaoFileImpl();
+            return "Production";
+        }
+    }
+    
     @Override
     public void adminAddMaterial(Material newMat) throws MaterialOverwriteException, MaterialsPersistenceException {
         for (Material mat : getValidMaterials()){
@@ -266,5 +287,4 @@ public class FlooringServiceImpl implements FlooringService {
         
         return order;
     }
-    
 }

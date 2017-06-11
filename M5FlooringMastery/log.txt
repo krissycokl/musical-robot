@@ -92,3 +92,14 @@
 	    Tax Amount: $54361.65
 	    Total Cost: $999781.65
 
+06/11/2017 03:49:36PM Order #23 added:
+	          Date: 2020-07-01
+	   Area (sqft): 500
+	 Customer Name: Stefan
+	      Material: Wood
+	         State: IL
+	 Material Cost: $2575.00
+	    Labor Cost: $2375.00
+	    Tax Amount: $532.13
+	    Total Cost: $5482.13
+

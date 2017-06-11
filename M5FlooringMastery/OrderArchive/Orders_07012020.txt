@@ -1,0 +1,2 @@
+"OrderNumber","CustomerName","State","TaxRate","ProductType","Area","CostPerSquareFoot","LaborCostPerSquareFoot","MaterialCost","LaborCost","Tax","Total"
+"23","Stefan","IL","1075.00","Wood","500","5.15","4.75","2575.00","2375.00","532.13","5482.13"

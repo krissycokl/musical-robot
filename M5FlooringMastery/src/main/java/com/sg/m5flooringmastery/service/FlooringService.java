@@ -48,6 +48,8 @@ public interface FlooringService {
     
     public Order removeOrder(int id, LocalDate day) throws
             NoSuchOrderException;
+
+    public String switchMode() throws FileNotFoundException;
     
     public boolean validateOrder(Order order) throws
             InvalidOrderException;

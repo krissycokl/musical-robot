@@ -57,6 +57,14 @@ public class FlooringView {
         io.print("\n=== Admin: States ===");
     }
 
+    public int confirmSwitchMode(String currMode) {
+        if(currMode.equals("Training")){
+            io.print("Really switch to production mode? Changes will be lost.");
+            return io.getInt("1. Switch   2. Cancel",false,1,2);
+        }
+        return 1;
+    }
+
     public Material getAdminNewMaterial(){
         Material material = new Material();
         material.setName(io.getString("Material name:", false));
@@ -80,14 +88,19 @@ public class FlooringView {
         return io.getInt("What would you like to do?", true,1,4);
     }
     
-    public int getMainMenuChoice(){
+    public int getMainMenuChoice(String currMode){
         io.print("1.) Display orders by date");
         io.print("2.) Look up order by customer name");
         io.print("3.) Look up order by number");
         io.print("4.) Add an order");
         io.print("5.) Admin menu");
-        io.print("6.) Quit");
-        return io.getInt("What would you like to do?", false, 1,6);
+        if (currMode.equals("Production")){
+            io.print("6.) Switch to training mode");
+        } else {
+            io.print("6.) Switch to production mode");
+        }
+        io.print("7.) Quit");
+        return io.getInt("What would you like to do?", false, 1,7);
     }
 
     public int getAdminMainMenuChoice(){
@@ -232,6 +245,13 @@ public class FlooringView {
     
     public void bannerMainMenu(){
         io.print("\n=== Main Menu ===");
+    }
+    
+    public void bannerSwitchModeSuccess(String currMode){
+        io.print("\n=== Switched to "+currMode+" Mode ===");
+        if(currMode.equals("Training")){
+            io.print("Changes made in this mode will not be saved.");
+        }
     }
     
     public void bannerOrderSearchResults(){

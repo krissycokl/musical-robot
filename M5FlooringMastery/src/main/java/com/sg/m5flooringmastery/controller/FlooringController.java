@@ -11,6 +11,7 @@ import com.sg.m5flooringmastery.service.MaterialOverwriteException;
 import com.sg.m5flooringmastery.service.NoSuchOrderException;
 import com.sg.m5flooringmastery.service.StateOverwriteException;
 import com.sg.m5flooringmastery.view.FlooringView;
+import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Month;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 public class FlooringController {
     private FlooringView view;
     private FlooringService service;
+    private String currMode = "Production";
     
     public FlooringController(FlooringView view, FlooringService service){
         this.view = view;
@@ -112,7 +114,7 @@ public class FlooringController {
 
     public boolean run() {
         view.bannerMainMenu();
-        switch(view.getMainMenuChoice()){
+        switch(view.getMainMenuChoice(currMode)){
             case 1:
                 orderListByDay();
                 break;
@@ -129,6 +131,9 @@ public class FlooringController {
                 adminMenu();
                 break;
             case 6:
+                switchMode();
+                break;
+            case 7:
                 return true;
         }
         return false;
@@ -270,5 +275,16 @@ public class FlooringController {
         editedOrder.setState(newState);
         
         return editedOrder;
+    }
+
+    private void switchMode() {
+        if(view.confirmSwitchMode(currMode) == 1){
+            try {
+                currMode = service.switchMode();
+                view.bannerSwitchModeSuccess(currMode);
+            } catch (FileNotFoundException e){
+                view.showError(e);
+            }
+        }
     }
 }
