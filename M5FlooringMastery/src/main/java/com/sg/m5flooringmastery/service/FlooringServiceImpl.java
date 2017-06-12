@@ -33,7 +33,6 @@ public class FlooringServiceImpl implements FlooringService {
     @Override
     public String switchMode() throws FileNotFoundException{
         if(flooringDao instanceof FlooringDaoFileImpl){
-            System.out.println("it is currently production and recognizes it");
             flooringDao = new FlooringDaoFileROImpl();
             materialsDao = new MaterialsDaoFileROImpl();
             taxesDao = new TaxesDaoFileROImpl();

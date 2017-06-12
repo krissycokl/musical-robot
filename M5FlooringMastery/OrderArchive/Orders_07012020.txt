@@ -1,0 +1,2 @@
+OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total
+34,Pawnee\, IN,IN,600.00,Tile,6700,3.50,4.15,23450.00,27805.00,3075.30,54330.30

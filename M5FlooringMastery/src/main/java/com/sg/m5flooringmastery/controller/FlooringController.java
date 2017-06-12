@@ -32,37 +32,15 @@ public class FlooringController {
     private void adminMenuMaterials() {
         view.bannerAdminMaterials();
         int choice = view.getAdminAction("Material");
-        Material newMat;
         switch (choice) {
             case 1:
-                view.bannerAdminNewMaterial();
-                newMat = view.getAdminNewMaterial();
-                try {
-                    service.adminAddMaterial(newMat);
-                    view.bannerAdminNewSuccess(newMat.getName());
-                } catch (MaterialOverwriteException | MaterialsPersistenceException e) {
-                    view.showError(e);
-                }
+                adminAddMat();
                 break;
             case 2:
-                String oldMatName = view.getOrderMaterial("", service.getValidMaterials());
-                view.bannerAdminEditMaterial(oldMatName);
-                newMat = view.getAdminNewMaterial();
-                try {
-                    service.adminEditMaterial(oldMatName, newMat);
-                    view.bannerAdminEditSuccess(newMat.getName());
-                } catch (MaterialOverwriteException | MaterialsPersistenceException e) {
-                    view.showError(e);
-                }
+                adminEditMat();
                 break;
             case 3:
-                String removeMat = view.getOrderMaterial("", service.getValidMaterials());
-                try {
-                    service.adminRemoveMaterial(removeMat);
-                    view.bannerAdminRemoveSuccess(removeMat);
-                } catch (MaterialsPersistenceException e) {
-                    view.showError(e);
-                }
+                adminRemoveMat();
                 break;
             case 4:
                 break;
@@ -72,41 +50,86 @@ public class FlooringController {
     private void adminMenuStates() {
         view.bannerAdminState();
         int choice = view.getAdminAction("State");
-        State newState;
         switch (choice) {
             case 1:
-                view.bannerAdminNewState();
-                newState = view.getAdminNewState();
-                try {
-                    service.adminAddState(newState);
-                    view.bannerAdminNewSuccess(newState.getName());
-                } catch (StateOverwriteException | StatePersistenceException e) {
-                    view.showError(e);
-                }
+                adminAddState();
                 break;
             case 2:
-                String oldStateName = view.getOrderState("", service.getValidStates());
-                view.bannerAdminEditState(oldStateName);
-                newState = view.getAdminNewState();
-                try {
-                    service.adminEditState(oldStateName, newState);
-                    view.bannerAdminEditSuccess(newState.getName());
-                } catch (StateOverwriteException | StatePersistenceException e) {
-                    view.showError(e);
-                }
+                adminEditState();
                 break;
             case 3:
-                String removeStateName = view.getOrderState("", service.getValidStates());
-                try {
-                    service.adminRemoveState(removeStateName);
-                    view.bannerAdminRemoveSuccess(removeStateName);
-                } catch (StatePersistenceException e) {
-                    view.showError(e);
-                }
-                ;
+                adminRemoveState();
                 break;
             case 4:
                 break;
+        }
+    }
+    
+    private void adminAddMat(){
+        Material newMat;
+        view.bannerAdminNewMaterial();
+        newMat = view.getAdminNewMaterial();
+        try {
+            service.adminAddMaterial(newMat);
+            view.bannerAdminNewSuccess(newMat.getName());
+        } catch (MaterialOverwriteException | MaterialsPersistenceException e) {
+            view.showError(e);
+        }
+    }
+    
+    private void adminRemoveMat(){
+        String removeMat = view.getOrderMaterial("", service.getValidMaterials());
+        try {
+            service.adminRemoveMaterial(removeMat);
+            view.bannerAdminRemoveSuccess(removeMat);
+        } catch (MaterialsPersistenceException e) {
+            view.showError(e);
+        }
+    }
+    
+    private void adminEditMat(){
+        Material newMat;
+        String oldMatName = view.getOrderMaterial("", service.getValidMaterials());
+        view.bannerAdminEditMaterial(oldMatName);
+        newMat = view.getAdminNewMaterial();
+        try {
+            service.adminEditMaterial(oldMatName, newMat);
+            view.bannerAdminEditSuccess(newMat.getName());
+        } catch (MaterialOverwriteException | MaterialsPersistenceException e) {
+            view.showError(e);
+        }
+    }
+    
+    private void adminAddState(){
+        view.bannerAdminNewState();
+        State newState = view.getAdminNewState();
+        try {
+            service.adminAddState(newState);
+            view.bannerAdminNewSuccess(newState.getName());
+        } catch (StateOverwriteException | StatePersistenceException e) {
+            view.showError(e);
+        }
+    }
+    
+    private void adminRemoveState(){
+        String removeStateName = view.getOrderState("", service.getValidStates());
+        try {
+            service.adminRemoveState(removeStateName);
+            view.bannerAdminRemoveSuccess(removeStateName);
+        } catch (StatePersistenceException e) {
+            view.showError(e);
+        }
+    }
+    
+    private void adminEditState(){
+        String oldStateName = view.getOrderState("", service.getValidStates());
+        view.bannerAdminEditState(oldStateName);
+        State newState = view.getAdminNewState();
+        try {
+            service.adminEditState(oldStateName, newState);
+            view.bannerAdminEditSuccess(newState.getName());
+        } catch (StateOverwriteException | StatePersistenceException e) {
+            view.showError(e);
         }
     }
     
@@ -222,7 +245,6 @@ public class FlooringController {
     
     private void addOrder() {
         Order order = buildOrder();
-        int orderNum;
         {
             try {
                 order = service.addOrder(order, order.getDay());
