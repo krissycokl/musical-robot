@@ -25,10 +25,7 @@ public class FlooringServiceImpl implements FlooringService {
     private FlooringDao flooringDao;
     private MaterialsDao materialsDao;
     private TaxesDao taxesDao;
-    
-    public FlooringDao getFlooringDaoImpl(){
-        return flooringDao;
-    }
+
     
     @Override
     public String switchMode() throws FileNotFoundException{
@@ -126,9 +123,8 @@ public class FlooringServiceImpl implements FlooringService {
     }
 
     public FlooringServiceImpl(FlooringDao flooringDao,
-                               MaterialsDao materialsDao,
-                               TaxesDao taxesDao)
-    {
+            MaterialsDao materialsDao,
+            TaxesDao taxesDao) {
         this.flooringDao = flooringDao;
         this.materialsDao = materialsDao;
         this.taxesDao = taxesDao;
@@ -284,5 +280,8 @@ public class FlooringServiceImpl implements FlooringService {
 
         return order;
     }
+<<<<<<< HEAD
+=======
 
+>>>>>>> 0b2e7ca0dfb54ba9378666687c6c13870ee3e394
 }

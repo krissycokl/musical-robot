@@ -126,7 +126,11 @@ public class FlooringController {
     
     public boolean run() {
         view.bannerMainMenu();
-        switch (view.getMainMenuChoice(currMode)) {
+<<<<<<< HEAD
+        switch(view.getMainMenuChoice(currMode)){
+=======
+        switch (view.getMainMenuChoice()) {
+>>>>>>> 0b2e7ca0dfb54ba9378666687c6c13870ee3e394
             case 1:
                 orderListByDay();
                 break;

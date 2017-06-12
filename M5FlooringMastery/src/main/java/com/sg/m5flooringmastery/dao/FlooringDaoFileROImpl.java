@@ -1,6 +1,5 @@
 package com.sg.m5flooringmastery.dao;
 
-import com.opencsv.CSVReader;
 import com.sg.m5flooringmastery.model.Order;
 import java.io.BufferedReader;
 import java.io.File;
@@ -25,22 +24,19 @@ public class FlooringDaoFileROImpl implements FlooringDao {
     private int currKey;
     
     private void initialize(){
+        loadKey();
         List<LocalDate> validDates = getDatesWithOrders();
         validDates.stream().forEach(day->{
             load(day);
         });
     }
     
-    private void terminate(){
-        orderMap.clear();
-    }
-    
     @Override
-    public int addOrder(Order order, LocalDate day) {
+    public Order addOrder(Order order, LocalDate day) {
         currKey++;
         order.setKey(currKey);
         orderMap.put(currKey, order);
-        return currKey;
+        return order;
     }
 
     @Override
@@ -96,7 +92,10 @@ public class FlooringDaoFileROImpl implements FlooringDao {
         }
         
         Map<Integer,Order> matchingOrder = new HashMap<>();
-        matchingOrder.put(orderNum, orderMap.get(orderNum));
+        Order order = orderMap.get(orderNum);
+        if (order != null){
+            matchingOrder.put(orderNum, order);
+        }
         
         return matchingOrder;
     }
@@ -111,7 +110,7 @@ public class FlooringDaoFileROImpl implements FlooringDao {
                 .entrySet()
                 .stream()
                 .filter(e->e.getValue().getDay().equals(day))
-                .collect(Collectors.toMap(e->e.getKey(), e->e.getValue()))  ;
+                .collect(Collectors.toMap(e->e.getKey(), e->e.getValue()));
     }
 
     @Override
@@ -127,11 +126,14 @@ public class FlooringDaoFileROImpl implements FlooringDao {
         File filename = new File("OrderArchive/Orders_"+dayAsString+".txt");
         if (filename.exists()){
             try {
-                CSVReader reader = new CSVReader(new FileReader(filename), ',', '"', 1);
+                Scanner sc = new Scanner(new BufferedReader(new FileReader(filename)));
                 String[] orderInfo;
-                while ((orderInfo = reader.readNext())!=null){
+                sc.nextLine();
+                while (sc.hasNextLine()) {
+                    orderInfo = sc.nextLine().split("(?<!\\\\),");
                     Order tempOrder = new Order(Integer.parseInt(orderInfo[0]));
                     tempOrder.setDay(day);
+                    orderInfo[1] = orderInfo[1].replace("\\,", ",");
                     tempOrder.setCustomerName(orderInfo[1]);
                     tempOrder.setState(orderInfo[2]);
                     tempOrder.setTaxRate(new BigDecimal(orderInfo[3]).divide(new BigDecimal("100")));
@@ -146,16 +148,21 @@ public class FlooringDaoFileROImpl implements FlooringDao {
 
                     orderMap.put(tempOrder.getOrderNum(), tempOrder);
                 }
-                reader.close();
+                sc.close();
             }
             catch (IOException e) {System.out.println("Unexpected error reading "+filename+".");}
         }
     }
 
-    public int loadKey() throws FileNotFoundException {
-        Scanner sc = new Scanner(new BufferedReader(new FileReader("index.txt")));
-        currKey = sc.nextInt();
-        sc.close();
-        return currKey;
+    public int loadKey() {
+        try{
+            Scanner sc = new Scanner(new BufferedReader(new FileReader("index.txt")));
+            currKey = sc.nextInt();
+            sc.close();
+            return currKey;
+        } catch (FileNotFoundException e) {
+            System.out.println("Could not locate index.txt.  Key set at 1.");
+            return currKey = 1;
+        }
     }
 }

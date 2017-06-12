@@ -1,6 +1,7 @@
-State,TaxRate
-OH,6.25
+State,TaxRate,
 PA,6.75
-MI,5.75
-IN,6.00
 IL,10.75
+IN,6.00
+OH,6.25
+MI,5.75
+CA,12.30

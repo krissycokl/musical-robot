@@ -15,9 +15,9 @@ public class FlooringDaoStubImpl implements FlooringDao {
     Map<Integer, Order> day2 = new HashMap<>();
     
     @Override
-    public int addOrder(Order order, LocalDate day) {
+    public Order addOrder(Order order, LocalDate day) {
         day1.put(order.getOrderNum(), order);
-        return order.getOrderNum();
+        return order;
     }
 
     @Override
