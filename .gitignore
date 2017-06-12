@@ -1,3 +1,4 @@
+*.orig
 /homework/ABeginning/target/
 .DS_Store
 /Scratch/target/
