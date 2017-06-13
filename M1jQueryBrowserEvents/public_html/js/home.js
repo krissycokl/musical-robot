@@ -4,32 +4,11 @@ $(document).ready(function () {
     $("#louisvilleInfoDiv").hide();
     $("[id$=Weather").hide();
     
-    $("#mainButton").on("click", function(){
-        $("#mainInfoDiv").show();
-        $("#akronInfoDiv").hide();
-        $("#minneapolisInfoDiv").hide();
-        $("#louisvilleInfoDiv").hide();
-    });
-    
-    $("#akronButton").on("click", function(){
-        $("#mainInfoDiv").hide();
-        $("#akronInfoDiv").show();
-        $("#minneapolisInfoDiv").hide();
-        $("#louisvilleInfoDiv").hide();
-    });
-    
-    $("#minneapolisButton").on("click", function(){
-        $("#mainInfoDiv").hide();
-        $("#akronInfoDiv").hide();
-        $("#minneapolisInfoDiv").show();
-        $("#louisvilleInfoDiv").hide();
-    });
-    
-    $("#louisvilleButton").on("click", function(){
-        $("#mainInfoDiv").hide();
-        $("#akronInfoDiv").hide();
-        $("#minneapolisInfoDiv").hide();
-        $("#louisvilleInfoDiv").show();
+    $("#mainButton").add("#akronButton").add("#minneapolisButton").add("#louisvilleButton")
+            .on("click", function(){
+        $("[id$=InfoDiv]").hide();
+        city = this.id.replace("Button","");
+        $("#"+city+"InfoDiv").show();
     });
     
     $("[id$=WeatherButton]").on("click", function(){

@@ -40,7 +40,9 @@ public class FlooringDaoFileROImpl implements FlooringDao {
     }
 
     @Override
-    public void changeOrderDay(Order order, LocalDate newDay) throws IOException, FileNotFoundException {
+    public void changeOrderDay(Order order, LocalDate newDay) throws
+            IOException,
+            FileNotFoundException {
         order.setDay(newDay);
         orderMap.put(order.getOrderNum(), order);
     }
